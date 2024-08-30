@@ -1,0 +1,233 @@
+Metadata-Version: 2.1
+Name: cloup
+Version: 0.7.1
+Summary: Option groups and subcommand help sections for pallets/click
+Home-page: https://github.com/janLuke/cloup
+Author: Gianluca Gippetto
+Author-email: gianluca.gippetto@gmail.com
+License: MIT license
+Keywords: cloup click option
+Platform: UNKNOWN
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Requires-Python: >=3.6
+Description-Content-Type: text/x-rst
+Requires-Dist: click (<9.0,>=7.0)
+
+========
+Overview
+========
+
+====================  ==========================================================
+**Master branch**     |tests-status| |coverage| |dev-docs|
+--------------------  ----------------------------------------------------------
+**Latest release**    |pypi-release| |python-versions| |release-docs|
+====================  ==========================================================
+
+.. |pypi-release| image:: https://img.shields.io/pypi/v/cloup.svg
+    :alt: Latest release on PyPI
+    :target: https://pypi.org/project/cloup/
+
+.. |tests-status| image:: https://github.com/janLuke/cloup/workflows/Tests/badge.svg
+    :alt: Tests status
+    :target: https://github.com/janLuke/cloup/actions?query=workflow%3ATests
+
+.. |coverage| image:: https://codecov.io/github/janLuke/cloup/coverage.svg?branch=master
+    :alt: Coverage Status
+    :target: https://codecov.io/github/janLuke/cloup?branch=master
+
+.. |python-versions| image:: https://img.shields.io/pypi/pyversions/cloup.svg
+    :alt: Supported versions
+    :target: https://pypi.org/project/cloup
+
+.. |dev-docs| image:: https://readthedocs.org/projects/cloup/badge/?version=latest
+    :alt: Documentation Status (master branch)
+    :target: https://cloup.readthedocs.io/en/latest/
+
+.. |release-docs| image:: https://readthedocs.org/projects/cloup/badge/?version=stable
+    :alt: Documentation Status (latest release)
+    :target: https://cloup.readthedocs.io/en/stable/
+
+Cloup (= **Cl**\ick + gr\ **oup**\s) contains a set of
+`Click <https://github.com/pallets/click>`_ extensions that enable you to:
+
+- define **option groups** with a clean API;
+
+- define **constraints**, including *conditional constraints*, on any group of
+  parameters (e.g. ``mutually_exclusive``, ``RequireAtLeast(1)`` etc.);
+
+- (optionally) show an auto-generated description of defined constraints in the
+  command help;
+
+- organize the subcommands of a ``MultiCommand`` in multiple **help sections**.
+
+These features are implemented in three "mixins" following the same pattern of
+click-contrib extensions (`cooperative multiple inheritance <https://medium.com/swlh/cooperative-multiple-inheritance-paradigm-in-python-f048b7ecdb29>`_).
+For ease of use, Cloup also provides:
+
+- its own versions of Click commands classes, obtained by mixing Click classes
+  with the above mentioned mixins;
+- its own versions of Click command decorators, for creating such commands.
+
+.. if-doc-stop-here
+
+Documentation
+=============
+Read more in the documentation:
+
+* `latest release <https://cloup.readthedocs.io/en/stable/>`_
+* `development version <https://cloup.readthedocs.io/en/latest/>`_.
+
+
+==========
+Change Log
+==========
+
+..  v0.X.X (in development)
+    =======================
+    **Requirements**
+    **Incompatible changes**
+    **Deprecated**
+    **Compatible changes and features**
+
+v0.7.1 (2021-05-02)
+===================
+- Fixed a bug with ``&`` and ``|`` ``Predicate`` operators giving ``AttributeError``
+  when used.
+- Fixed the error message of ``accept_none`` which didn't include ``{param_list}``.
+- Improved ``all_or_none`` error message.
+- Minor docs fixes.
+
+
+v0.7.0 (2021-03-24)
+===================
+**Compatible changes and features**
+
+- In constraint errors, the way the parameter list is formatted has changed.
+  Instead of printing a comma-separated list of single labels:
+
+  * each parameter is printed on a 2-space indented line and
+  * both the short and long name of options are printed.
+
+  See the relevant `commit <https://github.com/janLuke/cloup/commit/0280323e481bcca2b941a49c9133b06685e4bbe1>`_.
+
+- Minor improvements to code and docs.
+
+
+v0.6.1 (2021-03-01)
+===================
+This patch release fixes some problems in the management and releasing of
+the package.
+
+- Add a ``py.typed`` file to ship the package with type hints (PEP 561).
+- Use ``setuptools-scm`` to automatically manage the version of the package
+  *and* the content of the source distribution based on the git repository:
+
+  * the source distribution now matches the git repository, with the only
+    exception of ``_version.py``, which is not tracked by git; it's generated by
+    ``setuptools-scm`` and included in the package;
+
+  * tox.ini and Makefile were updated to account for the fact that ``_version.py``
+    doesn't exist in the repository before installing the package.
+
+- The new attribute ``cloup.__version_tuple__`` stores the version as a tuple
+  (of *at least* 3 elements).
+
+
+v0.6.0 (2021-02-28)
+===================
+**Incompatible changes**
+
+- Removed the deprecated ``GroupSection`` as previously announced.
+  Use the new name instead: ``Section``.
+- In ``Group.group()`` and ``Group.command``, the argument ``section`` was moved
+  after the ``cls`` argument so that the signatures are now fully compatible with
+  those of the parent class (the Liskov substitution principle is now satisfied).
+  If you (wisely) passed ``section`` and ``cls`` as keyword arguments in your
+  code, you don't need to change anything.
+
+**Compatible changes**
+
+- Slightly improved return type (hint) of command decorators.
+- Minor refactoring of ConstraintMixin.
+- Improved the documentation.
+
+
+v0.5.0 (2021-02-10)
+===================
+**Requirements**
+
+- Drop support to Python 3.5.
+
+**Deprecated**
+
+- ``GroupSection`` was renamed as ``Section``.
+
+**Compatible changes and features**
+
+- Added a subpackage for defining **constraints** on parameters groups
+  (including ``OptionGroup``'s).
+- The code for adding support to option groups was extracted to ``OptionGroupMixin``.
+- Most of the code for adding support to subcommand sections was extracted to
+  ``SectionMixin``.
+
+**Project changes**
+
+- Migrated from TravisCI to GitHub Actions.
+
+
+v0.4.0 (2021-01-10)
+===================
+
+**Requirements**
+
+- This is the last release officially supporting Python 3.5.
+
+**Compatible changes and features**
+
+- Changed the internal (non-public) structure of the package.
+- Minor code improvements.
+
+**Repository-wise:**
+
+- New documentation (hosted by ReadTheDocs)
+- Tox, TravisCI, Makefile completely rewritten.
+
+
+v0.3.0 (2020-03-26)
+===================
+Backward incompatible API changes
+---------------------------------
+- ``option_groups`` decorator now takes options as positional arguments ``*options``;
+- ``Group.section`` decorator now takes sections as positional arguments ``*sections``;
+- ``align_sections_help`` was renamed to ``align_sections``;
+- ``GroupSection.__init__() sorted_`` argument was renamed to ``sorted``.
+
+Other changes
+-------------
+- Additional signature for ``option_group``: you can pass the ``help`` argument
+  as 2nd positional argument.
+- Aligned option groups (option ``align_option_groups`` with default ``True``).
+- More refactoring and testing.
+
+
+v0.2.0 (2020-03-11)
+===================
+- [Feature] Add possibility of organizing subcommands of a cloup.Group in
+  multiple help sections.
+- Various code improvements.
+- Backward incompatible change:
+    - rename ``CloupCommand`` and ``CloupGroup`` resp. to just ``Command`` and ``Group``.
+
+
+v0.1.0 (2020-02-25)
+===================
+- First release on PyPI.
+
+

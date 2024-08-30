@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>flagmaster{% block title %}{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="/static/images/flagMaster_logo_mk3.png" rel="icon">
+</head>
+<body>
+    <!-- Theme JS to prevent flickering -->
+    <script src="static/js/theme_toggler.js"></script>
+
+    <!-- Universal Nav -->
+     <!-- used to be mb4 -->
+    <nav class="navbar navbar-expand-md mb-1"> 
+        <div class="container-lg">
+            <!-- Brand -->
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="/static/images/flagMaster_logo_mk3.png" alt="flagMaster" width="50" height="50" class="me-2">
+                <div class="d-flex flex-column justify-content-center lh-1">
+                    <span class="fw-bold fst-italic">speed</span>
+                    <span>Flags</span>
+                </div>
+            </a>            
+
+            <!-- Button - Navbar Toggler (When screensize < lg) -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navLinks" aria-controls="navLinks" aria-expanded="false" aria-label="Toggle navigation">
+                <!-- I want to replace this (below) toggler icon -->
+              <span class="navbar-toggler-icon"></span> 
+            </button>
+
+            <!-- Links that the Button above Collapses -->
+            <div class="collapse navbar-collapse" id="navLinks">
+                <!-- navbar-nav helps style navbar links -->
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a href="/" class="nav-link" active aria-current="page">Practice</a>
+                    </li>
+                    <li>
+                        <a href="/" class="nav-link" active>Progress</a>
+                    </li>
+                    <li>
+                        <a href="/" class="nav-link" active>Learn</a>
+                    </li>
+                </ul>
+                <!-- Account Buttons (Log in, Log out, Sign Up) -->
+                <ul class="navbar-nav ms-auto">
+                    <!-- | LOGOUT ACCOUNT | | LOG_IN SIGN_UP| -->
+                    {% if user %}
+                    <li>
+                        <a href="/logout" class="nav-link" active>Log Out</a>
+                    </li>
+                    <li>
+                        <a href="/" class="nav-link" active>Account</a>
+                    </li>
+                    {% else %}
+                    <li>
+                        <a href="/login" class="nav-link" active>Log in</a>
+                    </li>
+                    <li>
+                        <a href="/register" class="nav-link" active>Sign Up</a>
+                    </li>
+                    {% endif %}
+                    <li>
+                        <div class="dropdown">
+                            <button class="btn dropdown-toggle" id="theme-button" data-bs-toggle="dropdown" type="button"><i class="bi bi-sun-fill"></i></button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><button data-bs-theme-value="light" class="dropdown-item btn align-items-center" id="light-button"><i class="bi bi-sun-fill"></i> Light</button></li>
+                                <li><button data-bs-theme-value="dark" class="dropdown-item btn align-items-center" id="dark-button"><i class="bi bi-moon-stars-fill"></i> Dark</button></li>
+                                <li><button data-bs-theme-value="auto" class="dropdown-item btn align-items-center" id="auto-button"><i class="bi bi-circle-half"></i> Auto</button></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Body -->
+     {% block body %}
+     {% endblock %}
+
+    <!-- Footer -->
+
+    <!-- All universal javascript except theme -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
