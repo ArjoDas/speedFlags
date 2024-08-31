@@ -1,0 +1,16 @@
+# Ignore Flask session files
+flask_session/
+
+# Ignore Python cache files
+__pycache__/
+
+# You might also want to ignore other common Python/Flask-related files:
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.env
