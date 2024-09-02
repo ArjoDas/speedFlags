@@ -120,5 +120,9 @@ def set_game_duration():
     return jsonify({'error': 'Invalid duration'}), 400
 
 
+@app.route('/experiment', methods=['GET'])
+def experiment():
+    return render_template("experiment.html")
+
 if __name__ == '__main__':
     app.run(debug=True)
