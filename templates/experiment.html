@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Timer with +5s Button</title>
+    <title>Timer with +5s Button (Absolute Time)</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -36,47 +36,60 @@
 <body>
     <div class="container">
         <h1>Timer</h1>
-        <div id="timer">30</div>
+        <div id="timer">30.0</div>
         <button id="timerButton">Start Timer</button>
         <button id="addTimeButton">+5s</button>
     </div>
 
     <script>
-        let timer;
-        let timeLeft = 30;
+        let timerInterval;
+        let endTime;
+        let initialDuration = 30000; // 30 seconds in milliseconds
         const timerDisplay = document.getElementById('timer');
         const timerButton = document.getElementById('timerButton');
         const addTimeButton = document.getElementById('addTimeButton');
 
         function startTimer() {
             timerButton.disabled = true;
-            timer = setInterval(() => {
-                timeLeft--;
-                updateTimerDisplay();
-                if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    timerButton.disabled = false;
-                    timerButton.textContent = 'Restart Timer';
-                }
-            }, 1000);
+            endTime = Date.now() + initialDuration;
+            updateTimer();
+            timerInterval = setInterval(updateTimer, 100); // Update every 100ms for smoother display
         }
 
-        function updateTimerDisplay() {
-            timerDisplay.textContent = timeLeft;
+        function updateTimer() {
+            const timeLeft = Math.max(0, endTime - Date.now());
+            if (timeLeft === 0) {
+                clearInterval(timerInterval);
+                timerButton.disabled = false;
+                timerButton.textContent = 'Restart Timer';
+            }
+            updateTimerDisplay(timeLeft);
+        }
+
+        function updateTimerDisplay(timeLeft) {
+            timerDisplay.textContent = (timeLeft / 1000).toFixed(1);
         }
 
         function addTime() {
-            timeLeft += 5;
-            updateTimerDisplay();
+            if (endTime) {
+                endTime += 5000; // Add 5 seconds (5000 milliseconds)
+                updateTimer();
+            } else {
+                initialDuration += 5000;
+                updateTimerDisplay(initialDuration);
+            }
         }
 
         timerButton.addEventListener('click', () => {
-            timeLeft = 30;
-            updateTimerDisplay();
+            initialDuration = 30000;
+            updateTimerDisplay(initialDuration);
             startTimer();
         });
 
         addTimeButton.addEventListener('click', addTime);
+
+        // Initial display
+        updateTimerDisplay(initialDuration);
     </script>
 </body>
 </html>
