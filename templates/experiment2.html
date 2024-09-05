@@ -1,3 +1,5 @@
+<!-- my version -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,11 +14,11 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #f0f0f0;
+            background-color: #1f1f1f;
         }
         .container {
             text-align: center;
-            background-color: white;
+            background-color: #ffffff7d;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -45,54 +47,56 @@
     <script>
         let endTime
         let timerInterval; // to be used to create an interval and stop an interval in 2 separate function hence the higher namescope
-        let initialDuration = 30000; // 30s
+        let timerDuration = 30000; // 30s
 
         const timeLeftDisp = document.getElementById('timer');
         const startButton = document.getElementById('timerButton');
         const addTimeButton = document.getElementById('addTimeButton');
 
-        function startTimer() {
-            console.log("at startTimer");
-            startButton.disabled = true;
-            endTime = Date.now() + initialDuration;
-            updateTimerDisp();
-            timerInterval = setInterval(updateTimerDisp, 100);
-        }
-
-        function addTime() {
-            if(endTime){
-                endTime += 5000;
-                updateTimerDisp();
-            } else {
-                initialDuration += 5000;
-                updateTimerDisp(initialDuration);
-            }
-        }
-
-        function updateTimer() {
-            const timeLeft = Math.max(0, endTime - Date.now())
-            if (timeLeft === 0){
-                return stopTimer()
-            }
-            updateTimerDisp(timeLeft);
-        }
-
-        function updateTimerDisp(timeLeft) {
-            timeLeftDisp.textContent = (timeLeft / 1000).toFixed(1);
-        }
-
-        function stopTimer(){
-            clearInterval(timerInterval);
-            startButton.disabled = false;
-            startButton.textContent = 'restart';
-        }
-
-        startButton.addEventListener("click", () => {
-            updateTimer();
+        startButton.addEventListener('click', () => {
             startTimer();
         })
 
-        addTimeButton.addEventListener("click", addTime)
+        addTimeButton.addEventListener('click', () => {
+            // endTime only gets a value in startTimer.
+            if(endTime){
+                endTime += 5000;
+            } else {
+                timerDuration += 5000;
+                updateTimerDisplay((timerDuration / 1000).toFixed(1))
+            }
+        })
+
+        function startTimer() {
+            startButton.disabled = true;
+            endTime = Date.now() + timerDuration;           // declared in global scope
+            updateTimer();
+            timerInterval = setInterval(() => {
+                updateTimer();                              // other things can be added here
+            }, 100);
+        }
+
+        function updateTimer() {
+            let timeLeft = Math.max(0, endTime - Date.now());
+            if (timeLeft === 0) {
+                // exit timer
+                stopTimer();
+            }
+            updateTimerDisplay((timeLeft / 1000).toFixed(1));
+        }
+
+        function updateTimerDisplay(displayed_time) {
+            timeLeftDisp.textContent = displayed_time;
+        }
+
+        function stopTimer() {
+            startButton.disabled = false;
+            clearInterval(timerInterval);
+            endTime = 0;
+            updateTimerDisplay((30000 / 1000).toFixed(1))
+            startButton.textContent = "Restart Timer";
+        }
+
     </script>
 </body>
 </html>
