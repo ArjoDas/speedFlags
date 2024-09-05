@@ -124,5 +124,9 @@ def set_game_duration():
 def experiment():
     return render_template("experiment.html")
 
+@app.route('/experiment2', methods=['GET'])
+def experiment2():
+    return render_template("experiment2.html")
+
 if __name__ == '__main__':
     app.run(debug=True)

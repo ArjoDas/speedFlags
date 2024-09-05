@@ -35,6 +35,7 @@
 </head>
 <body>
     <div class="container">
+        <p style="background-color: yellow;">experiment</p>
         <h1>Timer</h1>
         <div id="timer">30.0</div>
         <button id="timerButton">Start Timer</button>
@@ -42,6 +43,20 @@
     </div>
 
     <script>
+        /*
+            once start timer is pressed,
+                initial duration = 30000ms  -> to reset timer once times over
+                updatetimerdisplay()        -> to reset timer once times over
+                starttimer()
+            
+            starttimer():
+                disable timerbutton
+                update endtime = date.now() + initialDuration
+                call updateTimer()
+                timerInterval =
+            
+        */
+
         let timerInterval;
         let endTime;
         let initialDuration = 30000; // 30 seconds in milliseconds
