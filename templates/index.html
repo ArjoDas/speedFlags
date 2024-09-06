@@ -46,32 +46,34 @@
 </style>
 
 <div class="container-lg py-1">
-    <div class="justify-content-center text-center position-absolute start-50 translate-middle" style="top: 6%">
-        <p class="d-inline-flex gap-1 my-1 me-4">
-            <input data-duration="30" data-bs-value="" type="radio" class="btn-check" name="game-duration" id="game-duration-option-30s" autocomplete="off" checked>
-            <label class="btn btn-sm font-monospace" for="game-duration-option-30s">30s</label>
-
-            <input data-duration="45" type="radio" class="btn-check" name="game-duration" id="game-duration-option-45s" autocomplete="off">
-            <label class="btn btn-sm font-monospace" for="game-duration-option-45s">45s</label>
-
-            <input data-duration="60" type="radio" class="btn-check" name="game-duration" id="game-duration-option-60s" autocomplete="off">
-            <label class="btn btn-sm font-monospace" for="game-duration-option-60s">60s</label>
-
-            <input data-duration="120" type="radio" class="btn-check" name="game-duration" id="game-duration-option-120s" autocomplete="off">
-            <label class="btn btn-sm font-monospace" for="game-duration-option-120s">120s</label>
-        </p>
-        <p class="d-inline-flex gap-1 my-1">
-            <input data-increment="0" type="radio" class="btn-check border-primary-subtle" name="game-addition" id="game-add-time-option-0s" autocomplete="off" checked>
-            <label class="btn btn-sm font-monospace" for="game-add-time-option-0s">+0s</label>
-
-            <input data-increment="5" type="radio" class="btn-check border-primary-subtle" name="game-addition" id="game-add-time-option-5s" autocomplete="off">
-            <label class="btn btn-sm font-monospace" for="game-add-time-option-5s">+5s</label>
-        </p>
-    </div>
-    <div id="info-board" class="alert alert-primary mb-2 text-center" role="alert" style="min-height: 165.2px !important;">
+    <div id="info-board" class="alert alert-primary mb-2 text-center" role="alert" style="min-height: 165.2px !important; position: relative;">
         <p class="display-4 mb-0"> Guess all the flags you can in <span class="fw-semibold fst-italic" id="info-duration">30 Seconds!</span> </p>
         <p class="fs-6 fw-light mb-0">Submit your answer by either typing or selecting the country's name (with arrow keys)</p>
         <p class="fs-6 fw-light">Timer starts when you submit your first try!</p>
+        <div style="position: absolute; bottom: 10px; left: 10px;">        <!-- class="position-absolute start-50 translate-middle" -->
+            <p class="d-inline-flex gap-1 my-1 me-4">
+                <input data-duration="30" data-bs-value="" type="radio" class="btn-check" name="game-duration" id="game-duration-option-30s" autocomplete="off" checked>
+                <label class="btn btn-sm font-monospace" for="game-duration-option-30s">30s</label>
+    
+                <input data-duration="45" type="radio" class="btn-check" name="game-duration" id="game-duration-option-45s" autocomplete="off">
+                <label class="btn btn-sm font-monospace" for="game-duration-option-45s">45s</label>
+    
+                <input data-duration="60" type="radio" class="btn-check" name="game-duration" id="game-duration-option-60s" autocomplete="off">
+                <label class="btn btn-sm font-monospace" for="game-duration-option-60s">60s</label>
+    
+                <input data-duration="120" type="radio" class="btn-check" name="game-duration" id="game-duration-option-120s" autocomplete="off">
+                <label class="btn btn-sm font-monospace" for="game-duration-option-120s">120s</label>
+            </p>
+        </div>
+        <div style="position: absolute; bottom: 10px; right: 10px;"> <!-- class="position-absolute start-50 translate-middle"-->
+            <p class="d-inline-flex gap-1 my-1">
+                <input data-increment="0" type="radio" class="btn-check border-primary-subtle" name="game-addition" id="game-add-time-option-0s" autocomplete="off" checked>
+                <label class="btn btn-sm font-monospace" for="game-add-time-option-0s">+0s</label>
+    
+                <input data-increment="5" type="radio" class="btn-check border-primary-subtle" name="game-addition" id="game-add-time-option-5s" autocomplete="off">
+                <label class="btn btn-sm font-monospace" for="game-add-time-option-5s">+5s</label>
+            </p>
+        </div>
     </div>
 
     <div class="progress mb-2" role="progressbar">
