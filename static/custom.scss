@@ -8,6 +8,10 @@
     $list-group-border-width: 3px;
 
     // Custom styles
+    .progress {
+        transition: width 50ms linear;
+    }
+
     .flag-container {
         min-height: 300px;
         display: flex;

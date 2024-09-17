@@ -6,7 +6,7 @@
 {% block body%}
 <script src="static/js/newgame.js"></script>
 
-<div class="container-lg py-1">
+<div class="container-lg py-1 my-0">
     <div id="info-board" class="alert alert-primary mb-2 text-center" role="alert" style="min-height: 165.2px !important; position: relative;">
         <p class="display-5 mb-0"> Guess as many flags as possible <span class="fw-semibold fst-italic" id="info-duration">30 Seconds!</span> </p>
         <p class="fs-6 fw-light mb-0">Submit your answer by either typing or selecting the country's name (with arrow keys)</p>
@@ -41,8 +41,8 @@
         <div class="progress-bar bg-primary" style="width: 100%"></div>
     </div>
 
-    <div id="game-board" class="">
-        <div class="alert alert-dark mb-4" role="alert" style="min-height: 651px; min-width: 1296;">
+    <div id="game-board" class="my-0 py-0">
+        <div class="alert alert-dark py-1" role="alert" style="min-height: 651px; min-width: 1296;">
             <div class="row justify-content-center flag-container border border-primary" style="position: relative;">    <!-- I don't really know why bootstrap's container-sm on its own isnt able to constrain this container's width -->
                 <div id="flag-svg" class="position-relative">
                     <!-- SVG will be inserted here by JavaScript -->
@@ -64,7 +64,7 @@
                             <input id="flag-input" type="text" class="form-control" placeholder="Country Name" autocomplete="off" autofocus>
                         </div>
                         <ul id="country-options" class="list-group text-center background-primary mt-1">
-                            <li class="first-option list-group-item list-group-item-secondary placeholder-glow border-primary-subtle">
+                            <!-- <li class="first-option list-group-item list-group-item-secondary placeholder-glow bg-primary-subtle text-primary">
                                 <span class="placeholder col-7"></span>
                             </li>
                             <li class="list-group-item list-group-item-secondary placeholder-glow">
@@ -78,7 +78,7 @@
                             </li>
                             <li class="last-option list-group-item list-group-item-secondary placeholder-glow">
                                 <span class="placeholder col-5"></span>
-                            </li>
+                            </li> -->
                         </ul>
                     </div>
                 </div>

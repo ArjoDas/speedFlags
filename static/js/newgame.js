@@ -41,23 +41,29 @@ const userData = {
 }
 
 const repeatedValues = {
-    emptyInput: `   
-                    <li class="first-option list-group-item list-group-item-secondary placeholder-glow border-primary-subtle">
-                        <span class="placeholder col-7"></span>
-                    </li>
-                    <li class="list-group-item list-group-item-secondary placeholder-glow">
-                        <span class="placeholder col-5"></span>
-                    </li>
-                    <li class="list-group-item list-group-item-secondary placeholder-glow">
-                        <span class="placeholder col-4"></span>
-                    </li>
-                    <li class="list-group-item list-group-item-secondary placeholder-glow">
-                        <span class="placeholder col-6"></span>
-                    </li>
-                    <li class="last-option list-group-item list-group-item-secondary placeholder-glow">
-                        <span class="placeholder col-5"></span>
-                    </li> 
-                `,
+
+    get emptyInput() {
+        const getRandomColNumber = () => Math.floor(Math.random() * 8) + 3; // Random number between 3 and 10
+
+        return `
+            <li class="first-option list-group-item list-group-item-secondary placeholder-glow bg-primary-subtle text-primary">
+                <span class="placeholder col-${getRandomColNumber()}"></span>
+            </li>
+            <li class="list-group-item list-group-item-secondary placeholder-glow">
+                <span class="placeholder col-${getRandomColNumber()}"></span>
+            </li>
+            <li class="list-group-item list-group-item-secondary placeholder-glow">
+                <span class="placeholder col-${getRandomColNumber()}"></span>
+            </li>
+            <li class="list-group-item list-group-item-secondary placeholder-glow">
+                <span class="placeholder col-${getRandomColNumber()}"></span>
+            </li>
+            <li class="last-option list-group-item list-group-item-secondary placeholder-glow">
+                <span class="placeholder col-${getRandomColNumber()}"></span>
+            </li>
+        `.trim();
+    },
+
     gameScoreBoard: `
                     <div class="justify-content-center my-0">
                         <div>
