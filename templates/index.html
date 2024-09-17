@@ -4,50 +4,11 @@
 {% block title %}{% endblock %} <!-- no title for index -->
 
 {% block body%}
-<script src="static/js/game3.js"></script>
-
-<style>
-    .flag-container {
-        min-height: 300px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    #flag-svg {
-        width: 100%;
-        height: 100%;
-    }
-    #flag-input{
-        text-align: center; 
-        caret-color: transparent;
-        margin-bottom: 1px;
-    }
-
-    input, .input-group, .input-group-lg, .list-group, .alert, .progress, label, button {
-        border-radius: 0px !important;
-    }
-
-    .progress{
-        height: 3px;
-    }
-
-    .list-group-item{
-        border-width: 3px;
-    }
-
-    /* #selected-option {
-        border-color: var(--bs-primary);
-    } */
-
-
-
-    /* $form-feedback-icon-invalid: None; */
-    
-</style>
+<script src="static/js/newgame.js"></script>
 
 <div class="container-lg py-1">
     <div id="info-board" class="alert alert-primary mb-2 text-center" role="alert" style="min-height: 165.2px !important; position: relative;">
-        <p class="display-4 mb-0"> Guess as many flags as possible <span class="fw-semibold fst-italic" id="info-duration">30 Seconds!</span> </p>
+        <p class="display-5 mb-0"> Guess as many flags as possible <span class="fw-semibold fst-italic" id="info-duration">30 Seconds!</span> </p>
         <p class="fs-6 fw-light mb-0">Submit your answer by either typing or selecting the country's name (with arrow keys)</p>
         <p class="fs-6 fw-light">Timer starts when you submit your first try!</p>
         <div style="position: absolute; bottom: 10px; left: 10px;">
@@ -80,13 +41,13 @@
         <div class="progress-bar bg-primary" style="width: 100%"></div>
     </div>
 
-    <div id="game-board">
-        <div class="alert alert-dark mb-4 border border-warning" role="alert" style="min-height: 651px; min-width: 1296;">
-            <div class="row justify-content-center flag-container border border-warning" style="position: relative;">    <!-- I don't really know why bootstrap's container-sm on its own isnt able to constrain this container's width -->
+    <div id="game-board" class="">
+        <div class="alert alert-dark mb-4" role="alert" style="min-height: 651px; min-width: 1296;">
+            <div class="row justify-content-center flag-container border border-primary" style="position: relative;">    <!-- I don't really know why bootstrap's container-sm on its own isnt able to constrain this container's width -->
                 <div id="flag-svg" class="position-relative">
                     <!-- SVG will be inserted here by JavaScript -->
                 </div>
-                <div id="feedback-parent" class="col-2 border border-warning" style="position: absolute; top: auto; right: 20px;">
+                <div id="feedback-parent" class="col-2" style="position: absolute; top: auto; right: 20px;">
                     <!-- <div>
                         <svg xmlns="http://www.w3.org/2000/svg" height="160px" width="160px" viewBox="0 -960 960 960" fill="#198754"><path d="M716-120H272v-512l278-288 39 31q6 5 9 14t3 22v10l-45 211h299q24 0 42 18t18 42v81.84q0 7.16 1.5 14.66T915-461L789-171q-8.88 21.25-29.59 36.12Q738.69-120 716-120Zm-384-60h397l126-299v-93H482l53-249-203 214v427Zm0-427v427-427Zm-60-25v60H139v392h133v60H79v-512h193Z"/></svg>
                     </div> -->
@@ -96,7 +57,7 @@
                     </div> -->
                 </div>
             </div>
-            <div class="row justify-content-center mt-3 border border-warning">
+            <div class="row justify-content-center mt-3 border border-primary">
                 <div class="col-10 col-md-8 col-lg-5">
                     <div class="alert alert-dark border border-primary my-2" role="alert" style="min-height: 300px !important;">   <!-- class="alert alert-dark" role="alert" -->
                         <div class="input-group input-group-md">

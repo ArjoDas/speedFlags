@@ -82,7 +82,7 @@ const apiCalls = {
     }
 };
 
-const gameFunctions ={
+const gameFuncgameFunctions ={
     async loadFlagSvg(){
         try {
             let svgData;

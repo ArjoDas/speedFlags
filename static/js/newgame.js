@@ -1,4 +1,3 @@
-
 const gameStatsObject = {
     // legacy
     currentCountry: {},
@@ -124,6 +123,7 @@ const svgMethods = {
             }
 
             if (!gameStatsObject.gameStarted && !gameStatsObject.gameEnded){
+        // FIRST FLAG
                 let svgData = await this.getFirstSvg();
                 gameStatsObject.currentCountry = {
                     'common': svgData.common,
@@ -132,10 +132,12 @@ const svgMethods = {
                 svgContainer.innerHTML = svgData.svg;
                 flagInput.placeholder = svgData.common;
             } else if (gameStatsObject.gameStarted && !gameStatsObject.gameEnded){
+        // SUBSEQUENT FLAGS
                 const svgData = await this.getRandomSvg();
                 svgContainer.innerHTML = svgData.svg;
                 flagInput.placeholder = "your answer";
             }
+        // ALL FLAGS
             this.styleSvg(svgContainer);
             gameInitialiser.midGameReset();
         } catch (error) {
@@ -366,9 +368,9 @@ const gameInitialiser = {
                 this.selectedOption = document.getElementById('selected-option'); // QUESTION why is this necessary?
                 if (this.selectedOption) {
                     this.flagInput.value = this.selectedOption.textContent;
-                    // this.flagInput.dispatchEvent(new KeyboardEvent('keydown', {key: event.key, bubbles: true, cancelable: true}));
-                    // the new KeyboardEvent above causes unlimited recursion  
-                    this.flagInput.dispatchEvent(new Event('input', { bubbles: true }));
+                    // this.flagInput.dispatchEvent(new KeyboardEvent('keydown', {key: event.key, bubbles: true, cancelable: true}));       // the new KeyboardEvent above causes unlimited recursion  
+
+                    // this.flagInput.dispatchEvent(new Event('input', { bubbles: true }));                                                 //<- BREAKTHROUGH this was the cause of all the problems with the second flag!
                 } 
             } else {
                 this.midGameReset(event);
@@ -417,18 +419,15 @@ const gameInitialiser = {
     },
 
     async startGame() {
+        // initialise gameStats variables
         gameStatsObject.gameStarted = true;
+        gameStatsObject.gameEnded = false;
         gameStatsObject.score = 0;
         gameStatsObject.attempts = 0;
 
-        await svgMethods.loadFlagSvg();
-
-        this.flagInput.value = '';
-        this.flagInput.dispatchEvent(new Event('input', { bubbles: true }));
-        this.allOptions.innerHTML = repeatedValues.emptyInput;
-
         this.formatInfoBoard();
-        this.progressBar = document.querySelector('.progress-bar');
+
+        // Starts timer
         this.progressBar.style.width='100%';
         gameStatsObject.startTime = Date.now();
         gameStatsObject.endTime = Date.now() + gameStatsObject.duration;
@@ -436,6 +435,14 @@ const gameInitialiser = {
         this.timerInterval = setInterval(() => {
             this.updateTimer();
         }, 100);
+
+        // prepares interface for next question (very similar to midGameReset) -> since we're calling midGameReset in svgMethods.loadFlagSvg anyways I commented this out first
+            // this.flagInput.value = '';
+            // this.flagInput.dispatchEvent(new Event('input', { bubbles: true }));
+            // this.allOptions.innerHTML = repeatedValues.emptyInput;
+
+        // loadFlagSvg uses gameStarted and gameEnded
+        await svgMethods.loadFlagSvg();
     },
 
     showFeedback(validity, correctAns){
@@ -458,7 +465,7 @@ const gameInitialiser = {
 
     processIllegalChars(event) {
         // blocks illegal characters and checks if the key is not a control key (like Backspace, Arrow keys, etc.)
-        let illegalCharTimeout = null;
+        // let illegalCharTimeout = null;
         if (event) {
             event.preventDefault();
         }
@@ -468,17 +475,19 @@ const gameInitialiser = {
         }, 100);
     },
 
+    nextQuestionReset() {
+        this.flagInput.style.caretColor = 'transparent';
+    },
+
     async inputKeydownListener() {
-        if (!this.flagInput) {
-            console.error('Flag input element not found');
-            return;
-        }
         this.flagInput.addEventListener('keydown', async (event) => {
             if (event.key === 'Enter') {
-                this.flagInput.style.caretColor = 'transparent';
+                this.nextQuestionReset();
                 this.autofillSelectedOption(event);
+
                 if(!gameStatsObject.gameStarted && !gameStatsObject.gameEnded) {
-                // GAME HASN'T STARTED
+                    // console.log("inputKeydownListener is checking ans and it think that game HAS NOT started")
+            // GAME HASN'T STARTED YET
                     if(this.flagInputValue === gameStatsObject.currentCountry.common.toLowerCase() || this.flagInputValue === gameStatsObject.currentCountry.official.toLowerCase()){
                         // START GAME  
                         this.showFeedback(true);
@@ -489,7 +498,8 @@ const gameInitialiser = {
                         console.log(`First ans: ${this.flagInputValue} is wrong.`);
                     }
                 } else if (gameStatsObject.gameStarted && !gameStatsObject.gameEnded) {
-                // GAME IS ONGOING
+                    // console.log("inputKeydownListener is checking ans and it think that game HAS started")
+            // GAME IS ONGOING
                     const ansData = await checkAnswer(this.flagInputValue);
                     if(ansData.answer){
                         console.log('Answer is correct!')
@@ -503,7 +513,9 @@ const gameInitialiser = {
                     // REGARDLESS OF VALIDITY
                     gameStatsObject.attempts++;
                     this.updateScoreDisplay();
-                    await svgMethods.loadFlagSvg();           
+                    // wait till gameStatsObject.gameStarted === true then await sgvMethods.loadFlagSvg()
+                    // still not working the above suggestion will lead to race conditions
+                    await svgMethods.loadFlagSvg();
                 }
             } else if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
                 processSuggestions.moveOptions(event);
@@ -523,6 +535,8 @@ const gameInitialiser = {
         this.infoHeader = document.getElementById('info-header');
         this.scoreDisplay = document.getElementById('score');
         this.attemptsDisplay = document.getElementById('attempts');
+        this.progressBar = document.querySelector('.progress-bar');
+
         
         if (!this.flagInput || !this.allOptions || !this.feedBackParent) {
             console.error('Required DOM elements not found');
