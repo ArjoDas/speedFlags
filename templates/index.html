@@ -4,16 +4,17 @@
 {% block title %}{% endblock %} <!-- no title for index -->
 
 {% block body%}
-<script src="static/js/newgame.js"></script>
+<script type="module" src="static/js/localStorageHandlers.js"></script>
+<script type="module" src="static/js/newgame.js"></script>
 
 <div class="container-lg py-1 my-0">
     <div id="info-board" class="alert alert-primary mb-2 text-center" role="alert" style="min-height: 165.2px !important; position: relative;">
-        <p class="display-5 mb-0"> Guess as many flags as possible <span class="fw-semibold fst-italic" id="info-duration">30 Seconds!</span> </p>
+        <p class="display-5 mb-0"> Guess as many flags as possible <span class="fw-semibold fst-italic" id="info-duration">30 seconds!</span> </p>
         <p class="fs-6 fw-light mb-0">Submit your answer by either typing or selecting the country's name (with arrow keys)</p>
         <p class="fs-6 fw-light">Timer starts when you submit your first try!</p>
         <div style="position: absolute; bottom: 10px; left: 10px;">
             <p class="d-inline-flex gap-1 my-1 me-4">
-                <input data-duration="30000" data-bs-value="" type="radio" class="btn-check" name="game-duration" id="game-duration-option-30s" autocomplete="off" checked>
+                <input data-duration="30000" type="radio" class="btn-check" name="game-duration" id="game-duration-option-30s" autocomplete="off">
                 <label class="btn btn-sm font-monospace" for="game-duration-option-30s">30s</label>
     
                 <input data-duration="45000" type="radio" class="btn-check" name="game-duration" id="game-duration-option-45s" autocomplete="off">
@@ -28,7 +29,7 @@
         </div>
         <div style="position: absolute; bottom: 10px; right: 10px;"> 
             <p class="d-inline-flex gap-1 my-1">
-                <input data-increment="0" type="radio" class="btn-check border-primary-subtle" name="game-addition" id="game-add-time-option-0s" autocomplete="off" checked>
+                <input data-increment="0" type="radio" class="btn-check border-primary-subtle" name="game-addition" id="game-add-time-option-0s" autocomplete="off">
                 <label class="btn btn-sm font-monospace" for="game-add-time-option-0s">+0s</label>
     
                 <input data-increment="5000" type="radio" class="btn-check border-primary-subtle" name="game-addition" id="game-add-time-option-5s" autocomplete="off">

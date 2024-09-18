@@ -20,7 +20,6 @@ const gameStatsObject = {
     timerInterval: null,
     score: 0,
     attempts: 0
-
 }
 
 const userData = {
@@ -213,16 +212,65 @@ const svgMethods = {
 
 }
 
+const localStorageHandlers = {
+    getStoredDuration() {
+        return localStorage.getItem('gameDuration');
+    },
+
+    setStoredDuration(duration) {
+        localStorage.setItem('gameDuration', duration);
+    },
+
+    getStoredIncrement() {
+        return localStorage.getItem('gameIncrement');
+    },
+
+    setStoredIncrement(increment) {
+        localStorage.setItem('gameIncrement', increment);
+    },
+
+    selectStoredDurationButton() {
+        const storedDuration = this.getStoredDuration();
+        if (storedDuration) {
+            const button = document.querySelector(`input[name="game-duration"][data-duration="${storedDuration}"]`);
+            if (button) {
+                button.checked = true;
+                gameStatsObject.duration = parseInt(storedDuration);
+                userPreferences.infoBoard.textContent = `${gameStatsObject.duration / 1000} seconds!`
+            }
+        } else {
+            const button = document.querySelector(`input[name="game-duration"][data-duration="30000"]`);
+            if (button) {
+                button.checked = true;
+                gameStatsObject.duration = 30000;
+            }
+        }
+    },
+
+    selectStoredIncrementButton() {
+        const storedIncrement = this.getStoredIncrement();
+        if (storedIncrement) {
+            const button = document.querySelector(`input[name="game-addition"][data-increment="${storedIncrement}"]`);
+            if (button) {
+                button.checked = true;
+                gameStatsObject.increment = parseInt(storedIncrement);
+            }
+        } else {
+            const button = document.querySelector(`input[name="game-addition"][data-increment="0"]`);
+            if (button) {
+                button.checked = true;
+                gameStatsObject.increment = 0;
+            }
+        }
+    }
+};
+
 const userPreferences = {
     durationInputs: document.querySelectorAll('input[name="game-duration"]'),
     incrementInputs: document.querySelectorAll('input[name="game-addition"]'),
     infoBoard: document.getElementById('info-duration'),
 
     chooseDuration(){
-        this.durationInputs = document.querySelectorAll('input[name="game-duration"]');
-        this.incrementInputs = document.querySelectorAll('input[name="game-addition"]');
-        this.infoBoard = document.getElementById('info-duration');
-
         if (!gameStatsObject.gameStarted && !gameStatsObject.gameEnded){
             this.durationInputs.forEach(input => {
                 input.addEventListener('change', () => {
@@ -231,6 +279,7 @@ const userPreferences = {
                         // TODO: Implement API call to verify allowed duration
                         this.infoBoard.textContent = `${duration / 1000} seconds!`
                         gameStatsObject.duration = duration;
+                        localStorageHandlers.setStoredDuration(duration);
                     }
                 })
             })
@@ -238,20 +287,30 @@ const userPreferences = {
     },
 
     chooseIncrement(){
-        this.durationInputs = document.querySelectorAll('input[name="game-duration"]');
-        this.incrementInputs = document.querySelectorAll('input[name="game-addition"]');
-        this.infoBoard = document.getElementById('info-duration');
-
         if (!gameStatsObject.gameStarted && !gameStatsObject.gameEnded){
             this.incrementInputs.forEach(input => {
                 input.addEventListener('change', () => {
                     if (input.checked) {
                         const increment = parseInt(input.dataset.increment);
                         gameStatsObject.increment = increment;
+                        localStorageHandlers.setStoredIncrement(increment);
                     }
                 })
             })
         }
+    },
+
+    init() {
+        this.infoBoard = document.getElementById('info-duration');
+        this.durationInputs = document.querySelectorAll('input[name="game-duration"]');
+        this.incrementInputs = document.querySelectorAll('input[name="game-addition"]');
+        this.durationInputs = document.querySelectorAll('input[name="game-duration"]');
+        this.incrementInputs = document.querySelectorAll('input[name="game-addition"]');
+
+        localStorageHandlers.selectStoredDurationButton();
+        localStorageHandlers.selectStoredIncrementButton();
+        this.chooseDuration();
+        this.chooseIncrement();
     }
 }
 
@@ -554,13 +613,14 @@ const gameInitialiser = {
     }
 }
 
+// do this before dom is loaded to prevent flickering upon reload <I'm a genius>
+userPreferences.init();
+// do these after dom is loaded to make sure necessary elements are present
 document.addEventListener('DOMContentLoaded', async () => {
     if (await gameInitialiser.init()){
         try {
             await svgMethods.loadFlagSvg();
             await processSuggestions.init();
-            userPreferences.chooseDuration();
-            userPreferences.chooseIncrement();        
         } catch(error) {
             console.log(`DOMContentLoaded failed to initiialise javascript:\n${error}`)
         }
