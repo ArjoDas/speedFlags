@@ -17,30 +17,119 @@ const gameStatsObject = {
     get currentDuration() {
         return (this.endTime - this.startTime)
     },
-    timerInterval: null,
     score: 0,
     attempts: 0
 }
 
-const userData = {
-    currentGame: {
-        score: 0,
-        attempts: 0,
-        history: []
-
-        /* 
-        userData.currentGame.history = [
-            {index: 0, country: Singapore, validity: true},
-            {index: 1, country: Japan, validity: false}
+const roundData = {
+    // claude's right, using a map here is unnecessary since we're not interested in looking up rounds by a unique key; we're more interested in the order they occurred
+    score: 0,
+    attempts: 0,
+    history: [],
+    /*
+        history = [
+            {index: int, country: theCorrectAns, userAnswer: userAns, validity: true/false}
             ...
         ]
-        */
+    */
+    flagContainer: document.querySelector('flag-container'),
+    userAnsInterface: document.getElementById('user-ans-interface'),
+    infoHeader: document.getElementById('info-header'),
 
+    updateHistory(correctAns, userAns, validity) {
+        this.history.push({
+            index: this.history.length,
+            country: correctAns,
+            userAnswer: userAns,
+            validity: validity
+        })
+    },
+
+    showPerformance() {
+        this.infoHeader = document.getElementById('info-header');
+        this.flagContainer = document.querySelector('.flag-container');
+        this.userAnsInterface = document.getElementById('user-ans-interface');
+        if (!this.flagContainer || !this.userAnsInterface || !this.infoHeader) {
+            console.error('Necessary elements could not be found');
+            return;
+        }
+        console.log(this.infoHeader);
+        this.infoHeader.innerHTML = `<a href="/"><button id="restart-button" type="button" class="btn btn-lg btn-outline-primary">restart</button></a>`
+        this.userAnsInterface.classList.add('d-none');
+        this.flagContainer.classList.remove('border', 'border-primary');
+
+        let tableHTML = `
+            <table class="table table-striped-columns text-center align-middle fs-5">
+                <tr>
+                    <th class="col-5">Flag</th>
+                    <th class="col-2">Country</th>
+                    <th class="col-2">Your Answer</th>
+                </tr>
+        `;
+    
+        this.history.forEach(round => {
+            const bgClass = round.validity ? 'bg-success-subtle' : 'bg-danger-subtle';
+            tableHTML += `
+                <tr>
+                    <td class="${bgClass}">
+                        <div id="flag-svg-${round.index}" style="height: 150px; display: flex; justify-content: center; align-items: center;"></div>
+                    </td>
+                    <td class="${bgClass}">${round.country}</td>
+                    <td class="${bgClass}">${round.userAnswer}</td>
+                </tr>
+            `;
+        });
+    
+        tableHTML += `</table>`;
+        this.flagContainer.innerHTML = tableHTML;
+    
+        // Now, load the SVGs for each flag
+        this.history.forEach(async (round) => {
+            const svgContainer = document.getElementById(`flag-svg-${round.index}`);
+            if (svgContainer) {
+                try {
+                    const response = await fetch('/fetch_specific_svg', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ country: round.country })
+                    });
+                    const data = await response.json();
+                    svgContainer.innerHTML = data.svg;
+                    this.styleSvg(svgContainer);
+                } catch (error) {
+                    console.error(`Error loading SVG for ${round.country}:`, error);
+                }
+            }
+        });
+    },
+
+    styleSvg(container) {
+        const svgElement = container.querySelector('svg');
+        if (svgElement) {
+            if (!svgElement.getAttribute('viewBox')) {
+                const width = svgElement.getAttribute('width') || svgElement.getBoundingClientRect().width;
+                const height = svgElement.getAttribute('height') || svgElement.getBoundingClientRect().height;
+                svgElement.setAttribute('viewBox', `0 0 ${width} ${height}`);
+            }
+            
+            // Remove any hardcoded width and height
+            svgElement.removeAttribute('width');
+            svgElement.removeAttribute('height');
+    
+            // Set a fixed height of 150px while maintaining aspect ratio
+            const viewBox = svgElement.getAttribute('viewBox').split(' ');
+            const aspectRatio = viewBox[2] / viewBox[3]; // aspect ratio = width divided by height
+            const newWidth = 150 * aspectRatio;
+            
+            svgElement.style.width = `${newWidth}px`;
+            svgElement.style.height = '150px';
+        }    
     }
 }
 
 const repeatedValues = {
-
     get emptyInput() {
         const getRandomColNumber = () => Math.floor(Math.random() * 8) + 3; // Random number between 3 and 10
 
@@ -78,14 +167,19 @@ const repeatedValues = {
                     <svg xmlns="http://www.w3.org/2000/svg" height="160px" width="160px" viewBox="0 -960 960 960" fill="#198754"><path d="M716-120H272v-512l278-288 39 31q6 5 9 14t3 22v10l-45 211h299q24 0 42 18t18 42v81.84q0 7.16 1.5 14.66T915-461L789-171q-8.88 21.25-29.59 36.12Q738.69-120 716-120Zm-384-60h397l126-299v-93H482l53-249-203 214v427Zm0-427v427-427Zm-60-25v60H139v392h133v60H79v-512h193Z"/></svg>
                 </div>
             `,
-    wrongAnsFeedback(correctAns){ 
+    wrongAnsFeedback(correctAns) { 
         return `
                 <div>
                     <svg xmlns="http://www.w3.org/2000/svg" height="160px" width="160px" viewBox="0 -960 960 960" fill="#dc3545"><path d="M242-840h444v512L408-40l-39-31q-6-5-9-14t-3-22v-10l45-211H103q-24 0-42-18t-18-42v-81.84q0-7.16-1.5-14.66T43-499l126-290q8.88-21.25 29.59-36.13Q219.31-840 242-840Zm384 60H229L103-481v93h373l-53 249 203-214v-427Zm0 427v-427 427Zm60 25v-60h133v-392H686v-60h193v512H686Z"/></svg>
                     <p class="fs-3 my-0 text-center">${correctAns}</p>
                 </div>
             `
-        }
+        },
+    increment(value) {
+        return `
+            <p class="fs-6 bg-warning-subtle border-bottom border-warning">+${value/1000}s for every right answer</p>
+            `
+    }
 }
 
 const svgMethods = {
@@ -243,6 +337,7 @@ const localStorageHandlers = {
             if (button) {
                 button.checked = true;
                 gameStatsObject.duration = 30000;
+                userPreferences.infoBoard.textContent = `${gameStatsObject.duration / 1000} seconds!`
             }
         }
     },
@@ -254,12 +349,16 @@ const localStorageHandlers = {
             if (button) {
                 button.checked = true;
                 gameStatsObject.increment = parseInt(storedIncrement);
+                if (gameStatsObject.increment !== 0){
+                    userPreferences.incrementNoticeParent.innerHTML = repeatedValues.increment(gameStatsObject.increment);
+                }
             }
         } else {
             const button = document.querySelector(`input[name="game-addition"][data-increment="0"]`);
             if (button) {
                 button.checked = true;
                 gameStatsObject.increment = 0;
+                // userPreferences.incrementNoticeParent.innerHTML = repeatedValues.increment(0);
             }
         }
     }
@@ -269,6 +368,7 @@ const userPreferences = {
     durationInputs: document.querySelectorAll('input[name="game-duration"]'),
     incrementInputs: document.querySelectorAll('input[name="game-addition"]'),
     infoBoard: document.getElementById('info-duration'),
+    incrementNoticeParent: document.getElementById('increment-notice-parent'),
 
     chooseDuration(){
         if (!gameStatsObject.gameStarted && !gameStatsObject.gameEnded){
@@ -293,6 +393,12 @@ const userPreferences = {
                     if (input.checked) {
                         const increment = parseInt(input.dataset.increment);
                         gameStatsObject.increment = increment;
+                        this.incrementNoticeParent.innerHTML = repeatedValues.increment(input.dataset.increment);
+                        if (increment !== 0){
+                            userPreferences.incrementNoticeParent.innerHTML = repeatedValues.increment(increment);
+                        } else {
+                            userPreferences.incrementNoticeParent.innerHTML = '';
+                        }
                         localStorageHandlers.setStoredIncrement(increment);
                     }
                 })
@@ -306,6 +412,7 @@ const userPreferences = {
         this.incrementInputs = document.querySelectorAll('input[name="game-addition"]');
         this.durationInputs = document.querySelectorAll('input[name="game-duration"]');
         this.incrementInputs = document.querySelectorAll('input[name="game-addition"]');
+        this.incrementNoticeParent = document.getElementById('increment-notice-parent');
 
         localStorageHandlers.selectStoredDurationButton();
         localStorageHandlers.selectStoredIncrementButton();
@@ -326,8 +433,7 @@ const processSuggestions = {
     lastOption: null,
 
     async populateOptions() {
-        // replaces autocomplete
-        // instead of running another event listener in parallel this is going to be inserted into gameInitialiser.inputKeydownListener
+        // THE ONLY input eventListener for our input
         this.flagInput.addEventListener('input', async () => {
             if (this.inputValue !== '') {
                 try {
@@ -422,10 +528,6 @@ const gameInitialiser = {
     attemptsDisplay: document.getElementById('attempts'),
     timerInterval: null,
 
-    allowedChar() {
-
-    },
-
     autofillSelectedOption(event) {
         if (event) {
             event.preventDefault();
@@ -460,12 +562,19 @@ const gameInitialiser = {
     },
 
     updateTimer(){
-        // WORKING ON THIS RIGHT NOW
+        if (gameStatsObject.gameEnded) {
+            console.log('Game has ended, stopping timer updates');
+            clearInterval(this.timerInterval);
+            this.timerInterval = null;
+            return;
+        }
+
         gameStatsObject.timeLeft = Math.max(0, gameStatsObject.endTime - Date.now())
         if (gameStatsObject.timeLeft === 0) {
-            this.endGame(); //TODO
+            this.endGame();
+        } else {
+            this.updateTimerDisplay(gameStatsObject.displayedTimeLeft);
         }
-        this.updateTimerDisplay(gameStatsObject.displayedTimeLeft)
     },
 
     updateTimerDisplay(numberDisplayed) {
@@ -478,12 +587,23 @@ const gameInitialiser = {
         clearInterval(this.timerInterval);
         gameStatsObject.startTime = 0;
         gameStatsObject.endTime = 0;
-        // TODO
         gameStatsObject.gameEnded = true;
-        this.updateTimerDisplay("Game Over") // Or something else
+        this.updateTimerDisplay("Game Over");
+
+        roundData.score = gameStatsObject.score;
+        roundData.attempts = gameStatsObject.attempts;
+        roundData.showPerformance();
     },
 
     async startGame() {
+        console.log('ending game...');
+        // Clear any existing interval
+        if (this.timerInterval) {
+            console.log('Clearing timer interval');
+            clearInterval(this.timerInterval);
+            this.timerInterval = null;
+        }
+
         // initialise gameStats variables
         gameStatsObject.gameStarted = true;
         gameStatsObject.gameEnded = false;
@@ -501,12 +621,7 @@ const gameInitialiser = {
             this.updateTimer();
         }, 100);
 
-        // prepares interface for next question (very similar to midGameReset) -> since we're calling midGameReset in svgMethods.loadFlagSvg anyways I commented this out first
-            // this.flagInput.value = '';
-            // this.flagInput.dispatchEvent(new Event('input', { bubbles: true }));
-            // this.allOptions.innerHTML = repeatedValues.emptyInput;
-
-        // loadFlagSvg uses gameStarted and gameEnded
+        // loadFlagSvg is called last as it uses gameStarted and gameEnded
         await svgMethods.loadFlagSvg();
     },
 
@@ -530,12 +645,11 @@ const gameInitialiser = {
 
     processIllegalChars(event) {
         // blocks illegal characters and checks if the key is not a control key (like Backspace, Arrow keys, etc.)
-        // let illegalCharTimeout = null;
         if (event) {
             event.preventDefault();
         }
         this.flagInput.classList.add("bg-danger-subtle", "border-danger");
-        illegalCharTimeout = setTimeout(() => {
+        const illegalCharTimeout = setTimeout(() => {
             this.flagInput.classList.remove("bg-danger-subtle", "border-danger");
         }, 100);
     },
@@ -546,15 +660,15 @@ const gameInitialiser = {
 
     async inputKeydownListener() {
         this.flagInput.addEventListener('keydown', async (event) => {
+        //  THE ONLY keydown event lisener for our input
             if (event.key === 'Enter') {
                 this.nextQuestionReset();
                 this.autofillSelectedOption(event);
 
                 if(!gameStatsObject.gameStarted && !gameStatsObject.gameEnded) {
-                    // console.log("inputKeydownListener is checking ans and it think that game HAS NOT started")
             // GAME HASN'T STARTED YET
                     if(this.flagInputValue === gameStatsObject.currentCountry.common.toLowerCase() || this.flagInputValue === gameStatsObject.currentCountry.official.toLowerCase()){
-                        // START GAME  
+                // START GAME  
                         this.showFeedback(true);
                         console.log('Game is starting!');
                         await this.startGame();
@@ -563,7 +677,6 @@ const gameInitialiser = {
                         console.log(`First ans: ${this.flagInputValue} is wrong.`);
                     }
                 } else if (gameStatsObject.gameStarted && !gameStatsObject.gameEnded) {
-                    // console.log("inputKeydownListener is checking ans and it think that game HAS started")
             // GAME IS ONGOING
                     const ansData = await checkAnswer(this.flagInputValue);
                     if(ansData.answer){
@@ -575,11 +688,13 @@ const gameInitialiser = {
                         console.log('Answer is incorrect!')
                         this.showFeedback(ansData.answer, ansData.correctAnswer);
                     }
-                    // REGARDLESS OF VALIDITY
+            // REGARDLESS OF VALIDITY
                     gameStatsObject.attempts++;
                     this.updateScoreDisplay();
-                    // wait till gameStatsObject.gameStarted === true then await sgvMethods.loadFlagSvg()
-                    // still not working the above suggestion will lead to race conditions
+
+                    // RECORD FLAG AND ANSWER
+                    roundData.updateHistory(ansData.correctAnswer, this.flagInputValue, ansData.answer);
+
                     await svgMethods.loadFlagSvg();
                 }
             } else if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
@@ -613,8 +728,13 @@ const gameInitialiser = {
     }
 }
 
-// do this before dom is loaded to prevent flickering upon reload <I'm a genius>
-userPreferences.init();
+// do this before dom is loaded to prevent flickering upon reload
+try {
+    userPreferences.init();
+} catch (error) {
+    console.log(`userPreferences failed to load. Here's the error:\n${error}`)
+}
+
 // do these after dom is loaded to make sure necessary elements are present
 document.addEventListener('DOMContentLoaded', async () => {
     if (await gameInitialiser.init()){

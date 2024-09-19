@@ -4,8 +4,7 @@
 {% block title %}{% endblock %} <!-- no title for index -->
 
 {% block body%}
-<script type="module" src="static/js/localStorageHandlers.js"></script>
-<script type="module" src="static/js/newgame.js"></script>
+<script type="module" src="/static/js/newgame.js"></script>
 
 <div class="container-lg py-1 my-0">
     <div id="info-board" class="alert alert-primary mb-2 text-center" role="alert" style="min-height: 165.2px !important; position: relative;">
@@ -27,7 +26,10 @@
                 <label class="btn btn-sm font-monospace" for="game-duration-option-120s">120s</label>
             </p>
         </div>
-        <div style="position: absolute; bottom: 10px; right: 10px;"> 
+        <div style="position: absolute; bottom: 40px; right: 10px;" id="increment-notice-parent">
+            <!-- <p class="fs-6 bg-warning-subtle border-bottom border-warning">+5s for every right answer</p> -->
+        </div>
+        <div style="position: absolute; bottom: 10px; right: 10px;">
             <p class="d-inline-flex gap-1 my-1">
                 <input data-increment="0" type="radio" class="btn-check border-primary-subtle" name="game-addition" id="game-add-time-option-0s" autocomplete="off">
                 <label class="btn btn-sm font-monospace" for="game-add-time-option-0s">+0s</label>
@@ -58,7 +60,7 @@
                     </div> -->
                 </div>
             </div>
-            <div class="row justify-content-center mt-3 border border-primary">
+            <div id="user-ans-interface" class="row justify-content-center mt-3 border border-primary">
                 <div class="col-10 col-md-8 col-lg-5">
                     <div class="alert alert-dark border border-primary my-2" role="alert" style="min-height: 300px !important;">   <!-- class="alert alert-dark" role="alert" -->
                         <div class="input-group input-group-md">

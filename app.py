@@ -7,21 +7,9 @@ from functools import wraps
 import os, random
 from flask_wtf.csrf import CSRFProtect
 
-
-# Add this to your fetch calls in JavaScript
-# headers: {
-#     'Content-Type': 'application/json',
-#     'X-CSRFToken': '{{ csrf_token() }}'
-# },
-
-# Load environment variables
 load_dotenv()
 
-# Defines app
 app = Flask(__name__)
-
-# Enables Cross Site Request Forgery
-# csrf = CSRFProtect(app)
 
 # Configure session
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY') or os.urandom(24)
@@ -30,29 +18,6 @@ Session(app)
 
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///speedflags.db")
-
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if session.get("user_id") is None:
-            return redirect(url_for('login'))
-        return f(*args, **kwargs)
-    return decorated_function
-
-@app.route("/register", methods=["GET", "POST"])
-def register():
-    if request.method == "POST":
-        # Implement registration logic here
-        pass
-    return render_template("register.html")
-
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    session.clear()
-    if request.method == "POST":
-        # Implement login logic here
-        pass
-    return render_template("login.html")
 
 @app.route("/", methods=["GET"])
 def index():
@@ -69,8 +34,6 @@ def autocomplete_country():
     return jsonify(countries)
 
 
-# n e w   f e t c h (s)   a n d   c h e c k    v e r s i o n
-
 @app.route('/fetch_first_svg', methods=['POST'])
 def fetch_first_svg():
     random_country = db.execute('SELECT svg_code, common, official FROM flags ORDER BY RANDOM() LIMIT 1')[0]
@@ -84,7 +47,6 @@ def fetch_first_svg():
         'common': random_country['common'],
         'official': random_country['official']
     })
-
 
 @app.route('/fetch_random_svg', methods=['POST'])
 def fetch_random_svg():
@@ -110,23 +72,15 @@ def check_country_ans():
     return jsonify({'answer': is_correct, 'correctAnswer': correct_answers['common']})
 
 
-@app.route('/set_game_duration', methods=['POST'])
-def set_game_duration():
+@app.route('/fetch_specific_svg', methods=['POST'])
+def fetch_specific_svg():
     data = request.get_json()
-    duration = data.get('duration')
-    if duration:
-        session['game_duration'] = duration
-        return jsonify({'success': True}), 200
-    return jsonify({'error': 'Invalid duration'}), 400
+    country = data.get('country')
+    specific_country = db.execute('SELECT svg_code FROM flags WHERE LOWER(common) = LOWER(?)', country)
+    if specific_country[0]:
+        return jsonify({'svg': specific_country[0]['svg_code']})
+    return jsonify({'svg': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 504 198" width="380" height="150"><path fill="#8a1538" d="M0 0h504v198H0z"/><path fill="#fff" d="M144 198H0V0h144l36 11-36 11 36 11-36 11 36 11-36 11 36 11-36 11 36 11-36 11 36 11-36 11 36 11-36 11 36 11-36 11 36 11z"/></svg>'})
 
-
-@app.route('/experiment', methods=['GET'])
-def experiment():
-    return render_template("experiment.html")
-
-@app.route('/experiment2', methods=['GET'])
-def experiment2():
-    return render_template("experiment2.html")
 
 if __name__ == '__main__':
     app.run(debug=True)
