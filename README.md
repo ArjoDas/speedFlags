@@ -1,36 +1,95 @@
-> ##### CS50's README formatting guide
-> Your README.md file should be minimally multiple paragraphs in length, and should explain what your project is, what each of the files you wrote for the project contains and does, and if you debated certain design choices, explaining why you made them. Ensure you allocate sufficient time and energy to writing a README.md that documents your project thoroughly. Be proud of it! A README.md in the neighborhood of 750 words is likely to be sufficient for describing your project and all aspects of its functionality. If unable to reach that threshold, that probably means your project is insufficiently complex.
 
-# About this project
-Though speedFlags doesn't have many html pages, I learnt a lot of concepts; javascript and beyond. In essance, speedFlags is a simple game where users have to guess all the flags they can in a time limit of their choosing (30, 45, 60 or 120 seconds). They have an option to add 5 seconds with each correct answer.
+#### CS50's README formatting guide
+- what each of the files you wrote for the project contains and does, and
+- if you debated certain design choices, explaining why you made them.
 
-## User Experience
-1. user loads the page 
-    1. the page loads according to their browsers `prefers-color-scheme` attribute but if they have previously selected a colour mode of their choice dark or light the page loads according to their selected colour mode. This feature was implemented with bootstrap.
-    2. with inspiration from the boostrap code that enabled the detection and setting of the users' preferred theme, I wrote `userPreferences` in newgame.js to allow users to pick their game settings (game duration & increment) and for the browser to remember it upon subsequent reloads.
-2. The user can then select their preferences for the game. This includes the duration - 30 to 120 seconds and the increment to the duration with every correct answer - 0 to 5 seconds.
-3. They can start the game by clicking on the input box and typing the answer and pressing enter for the first flag displayed. The answer for this flag is provided as the placeholder since it doesn't count towards the score anyway.
-    1. The game starts exactly when the user presses enter. Immediately the main text changes and the progress bar starts shrinking. 
-4. As the user guesses their answers suggestions pop up form below and they can press enter to select and use to up and down arrow keys to navigate the options.
-5. As the game progresses the users score and attempts are displayed
-6. When the timer ends the user is presented a table of all the flags that they attempted within the game's span the correct answers to each flag and the answer they attempted. The countdown timer is also replaced with a restart button that reloads the page and allows the user to restart.
+# speedFlags
 
-## Obtaining the flags, preparing the database, sending the flags to front-end
-My initial plan was to fetch the flags from the rest countries api but after writing the frontend js for it, I quickly realised that it was taking too long to fetch the flags from their servers so I decided to serve the flags myself. To do this, I had to write some python scripts to fetch and then save the flag svg codes along with some other details into my database: speedflags.db. 
-Now to send the flags to the front-end, I wrote 3 APIs and they are as follows.
+speedFlags is an interactive web-based game that challenges players to identify country flags as quickly as possible.
+In the process of building this game, I learnt many skills, which include HTML, CSS, SASS, Bootstrap, and JavaScript, as well as many concepts inside the domain of Javascript, such as Object-Orientated Programming, Promises, Event Listeners, Asynchronous Programming, Closures & Scope, DOM Manipulation Techniques, Web debugging, APIs like fetch, and perhaps most importantly, understood how the Javascript event loop worked.
 
-## Individual Functions inside newgame.js
-### `fetch_first_svg()`
-this is to obtain the first flag
+## Project Overview
 
-### `fetch_random_svg()`
+speedFlags is built using a combination of Flask (Python) for the backend and vanilla JavaScript for the frontend. The game utilises SVG images for flag rendering, ensuring crisp visuals at any scale. Bootstrap employs their themes and styles, making the game accessible on various devices, while custom aesthetic changes have been added through SCSS.
 
-### `fetch_specific_svg()`
+## File Structure and Functionality
 
+### Backend (Python/Flask)
 
-# the newgame.js script
+1. `app.py`
+Contains the main Flask application and handles routing, server-side logic, and manages game sessions and data persistence.
+`app.py` includes 1 webpage endpoint (index) and 5 API endpoints, of which 3 deliver SVGs and other information to the frontend javascript, while the other 2 are used for the autocomplete and answer checking features.
 
+2. `requirements.txt`
+- Lists all Python dependencies required for the project
+- Notable packages include Flask and SQLAlchemy.
 
-# styling
+### Frontend (JavaScript/HTML/CSS)
 
+1. `static/js/newgame.js`
+- Core game logic implementation
+- Manages game state, timer, and user interactions
+- Handles AJAX requests to the server for flag data and answer validation
 
+2. `static/js/theme_toggler.js` (mentioned in layout.html)
+- Implements dark/light mode functionality
+
+3. `static/custom.css`
+- Custom styles for the application
+- Extends and overrides Bootstrap styles for a unique look
+
+4. `templates/layout.html`
+- Base template for the application
+- Includes common elements like the navbar and theme toggle.
+
+5. `templates/index.html`
+Main game interface template
+Contains the structure for the game board, timer, and user input.
+
+### Configuration and Assets
+
+1. `package.json`
+- Defines project dependencies (Bootstrap)
+
+2. `.gitignore`
+- Specifies files and directories to be ignored by version control.
+
+## Key Features and Design Choices
+
+1. **Modular JavaScript Architecture**: The game logic is organised into modular objects (e.g., `gameStatsObject`, `svgMethods`, `gameInitialiser`), promoting code organisation and maintainability. The initial version of `game.js` had virtually no use of Javascript objects, which made debugging very hard as functions were all over the place. This led to me eventually giving up on debugging and rewriting the `game.js` from scratch, which I named `newgame.js`.
+
+2. **SVG Flag Rendering**: The decision to use SVG for flags ensures high-quality visuals across different screen sizes and resolutions. I had vastly underestimated how difficult it would be to manipulate the SVGs to be coherent with the rest of the page and had to understand how to use `viewPorts` and 'viewBoxes', which took a while.
+
+3. **Asynchronous Operations**: Extensive use of async/await for smooth user experience and efficient server communication. This took me a pretty long time to fully grasp as I was used to more linear languages like Python and C. But after understanding how JavaScript worked under the hood—how the `heap`, 'queue', and'stack` help a webpage to run—everything fell into place.
+
+4. **Customisable Game Settings**: Players can adjust game duration and scoring rules, enhancing replayability.
+
+5. **Accessibility Considerations**: Keyboard navigation support and clear visual feedback contribute to a more inclusive user experience.
+
+6. **Performance Optimisation**: Techniques like batched DOM updates and efficient event handling are employed to ensure smooth gameplay.
+
+7. **Security Measures**: Basic input sanitisation and server-side answer validation protect against common vulnerabilities.
+
+## Development Decisions and Tradeoffs
+
+1. **Vanilla JS vs. Framework**: The choice to use vanilla JavaScript instead of a framework like React or Vue.js was likely made to reduce complexity and dependencies for a relatively simple game. However, this may limit scalability for future feature additions.
+
+2. **Server-Side Rendering**: Using Flask's templating engine for initial page loads provides faster initial render times but may result in less dynamic content updates compared to a single-page application approach.
+
+3. **CSS Framework**: Bootstrap was chosen for rapid development and responsive design. While this ensures consistency and cross-browser compatibility, it may lead to larger CSS file sizes and potential styling conflicts.
+
+4. **SVG Manipulation**: Custom SVG handling provides precise control over flag rendering but requires more complex code compared to using pre-rendered images.
+
+## Future Improvements
+
+1. Implement a more robust state management solution for complex game states.
+2. Enhance accessibility features, including ARIA attributes and screen reader support.
+3. Add internationalisation (i18n) for multi-language support.
+4. Develop a comprehensive test suite for both frontend and backend components.
+5. Optimise performance further, especially for mobile devices.
+6. Implement offline support using service workers.
+7. Expand the game with additional modes or educational features.
+
+## Conclusion
+
+speedFlags demonstrates a well-structured web application that combines educational content with engaging gameplay. The project showcases effective use of modern web technologies while maintaining simplicity in its core design. Its modular architecture and thoughtful feature implementations provide a solid foundation for future enhancements and expansions.
