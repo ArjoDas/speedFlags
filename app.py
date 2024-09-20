@@ -33,7 +33,6 @@ def autocomplete_country():
         countries = []
     return jsonify(countries)
 
-
 @app.route('/fetch_first_svg', methods=['POST'])
 def fetch_first_svg():
     random_country = db.execute('SELECT svg_code, common, official FROM flags ORDER BY RANDOM() LIMIT 1')[0]
@@ -57,7 +56,6 @@ def fetch_random_svg():
     }
     return jsonify({'svg': random_country['svg_code']})
 
-
 @app.route('/check_country_ans', methods=['POST'])
 def check_country_ans():
     data = request.get_json()
@@ -70,7 +68,6 @@ def check_country_ans():
     # is_correct is a boolean True or False
     is_correct = user_answer in [correct_answers['common'], correct_answers['official']]
     return jsonify({'answer': is_correct, 'correctAnswer': correct_answers['common']})
-
 
 @app.route('/fetch_specific_svg', methods=['POST'])
 def fetch_specific_svg():
