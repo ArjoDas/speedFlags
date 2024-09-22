@@ -22,16 +22,9 @@ const gameStatsObject = {
 }
 
 const roundData = {
-    // claude's right, using a map here is unnecessary since we're not interested in looking up rounds by a unique key; we're more interested in the order they occurred
     score: 0,
     attempts: 0,
-    history: [],
-    /*
-        history = [
-            {index: int, country: theCorrectAns, userAnswer: userAns, validity: true/false}
-            ...
-        ]
-    */
+    history: [], // = [{index: int, country: theCorrectAns, userAnswer: userAns, validity: true/false}...]
     flagContainer: document.querySelector('flag-container'),
     userAnsInterface: document.getElementById('user-ans-interface'),
     infoHeader: document.getElementById('info-header'),
@@ -57,7 +50,7 @@ const roundData = {
         this.infoHeader.innerHTML = `<a href="/"><button id="restart-button" type="button" class="btn btn-lg btn-outline-primary">restart</button></a>`
         this.userAnsInterface.classList.add('d-none');
         this.flagContainer.classList.remove('border', 'border-primary');
-
+    
         let tableHTML = `
             <table class="table table-striped-columns text-center align-middle fs-5">
                 <tr>
@@ -72,7 +65,7 @@ const roundData = {
             tableHTML += `
                 <tr>
                     <td class="${bgClass}">
-                        <div id="flag-svg-${round.index}" style="height: 150px; display: flex; justify-content: center; align-items: center;"></div>
+                        <div id="flag-img-${round.index}" style="height: 150px; display: flex; justify-content: center; align-items: center;"></div>
                     </td>
                     <td class="${bgClass}">${round.country}</td>
                     <td class="${bgClass}">${round.userAnswer}</td>
@@ -83,12 +76,12 @@ const roundData = {
         tableHTML += `</table>`;
         this.flagContainer.innerHTML = tableHTML;
     
-        // Now, load the SVGs for each flag
+        // Now, load the flag images for each country
         this.history.forEach(async (round) => {
-            const svgContainer = document.getElementById(`flag-svg-${round.index}`);
-            if (svgContainer) {
+            const imgContainer = document.getElementById(`flag-img-${round.index}`);
+            if (imgContainer) {
                 try {
-                    const response = await fetch('/fetch_specific_svg', {
+                    const response = await fetch('/fetch_specific_cca2', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -96,36 +89,14 @@ const roundData = {
                         body: JSON.stringify({ country: round.country })
                     });
                     const data = await response.json();
-                    svgContainer.innerHTML = data.svg;
-                    this.styleSvg(svgContainer);
+                    const cca2 = data.cca2.toLowerCase();
+                    const imgURL = `https://flagcdn.com/w640/${cca2}.jpg`;
+                    imgContainer.innerHTML = `<img src="${imgURL}" alt="${round.country} flag" class="img-fluid" style="max-height: 150px; width: auto;">`;
                 } catch (error) {
-                    console.error(`Error loading SVG for ${round.country}:`, error);
+                    console.error(`Error loading flag for ${round.country}:`, error);
                 }
             }
         });
-    },
-
-    styleSvg(container) {
-        const svgElement = container.querySelector('svg');
-        if (svgElement) {
-            if (!svgElement.getAttribute('viewBox')) {
-                const width = svgElement.getAttribute('width') || svgElement.getBoundingClientRect().width;
-                const height = svgElement.getAttribute('height') || svgElement.getBoundingClientRect().height;
-                svgElement.setAttribute('viewBox', `0 0 ${width} ${height}`);
-            }
-            
-            // Remove any hardcoded width and height
-            svgElement.removeAttribute('width');
-            svgElement.removeAttribute('height');
-    
-            // Set a fixed height of 150px while maintaining aspect ratio
-            const viewBox = svgElement.getAttribute('viewBox').split(' ');
-            const aspectRatio = viewBox[2] / viewBox[3]; // aspect ratio = width divided by height
-            const newWidth = 150 * aspectRatio;
-            
-            svgElement.style.width = `${newWidth}px`;
-            svgElement.style.height = '150px';
-        }    
     }
 }
 

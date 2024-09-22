@@ -69,14 +69,24 @@ def check_country_ans():
     is_correct = user_answer in [correct_answers['common'], correct_answers['official']]
     return jsonify({'answer': is_correct, 'correctAnswer': correct_answers['common']})
 
-@app.route('/fetch_specific_svg', methods=['POST'])
-def fetch_specific_svg():
+# wasn't used because loading that many svgs were too intense for the browser
+# @app.route('/fetch_specific_svg', methods=['POST'])
+# def fetch_specific_svg():
+#     data = request.get_json()
+#     country = data.get('country')
+#     specific_country = db.execute('SELECT svg_code FROM flags WHERE LOWER(common) = LOWER(?)', country)
+#     if specific_country[0]:
+#         return jsonify({'svg': specific_country[0]['svg_code']})
+#     return jsonify({'svg': 'error'})
+
+@app.route('/fetch_specific_cca2', methods=['POST'])
+def fetch_specific_cca2():
     data = request.get_json()
     country = data.get('country')
-    specific_country = db.execute('SELECT svg_code FROM flags WHERE LOWER(common) = LOWER(?)', country)
+    specific_country = db.execute('SELECT cca2 FROM flags WHERE LOWER(common) = LOWER(?)', country) # for debugging
     if specific_country[0]:
-        return jsonify({'svg': specific_country[0]['svg_code']})
-    return jsonify({'svg': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 504 198" width="380" height="150"><path fill="#8a1538" d="M0 0h504v198H0z"/><path fill="#fff" d="M144 198H0V0h144l36 11-36 11 36 11-36 11 36 11-36 11 36 11-36 11 36 11-36 11 36 11-36 11 36 11-36 11 36 11-36 11 36 11z"/></svg>'})
+        return jsonify({'cca2': specific_country[0]['cca2']})   # for debugging
+    return jsonify({'cca2': 'error'})
 
 
 if __name__ == '__main__':

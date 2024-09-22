@@ -1,12 +1,7 @@
-
-#### CS50's README formatting guide
-- what each of the files you wrote for the project contains and does, and
-- if you debated certain design choices, explaining why you made them.
-
 # speedFlags
 
 speedFlags is an interactive web-based game that challenges players to identify country flags as quickly as possible.
-In the process of building this game, I learnt many skills, which include HTML, CSS, SASS, Bootstrap, and JavaScript, as well as many concepts inside the domain of Javascript, such as Object-Orientated Programming, Promises, Event Listeners, Asynchronous Programming, Closures & Scope, DOM Manipulation Techniques, Web debugging, APIs like fetch, and perhaps most importantly, understood how the Javascript event loop worked.
+While building this game, I learnt many skills, including SASS, Bootstrap, and Vanilla JavaScript. I also learnt many concepts inside the domain of Javascript, such as Object-Orientated Programming, Promises, Event Listeners, Asynchronous Programming, Closures & Scope, DOM Manipulation Techniques, Web debugging, APIs like fetch, and perhaps most importantly, understood how the Javascript event loop worked under the hood.
 
 ## Project Overview
 
@@ -54,6 +49,9 @@ Contains the structure for the game board, timer, and user input.
 2. `.gitignore`
 - Specifies files and directories to be ignored by version control.
 
+3. `temp_files/temp1.py - temp4.py`
+- These scripts were used to obtain the flag svg codes from the REST Countries API. Though my initial plan was to get the svg codes from the REST Countries APIs directly through the front-end. It turned out to take too long and since quick delivery was important I downloaded the SVGs into my own `speedflags.db` and made my own APIs to serve the flags to the front end from there.
+
 ## Key Features and Design Choices
 
 1. **Modular JavaScript Architecture**: The game logic is organised into modular objects (e.g., `gameStatsObject`, `svgMethods`, `gameInitialiser`), promoting code organisation and maintainability. The initial version of `game.js` had virtually no use of Javascript objects, which made debugging very hard as functions were all over the place. This led to me eventually giving up on debugging and rewriting the `game.js` from scratch, which I named `newgame.js`.
@@ -88,7 +86,7 @@ Contains the structure for the game board, timer, and user input.
 4. Develop a comprehensive test suite for both frontend and backend components.
 5. Optimise performance further, especially for mobile devices.
 6. Implement offline support using service workers.
-7. Expand the game with additional modes or educational features.
+7. Expand the game with additional modes or educational features. We could add accounts where people can use active-recall and spaced-repetition with an alogirthm similiar to Anki's and optally remember flags from there.
 
 ## Conclusion
 
