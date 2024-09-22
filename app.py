@@ -69,16 +69,6 @@ def check_country_ans():
     is_correct = user_answer in [correct_answers['common'], correct_answers['official']]
     return jsonify({'answer': is_correct, 'correctAnswer': correct_answers['common']})
 
-# wasn't used because loading that many svgs were too intense for the browser
-# @app.route('/fetch_specific_svg', methods=['POST'])
-# def fetch_specific_svg():
-#     data = request.get_json()
-#     country = data.get('country')
-#     specific_country = db.execute('SELECT svg_code FROM flags WHERE LOWER(common) = LOWER(?)', country)
-#     if specific_country[0]:
-#         return jsonify({'svg': specific_country[0]['svg_code']})
-#     return jsonify({'svg': 'error'})
-
 @app.route('/fetch_specific_cca2', methods=['POST'])
 def fetch_specific_cca2():
     data = request.get_json()
