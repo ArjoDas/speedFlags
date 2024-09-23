@@ -1,15 +1,18 @@
 # speedFlags
 
+#### Video Demo:  
+[<YouTube Presentation>](https://youtu.be/p_8dHJ_5BW4)
+#### Description:
 speedFlags is an interactive web-based game that challenges players to identify country flags as quickly as possible.
 While building this game, I learnt many skills, including SASS, Bootstrap, and Vanilla JavaScript. I also learnt many concepts inside the domain of Javascript, such as Object-Orientated Programming, Promises, Event Listeners, Asynchronous Programming, Closures & Scope, DOM Manipulation Techniques, Web debugging, APIs like fetch, and perhaps most importantly, understood how the Javascript event loop worked under the hood.
 
-## Project Overview
+### Project Overview
 
 speedFlags is built using a combination of Flask (Python) for the backend and vanilla JavaScript for the frontend. The game utilises SVG images for flag rendering, ensuring crisp visuals at any scale. Bootstrap employs their themes and styles, making the game accessible on various devices, while custom aesthetic changes have been added through SCSS.
 
-## File Structure and Functionality
+### File Structure and Functionality
 
-### Backend (Python/Flask)
+#### Backend (Python/Flask)
 
 1. `app.py`
 Contains the main Flask application and handles routing, server-side logic, and manages game sessions and data persistence.
@@ -19,7 +22,7 @@ Contains the main Flask application and handles routing, server-side logic, and 
 - Lists all Python dependencies required for the project
 - Notable packages include Flask and SQLAlchemy.
 
-### Frontend (JavaScript/HTML/CSS)
+#### Frontend (JavaScript/HTML/CSS)
 
 1. `static/js/newgame.js`
 - Core game logic implementation
@@ -41,7 +44,7 @@ Contains the main Flask application and handles routing, server-side logic, and 
 Main game interface template
 Contains the structure for the game board, timer, and user input.
 
-### Configuration and Assets
+#### Configuration and Assets
 
 1. `package.json`
 - Defines project dependencies (Bootstrap)
@@ -52,7 +55,7 @@ Contains the structure for the game board, timer, and user input.
 3. `temp_files/temp1.py - temp4.py`
 - These scripts were used to obtain the flag svg codes from the REST Countries API. Though my initial plan was to get the svg codes from the REST Countries APIs directly through the front-end. It turned out to take too long and since quick delivery was important I downloaded the SVGs into my own `speedflags.db` and made my own APIs to serve the flags to the front end from there.
 
-## Key Features and Design Choices
+### Key Features and Design Choices
 
 1. **Modular JavaScript Architecture**: The game logic is organised into modular objects (e.g., `gameStatsObject`, `svgMethods`, `gameInitialiser`), promoting code organisation and maintainability. The initial version of `game.js` had virtually no use of Javascript objects, which made debugging very hard as functions were all over the place. This led to me eventually giving up on debugging and rewriting the `game.js` from scratch, which I named `newgame.js`.
 
@@ -68,7 +71,7 @@ Contains the structure for the game board, timer, and user input.
 
 7. **Security Measures**: Basic input sanitisation and server-side answer validation protect against common vulnerabilities.
 
-## Development Decisions and Tradeoffs
+### Development Decisions and Tradeoffs
 
 1. **Vanilla JS vs. Framework**: The choice to use vanilla JavaScript instead of a framework like React or Vue.js was likely made to reduce complexity and dependencies for a relatively simple game. However, this may limit scalability for future feature additions.
 
@@ -78,7 +81,7 @@ Contains the structure for the game board, timer, and user input.
 
 4. **SVG Manipulation**: Custom SVG handling provides precise control over flag rendering but requires more complex code compared to using pre-rendered images.
 
-## Future Improvements
+### Future Improvements
 
 1. Implement a more robust state management solution for complex game states.
 2. Enhance accessibility features, including ARIA attributes and screen reader support.
@@ -88,6 +91,6 @@ Contains the structure for the game board, timer, and user input.
 6. Implement offline support using service workers.
 7. Expand the game with additional modes or educational features. We could add accounts where people can use active-recall and spaced-repetition with an alogirthm similiar to Anki's and optally remember flags from there.
 
-## Conclusion
+### Conclusion
 
 speedFlags demonstrates a well-structured web application that combines educational content with engaging gameplay. The project showcases effective use of modern web technologies while maintaining simplicity in its core design. Its modular architecture and thoughtful feature implementations provide a solid foundation for future enhancements and expansions.
