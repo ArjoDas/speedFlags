@@ -11,10 +11,25 @@ load_dotenv()
 
 app = Flask(__name__)
 
-# Configure session
+# REMOVED FOR VERCEL
+# # Configure session
+# app.config['SECRET_KEY'] = os.getenv('SECRET_KEY') or os.urandom(24)
+# app.config['SESSION_TYPE'] = 'filesystem'
+# Session(app)
+
+# VERCEL SPECIFIC CODE
+# Updated session configuration for VERCEL
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY') or os.urandom(24)
 app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SESSION_FILE_DIR'] = '/tmp/flask_session' if os.environ.get('VERCEL_REGION') else None
+app.config['SESSION_USE_SIGNER'] = True
 Session(app)
+
+# Create the session directory if on Vercel
+if os.environ.get('VERCEL_REGION') and not os.path.exists('/tmp/flask_session'):
+    os.makedirs('/tmp/flask_session')
+
+
 
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///speedflags.db")
@@ -80,4 +95,4 @@ def fetch_specific_cca2():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
