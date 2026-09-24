@@ -56,14 +56,14 @@ export function recordBest(game: Game): { best: number; saved: boolean } {
 }
 
 export function dailyKey(game: Game): string {
-  return `daily.v1.${game.challenge_date}.${game.dataset_version}`
+  return `daily.v2.${game.challenge_date}`
 }
 export function storedDaily(game: Game): Game | null {
-  const saved = read(dailyKey(game)) as Game | null
+  const saved = (read(dailyKey(game)) ??
+    read(`daily.v1.${game.challenge_date}.${game.dataset_version}`)) as Game | null
   try {
     return saved &&
       saved.challenge_date === game.challenge_date &&
-      saved.dataset_version === game.dataset_version &&
       saved.settings?.mode === 'challenge'
       ? validGame(saved)
       : null

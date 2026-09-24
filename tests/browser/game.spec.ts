@@ -183,14 +183,14 @@ test('malformed successful response stays recoverable', async ({ page }) => {
 })
 
 test('failed first asset can retry without starting the clock', async ({ page }) => {
-  await page.goto('/')
   let fail = true
   await page.route('**/flags/*.svg', (route) => (fail ? route.abort() : route.continue()))
-  await page.getByRole('button', { name: 'Play', exact: true }).click()
+  await page.goto('/')
   await expect(page.getByRole('alert')).toContainText('flag could not load')
   await expect(page.getByRole('region', { name: 'Flag game' })).toHaveCount(0)
   fail = false
   await page.getByRole('button', { name: 'Retry', exact: true }).click()
+  await page.getByRole('button', { name: 'Close settings' }).click()
   await expect(page.getByRole('combobox', { name: 'Country name' })).toBeEnabled()
 })
 
@@ -352,11 +352,11 @@ test('settings modal defaults to Challenge, preserves the warm-up on cancel and 
   const modal = page.getByRole('dialog', { name: 'New game' })
   await expect(modal).toBeVisible()
   await expect(modal.getByRole('radio', { name: 'Daily Challenge', exact: true })).toBeChecked()
-  await expect(modal).toContainText('30 flags daily · +5s per wrong answer or skip')
+  await expect(modal).toContainText('30 flags daily')
   await expect(modal.getByRole('radio', { name: '120s' })).toHaveCount(0)
   await page.keyboard.press('Escape')
   await expect(modal).not.toBeVisible()
-  await page.getByRole('button', { name: 'Settings', exact: true }).click()
+  await page.getByRole('button', { name: /^(Settings|Change settings)$/ }).click()
   await modal.getByRole('radio', { name: 'Timed', exact: true }).check()
   await modal.getByRole('radio', { name: '120s' }).check()
   await modal.getByRole('radio', { name: '+5s', exact: true }).check()
@@ -436,7 +436,41 @@ test('daily challenge resumes, scores 30 flags and copies only blocks and adjust
   await page.getByRole('button', { name: 'Play', exact: true }).click()
   await expect(page.getByRole('heading', { name: 'Results', exact: true })).toBeVisible()
   await expect(page.getByLabel('Share preview')).toHaveText(shared!)
-  await page.getByRole('button', { name: 'Practice today’s flags' }).click()
+  await expect(page.getByRole('button', { name: 'Practice today’s flags' })).toHaveCount(0)
+  await expect(page.locator('.daily-result')).toContainText('Come back tomorrow')
+  await page.getByRole('button', { name: 'Change settings' }).click()
+  await page.getByRole('button', { name: 'Play', exact: true }).click()
+  await expect(page.getByLabel('Share preview')).toHaveText(shared!)
+})
+
+test('dismissing initial settings starts from a loaded warm-up without pressing Play', async ({
+  page,
+}) => {
+  await page.goto('/')
+  const modal = page.getByRole('dialog')
+  await expect(modal.getByRole('button', { name: 'Play', exact: true })).toBeEnabled()
+  await expect(modal).toContainText('One attempt per day on this browser')
+  await expect(modal).not.toContainText('daily ·')
+  await modal.getByRole('button', { name: 'Close settings' }).click()
+  await expect(page.getByRole('combobox', { name: 'Country name' })).toBeEnabled()
+  await expect(page.getByTestId('warmup-answer')).toBeVisible()
+  await expect(page.locator('.timer')).toHaveText('0:00')
+})
+
+test('daily play requires storage so its one-play limit can persist', async ({ page }) => {
+  await page.addInitScript(() =>
+    Object.defineProperty(window, 'localStorage', {
+      get() {
+        throw new Error('disabled')
+      },
+    }),
+  )
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Close settings' }).click()
+  const input = page.getByRole('combobox', { name: 'Country name' })
   await expect(input).toBeEnabled()
-  await expect(page.locator('.daily-status')).toContainText('Practice attempt')
+  await input.fill(await page.getByTestId('warmup-answer').innerText())
+  await input.press('Enter')
+  await expect(page.getByRole('alert')).toContainText('Daily Challenge needs browser storage')
+  await expect(page.getByTestId('warmup-answer')).toBeVisible()
 })

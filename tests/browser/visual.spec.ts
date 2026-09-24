@@ -28,7 +28,7 @@ test('small viewport and dark layout remain usable', async ({ page }) => {
   await page.goto('/')
   await page.getByRole('button', { name: 'Close settings' }).click()
   await page.getByRole('button', { name: 'Dark', exact: true }).click()
-  await page.getByRole('button', { name: 'Settings', exact: true }).click()
+  await page.getByRole('button', { name: /^(Settings|Change settings)$/ }).click()
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy()
   await page.getByRole('button', { name: 'Play', exact: true }).click()
   await expect(page.getByRole('combobox', { name: 'Country name' })).toBeEnabled()

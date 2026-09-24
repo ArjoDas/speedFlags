@@ -33,7 +33,17 @@ export function Setup({ settings, onChange, onStart, disabled }: Props) {
         </div>
       </fieldset>
       {settings.mode === 'challenge' && (
-        <p className="challenge-rules">30 flags daily · +5s per wrong answer or skip</p>
+        <div className="challenge-rules">
+          <p>
+            30 flags daily
+            <br />
+            +5s per wrong answer or skip
+          </p>
+          <p>
+            One attempt per day on this browser. Refresh to resume; finishing or leaving early uses
+            your attempt. Resets at midnight UTC.
+          </p>
+        </div>
       )}
       {settings.mode === 'timed' && (
         <>

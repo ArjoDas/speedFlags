@@ -9,6 +9,25 @@ import { Theme } from './ui/Theme'
 import { formatTime } from './game/daily'
 import { normalize } from './game/search'
 
+async function prepareGame(settings: Settings, signal: AbortSignal): Promise<Game> {
+  const prepared = await api.create(settings, signal)
+  const saved = prepared.challenge_date ? storedDaily(prepared) : null
+  if (saved?.status === 'finished') return saved
+  if (saved) {
+    try {
+      return await api.sync(saved, signal)
+    } catch (cause) {
+      if (!(cause instanceof ApiError) || ![401, 409, 410].includes(cause.status)) throw cause
+      if (saved.status !== 'ready')
+        throw new ApiError(
+          'Today’s Daily Challenge attempt has ended. Come back tomorrow, or choose Timed or Practice.',
+        )
+    }
+  }
+  await preload(prepared.question!.asset_url, signal)
+  return prepared
+}
+
 type State = { game: Game | null; busy: boolean; error: string; best: number; saved: boolean }
 type Action =
   | { type: 'busy' }
@@ -40,8 +59,6 @@ export default function App() {
   const [countries, setCountries] = useState<Country[]>([])
   const [remaining, setRemaining] = useState(0)
   const [elapsed, setElapsed] = useState(0)
-  const [dailyPractice, setDailyPractice] = useState(false)
-  const dailyPracticeRef = useRef(false)
   const dailyClock = useRef({ received: 0, elapsed: 0 })
   const [warmupError, setWarmupError] = useState('')
   const [flash, setFlash] = useState(false)
@@ -72,90 +89,92 @@ export default function App() {
     }
   }, [])
 
-  const run = useCallback((operation: (signal: AbortSignal) => Promise<Game>) => {
-    if (lock.current) return
-    lock.current = true
-    controller.current = new AbortController()
-    const abort = controller.current
-    const currentEpoch = epoch.current
-    dispatch({ type: 'busy' })
-    retry.current = () => run(operation)
-    operation(abort.signal)
-      .then((result) => {
-        if (abort.signal.aborted || currentEpoch !== epoch.current) return
-        sync.current = {
-          received: performance.now(),
-          remaining:
-            result.deadline === null
-              ? Infinity
-              : Math.max(0, (result.deadline - result.server_time) * 1000),
-        }
-        dailyClock.current = {
-          received: performance.now(),
-          elapsed:
-            result.status === 'playing' && result.started_at != null
-              ? Math.max(0, result.server_time - result.started_at)
-              : (result.elapsed_seconds ?? 0),
-        }
-        setElapsed(dailyClock.current.elapsed)
-        if (result.challenge_date && !dailyPracticeRef.current) {
-          const saved = write(dailyKey(result), result)
-          dispatch({ type: 'saved', best: 0, saved })
-        }
-        setRemaining(sync.current.remaining)
-        if (result.last_attempt?.question_id === currentQuestion.current && currentFlag.current) {
-          outgoingFlag.current = {
-            id: currentQuestion.current,
-            bounds: currentFlag.current.getBoundingClientRect(),
+  const run = useCallback(
+    (operation: (signal: AbortSignal) => Promise<Game>, keepSettingsOpen = false) => {
+      if (lock.current) return
+      lock.current = true
+      controller.current = new AbortController()
+      const abort = controller.current
+      const currentEpoch = epoch.current
+      dispatch({ type: 'busy' })
+      retry.current = () => run(operation, keepSettingsOpen)
+      operation(abort.signal)
+        .then((result) => {
+          if (abort.signal.aborted || currentEpoch !== epoch.current) return
+          if (result.challenge_date) {
+            const existing = storedDaily(result)
+            if (
+              existing &&
+              ((existing.status !== 'ready' && result.status === 'ready') ||
+                existing.attempts > result.attempts ||
+                (existing.status === 'finished' && result.status !== 'finished'))
+            )
+              result = existing
           }
-        }
-        if (result.question?.id !== currentQuestion.current) setImageStatus('loading')
-        currentQuestion.current = result.question?.id ?? ''
-        dispatch({ type: 'game', game: result })
-        setSettingsOpen(false)
-        retry.current = null
-        if (result.status === 'finished' && !result.challenge_date)
-          dispatch({ type: 'saved', ...recordBest(result) })
-      })
-      .catch((cause: unknown) => {
-        if (abort.signal.aborted || currentEpoch !== epoch.current) return
-        if (cause instanceof ApiError && [401, 409, 410, 422].includes(cause.status))
+          sync.current = {
+            received: performance.now(),
+            remaining:
+              result.deadline === null
+                ? Infinity
+                : Math.max(0, (result.deadline - result.server_time) * 1000),
+          }
+          dailyClock.current = {
+            received: performance.now(),
+            elapsed:
+              result.status === 'playing' && result.started_at != null
+                ? Math.max(0, result.server_time - result.started_at)
+                : (result.elapsed_seconds ?? 0),
+          }
+          setElapsed(dailyClock.current.elapsed)
+          if (result.challenge_date) {
+            const saved = write(dailyKey(result), result)
+            dispatch({ type: 'saved', best: 0, saved })
+          }
+          setRemaining(sync.current.remaining)
+          if (result.last_attempt?.question_id === currentQuestion.current && currentFlag.current) {
+            outgoingFlag.current = {
+              id: currentQuestion.current,
+              bounds: currentFlag.current.getBoundingClientRect(),
+            }
+          }
+          if (result.question?.id !== currentQuestion.current) setImageStatus('loading')
+          currentQuestion.current = result.question?.id ?? ''
+          dispatch({ type: 'game', game: result })
+          if (!keepSettingsOpen) setSettingsOpen(false)
           retry.current = null
-        dispatch({
-          type: 'error',
-          message:
-            cause instanceof Error ? cause.message : 'Something went wrong. Please try again.',
+          if (result.status === 'finished' && !result.challenge_date)
+            dispatch({ type: 'saved', ...recordBest(result) })
         })
-      })
-      .finally(() => {
-        if (currentEpoch === epoch.current) lock.current = false
-      })
-  }, [])
+        .catch((cause: unknown) => {
+          if (abort.signal.aborted || currentEpoch !== epoch.current) return
+          if (cause instanceof ApiError && [401, 409, 410, 422].includes(cause.status))
+            retry.current = null
+          dispatch({
+            type: 'error',
+            message:
+              cause instanceof Error ? cause.message : 'Something went wrong. Please try again.',
+          })
+        })
+        .finally(() => {
+          if (currentEpoch === epoch.current) lock.current = false
+        })
+    },
+    [],
+  )
 
-  function begin(next = settings, practiceDaily = false) {
-    dailyPracticeRef.current = practiceDaily
-    setDailyPractice(practiceDaily)
+  const initialSettings = useRef(settings)
+  useEffect(() => {
+    run((signal) => prepareGame(initialSettings.current, signal), true)
+    return () => {
+      epoch.current += 1
+      controller.current?.abort()
+      lock.current = false
+    }
+  }, [run])
+
+  function begin(next = settings) {
     write('settings.v2', { ...next, country_ids: [] })
-    // A retry reuses a prepared game after creation, rather than allocating another one.
-    let prepared: Game | null = null
-    run(async (signal) => {
-      prepared ??= await api.create(next, signal)
-      if (prepared.challenge_date && !practiceDaily) {
-        const saved = storedDaily(prepared)
-        if (saved) {
-          if (saved.status === 'finished') return saved
-          try {
-            return await api.sync(saved, signal)
-          } catch (cause) {
-            if (!(cause instanceof ApiError) || ![401, 409, 410].includes(cause.status)) throw cause
-            dailyPracticeRef.current = true
-            setDailyPractice(true)
-          }
-        }
-      }
-      await preload(prepared.question!.asset_url, signal)
-      return prepared
-    })
+    run((signal) => prepareGame(next, signal))
   }
   function reset() {
     setSettingsOpen(true)
@@ -180,7 +199,23 @@ export default function App() {
         return
       }
       setWarmupError('')
-      run((signal) => api.start(game, text, signal))
+      run(async (signal) => {
+        const start = async () => {
+          const saved = game.challenge_date ? storedDaily(game) : null
+          if (saved && saved.status !== 'ready')
+            return saved.status === 'finished' ? saved : api.sync(saved, signal)
+          if (game.challenge_date && !write(dailyKey(game), game))
+            throw new ApiError(
+              'Daily Challenge needs browser storage to save your one daily attempt. Enable storage, or choose Timed or Practice.',
+            )
+          const result = await api.start(game, text, signal)
+          if (game.challenge_date) write(dailyKey(result), result)
+          return result
+        }
+        return game.challenge_date && navigator.locks
+          ? navigator.locks.request(`speedflags-daily-${game.challenge_date}`, start)
+          : start()
+      })
       return
     }
     const body = {
@@ -335,7 +370,10 @@ export default function App() {
           onVisibilityChange={setSettingsVisible}
           open={settingsOpen}
           busy={busy}
-          onDismiss={() => setSettingsOpen(false)}
+          onDismiss={() => {
+            setSettingsOpen(false)
+            if (!game || JSON.stringify(game.settings) !== JSON.stringify(settings)) begin()
+          }}
         >
           {error && (
             <div className="error-banner" role="alert">
@@ -413,8 +451,8 @@ export default function App() {
             )}
             {game.challenge_date && (
               <p className="daily-status">
-                {game.challenge_date} · {dailyPractice ? 'Practice attempt' : 'Daily attempt'} ·{' '}
-                {game.attempts}/30 · +{game.penalty_seconds}s penalties
+                {game.challenge_date} · One daily attempt per browser · {game.attempts}/30 · +
+                {game.penalty_seconds}s penalties
               </p>
             )}
             <div className="game-workspace">
@@ -535,14 +573,13 @@ export default function App() {
         {game?.status === 'finished' && (
           <Results
             game={game}
-            dailyPractice={dailyPractice}
             best={state.best}
             saved={state.saved}
             setup={reset}
             replay={() => {
               reset()
               setSettingsOpen(false)
-              begin(game.settings, !!game.challenge_date)
+              begin(game.settings)
             }}
             practice={() => {
               const missed = [

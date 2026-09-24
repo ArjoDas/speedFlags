@@ -69,3 +69,11 @@ Temporary fixes to the old Flask UI were superseded by regression-tested replace
 - Sharing copies exactly five rows of six outcome blocks, a blank line and adjusted time. Accuracy and elapsed/penalty breakdown appear separately on the results screen. Clipboard failures expose selectable text.
 - Saved first-attempt contexts support refresh recovery and completed-result review on the same browser. Explicit daily retries are labelled practice and do not overwrite that first attempt. This is not globally enforced ranking eligibility: trusted single attempts, duplicate suppression across clients, leaderboards and country statistics still require durable shared storage and identity. Timed and Practice remain available.
 - Validation: 39 Python tests, 4 frontend unit tests, 74 browser checks (six intentionally skipped duplicate timer/screenshot checks), and a final daily-flow rerun across all four browser configurations. Production build, TypeScript, lint/formatting and accessibility checks pass. Daily game and results screenshots were inspected.
+
+## Automatic loading and one daily play
+
+- The initial page load prepares or resumes the selected game behind the settings popup. Dismissing it reveals the loaded warm-up/results without requiring Play; the warm-up still controls when the timer starts.
+- Daily replay has been removed. localStorage now tracks one attempt per UTC date independently of dataset version, with migration from the previous date/version key. Completed results remain available and expired started attempts cannot silently turn into another Daily Challenge. Timed and Practice remain available.
+- Daily start requires writable browser storage. Web Locks serialize starts across tabs where supported, and older ready/answer responses cannot overwrite a more advanced stored attempt. Clearing storage, switching browser/device, or directly replaying stateless API contexts still requires server-side identity and durable records to police globally.
+- Settings now explain the one-attempt limit and UTC reset. Daily rules use a line break instead of the separator between “30 flags daily” and the penalty description.
+- Verification: production build, lint and formatting pass; 82 browser checks pass across Chromium, Firefox, WebKit and mobile, with six intentionally skipped duplicate timer/screenshot checks.

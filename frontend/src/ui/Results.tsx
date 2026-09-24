@@ -3,14 +3,13 @@ import { dailyShare, formatTime } from '../game/daily'
 import type { Game } from '../api/client'
 type Props = {
   game: Game
-  dailyPractice: boolean
   best: number
   saved: boolean
   replay: () => void
   practice: () => void
   setup: () => void
 }
-export function Results({ game, dailyPractice, best, saved, replay, practice, setup }: Props) {
+export function Results({ game, best, saved, replay, practice, setup }: Props) {
   const [copyState, setCopyState] = useState('')
   const share = dailyShare(game)
   const heading = useRef<HTMLHeadingElement>(null)
@@ -43,10 +42,7 @@ export function Results({ game, dailyPractice, best, saved, replay, practice, se
           <p>
             {formatTime(game.elapsed_seconds)} + {game.penalty_seconds}s penalties
           </p>
-          <p>
-            {game.challenge_date} ·{' '}
-            {dailyPractice ? 'Practice attempt' : 'Daily attempt on this device'}
-          </p>
+          <p>{game.challenge_date} · Daily attempt used. Come back tomorrow.</p>
           {share && (
             <>
               <pre aria-label="Share preview">{share}</pre>
@@ -98,10 +94,12 @@ export function Results({ game, dailyPractice, best, saved, replay, practice, se
         </div>
       )}
       <div className="result-actions">
-        <button className="primary" onClick={replay}>
-          {game.challenge_date ? 'Practice today’s flags' : 'Play again'}{' '}
-          <span aria-hidden="true">↗</span>
-        </button>
+        {!game.challenge_date && (
+          <button className="primary" onClick={replay}>
+            Play again
+            <span aria-hidden="true">↗</span>
+          </button>
+        )}
         {missed.length > 0 && (
           <button className="secondary" onClick={practice}>
             Practice missed flags

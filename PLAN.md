@@ -260,7 +260,7 @@ Implemented: **Daily Challenge** is the default. It selects 30 distinct playable
 
 Sharing copies only five rows of six outcome blocks (green correct, red incorrect, yellow skipped), a blank line, and adjusted total time. The results screen separately shows e.g. “2:12 · 24/30” and “1:42 + 30s penalties”. Incomplete/expired rounds cannot produce a completed share. Finishing all 30 is mandatory for a result.
 
-The first daily attempt is saved locally after each server response and can be resumed or reviewed after refresh. Replays are labelled practice and do not replace it. This is device-local convenience, not a trusted one-player/one-attempt enforcement system. Practice retries are not durable across reload; reload restores the first daily attempt. No public rankings or country collection are enabled yet. Do not change the dataset mid-day when comparability matters; a dataset change gives a different versioned challenge.
+The first daily attempt is saved locally after each server response and can be resumed or reviewed after refresh. Daily replays are disabled: one attempt per UTC day is tracked in localStorage, independent of dataset version. The app automatically prepares/resumes a game behind settings on page load. Browser storage is required to start a daily attempt. Web Locks serialize starts across tabs where supported. These are browser-local controls, not a trusted global one-player/one-attempt enforcement system; clearing storage or using another browser can bypass them. Timed and Practice remain available. No public rankings or country collection are enabled yet. Do not change the dataset mid-day when comparability matters; a dataset change gives a different versioned challenge.
 
 Future work, restricted to Daily Challenge results:
 
