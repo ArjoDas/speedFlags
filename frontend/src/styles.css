@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 @theme {
-  --font-sans: 'Inter', 'Avenir Next', 'Segoe UI', sans-serif;
+  --font-sans:
+    system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans',
+    Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 }
 :root {
   color-scheme: light;
@@ -17,8 +19,8 @@
 }
 :root[data-theme='dark'] {
   color-scheme: dark;
-  --paper: #121923;
-  --card: #1b2634;
+  --paper: #080c12;
+  --card: #111923;
   --ink: #edf2fa;
   --muted: #b4c1d3;
   --line: #3a4a60;
@@ -108,15 +110,16 @@ h2 {
   font-weight: 800;
 }
 .theme-options {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   padding: 4px;
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 0;
   gap: 2px;
 }
 .theme-options button {
   padding: 7px 10px;
-  border-radius: 6px;
+  border-radius: 0;
   font-size: 0.8rem;
   color: var(--muted);
 }
@@ -132,7 +135,7 @@ main {
 .primary,
 .secondary {
   padding: 11px 18px;
-  border-radius: 8px;
+  border-radius: 0;
   font-weight: 600;
 }
 .primary {
@@ -156,7 +159,7 @@ main {
 .setup-card {
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: 0;
   max-width: 430px;
   margin: 8px auto;
   padding: 28px;
@@ -180,7 +183,7 @@ legend {
   gap: 4px;
   padding: 4px;
   background: var(--soft);
-  border-radius: 10px;
+  border-radius: 0;
 }
 .segments label {
   flex: 1;
@@ -198,7 +201,7 @@ legend {
 .segments span {
   display: block;
   padding: 10px 4px;
-  border-radius: 7px;
+  border-radius: 0;
   font-size: 0.9rem;
 }
 .segments input:checked + span {
@@ -229,32 +232,28 @@ legend {
   width: 100%;
 }
 .play-top {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: 12px;
   margin-bottom: 16px;
 }
-.play-top h1 {
-  font-size: 1rem;
-  color: var(--muted);
-}
-.game-state {
-  display: flex;
-  align-items: center;
-  gap: 22px;
+.play-top > .text-button {
+  justify-self: end;
 }
 .timer {
-  font-size: 1.5rem;
+  grid-column: 2;
+  font-size: 3rem;
   font-weight: 650;
   font-variant-numeric: tabular-nums;
+  text-align: center;
 }
 .timer.urgent {
   color: var(--red);
 }
 .time-track {
   height: 7px;
-  border-radius: 10px;
+  border-radius: 0;
   background: var(--line);
   overflow: hidden;
   margin-bottom: 28px;
@@ -282,7 +281,7 @@ legend {
   padding: 20px;
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: 0;
 }
 .flag-stage > img {
   max-width: 100%;
@@ -380,19 +379,13 @@ legend {
 }
 .answer-flash {
   border: 1px solid var(--red);
-  border-radius: 8px;
+  border-radius: 0;
   padding: 12px 16px;
   color: var(--red);
   width: 100%;
 }
 .answer-form {
   position: relative;
-}
-.answer-form > label {
-  display: block;
-  font-size: 0.85rem;
-  font-weight: 600;
-  margin-bottom: 8px;
 }
 .input-row {
   display: flex;
@@ -403,7 +396,7 @@ legend {
   width: 100%;
   padding: 12px;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 0;
   background: var(--card);
   color: var(--ink);
 }
@@ -411,32 +404,34 @@ legend {
   color: var(--muted);
 }
 .submit {
-  flex-shrink: 0;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  font-size: 1.5rem;
+  align-self: center;
 }
 .answer-footer {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 12px;
   align-items: center;
   margin-top: 8px;
   color: var(--muted);
   font-size: 0.75rem;
 }
-.answer-footer p {
-  max-width: 260px;
-}
 .answer-footer button {
   white-space: nowrap;
 }
 .suggestions {
   position: absolute;
-  top: 80px;
+  top: 54px;
   left: 0;
   right: 0;
   z-index: 2;
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 0;
   padding: 5px;
   margin: 0;
   list-style: none;
@@ -447,7 +442,7 @@ legend {
   justify-content: space-between;
   gap: 12px;
   padding: 12px;
-  border-radius: 5px;
+  border-radius: 0;
   cursor: pointer;
 }
 .suggestions li[aria-selected='true'],
@@ -459,14 +454,6 @@ legend {
   color: var(--muted);
   font-size: 0.8rem;
 }
-.site-footer {
-  display: flex;
-  justify-content: center;
-  padding: 16px 0;
-}
-.site-footer button {
-  font-size: 0.75rem;
-}
 .error-banner {
   display: flex;
   justify-content: space-between;
@@ -474,7 +461,7 @@ legend {
   gap: 20px;
   border: 1px solid var(--red);
   padding: 16px;
-  border-radius: 8px;
+  border-radius: 0;
   margin-bottom: 24px;
 }
 .error-banner > div:last-child {
@@ -488,10 +475,10 @@ legend {
 }
 .result-stats {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: 0;
   padding: 24px;
   gap: 20px;
 }
@@ -539,7 +526,7 @@ legend {
 }
 .review-card {
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 0;
   background: var(--card);
   overflow: hidden;
   color: var(--ink);
@@ -648,21 +635,12 @@ legend {
   .setup-card {
     padding: 22px;
   }
-  .game-state {
-    gap: 12px;
-  }
   .timer {
-    font-size: 1.2rem;
+    font-size: 2.5rem;
   }
   .flag-stage {
     height: 215px;
     padding: 16px;
-  }
-  .submit {
-    padding: 10px;
-  }
-  .submit span {
-    display: none;
   }
   .input-row input {
     font-size: 16px;

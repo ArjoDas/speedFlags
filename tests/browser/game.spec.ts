@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs'
 const manifest = JSON.parse(readFileSync('data/generated/manifest.json', 'utf8'))
 
 async function warmup(page) {
-  const input = page.getByRole('combobox', { name: 'Which country or territory is this?' })
+  const input = page.getByRole('combobox', { name: 'Country name' })
   await expect(input).toBeEnabled()
   const name = await page.getByTestId('warmup-answer').innerText()
   await input.fill(name)
@@ -17,9 +17,7 @@ async function start(page) {
   await page.goto('/')
   await page.getByRole('radio', { name: /^Practice$/ }).check()
   await page.getByRole('button', { name: 'Play', exact: true }).click()
-  await expect(
-    page.getByRole('combobox', { name: 'Which country or territory is this?' }),
-  ).toBeEnabled()
+  await expect(page.getByRole('combobox', { name: 'Country name' })).toBeEnabled()
   await warmup(page)
 }
 
@@ -27,7 +25,7 @@ test('play, score, skip, review, practice missed and replay', async ({ page }) =
   const errors: string[] = []
   page.on('pageerror', (error) => errors.push(error.message))
   await start(page)
-  const input = page.getByRole('combobox', { name: 'Which country or territory is this?' })
+  const input = page.getByRole('combobox', { name: 'Country name' })
   const src = await page.getByAltText('Flag to identify').getAttribute('src')
   const country = manifest.countries.find((c) => src.includes(c.asset))
   await input.fill(country.name)
@@ -61,7 +59,7 @@ test('play, score, skip, review, practice missed and replay', async ({ page }) =
 
 test('suggestions submit the default selection on Enter and support touch', async ({ page }) => {
   await start(page)
-  const input = page.getByRole('combobox', { name: 'Which country or territory is this?' })
+  const input = page.getByRole('combobox', { name: 'Country name' })
   await input.fill('united')
   await expect(page.getByRole('listbox').getByRole('option')).toHaveCount(5)
   await expect(page.getByRole('option').first()).toHaveAttribute('aria-selected', 'true')
@@ -93,7 +91,7 @@ test('network failure is recoverable and rapid Enter submits once', async ({ pag
       await route.continue()
     }
   })
-  const input = page.getByRole('combobox', { name: 'Which country or territory is this?' })
+  const input = page.getByRole('combobox', { name: 'Country name' })
   await input.fill('France')
   await input.press('Enter')
   await expect(page.getByRole('alert')).toContainText('Could not reach')
@@ -118,9 +116,7 @@ test('layout and accessibility in setup, play and results', async ({ page }) => 
   await start(page)
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([])
   await page.getByRole('button', { name: /Skip flag/ }).click()
-  await expect(
-    page.getByRole('combobox', { name: 'Which country or territory is this?' }),
-  ).toBeEnabled()
+  await expect(page.getByRole('combobox', { name: 'Country name' })).toBeEnabled()
   await page.getByRole('button', { name: /Finish round/ }).click()
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([])
   expect(
@@ -176,9 +172,7 @@ test('malformed successful response stays recoverable', async ({ page }) => {
   await expect(page.locator('body')).not.toContainText('undefined')
   await page.unroute('**/api/v1/games/*/answers')
   await page.getByRole('button', { name: 'Retry', exact: true }).click()
-  await expect(
-    page.getByRole('combobox', { name: 'Which country or territory is this?' }),
-  ).toBeEnabled()
+  await expect(page.getByRole('combobox', { name: 'Country name' })).toBeEnabled()
 })
 
 test('failed first asset can retry without starting the clock', async ({ page }) => {
@@ -190,9 +184,7 @@ test('failed first asset can retry without starting the clock', async ({ page })
   await expect(page.getByRole('region', { name: 'Flag game' })).toHaveCount(0)
   fail = false
   await page.getByRole('button', { name: 'Retry', exact: true }).click()
-  await expect(
-    page.getByRole('combobox', { name: 'Which country or territory is this?' }),
-  ).toBeEnabled()
+  await expect(page.getByRole('combobox', { name: 'Country name' })).toBeEnabled()
 })
 
 test('abandoning an in-flight answer cannot replace the setup screen', async ({ page }) => {
@@ -209,7 +201,7 @@ test('abandoning an in-flight answer cannot replace the setup screen', async ({ 
 
 test('IME composition does not submit an unfinished answer', async ({ page }) => {
   await start(page)
-  const input = page.getByRole('combobox', { name: 'Which country or territory is this?' })
+  const input = page.getByRole('combobox', { name: 'Country name' })
   let requests = 0
   page.on('request', (request) => {
     if (request.url().endsWith('/answers')) requests++
@@ -238,9 +230,7 @@ test('real timed round expires once and records no unanswered attempt', async ({
   })
   await page.goto('/')
   await page.getByRole('button', { name: 'Play', exact: true }).click()
-  await expect(
-    page.getByRole('combobox', { name: 'Which country or territory is this?' }),
-  ).toBeEnabled()
+  await expect(page.getByRole('combobox', { name: 'Country name' })).toBeEnabled()
   await warmup(page)
   await expect(page.getByRole('heading', { name: /^Results$/ })).toBeVisible({ timeout: 35000 })
   await expect(page.getByText('Time’s up.', { exact: false })).toBeVisible()
@@ -253,7 +243,7 @@ test('warm-up reveals the answer and leaves the timer stopped until correct entr
 }) => {
   await page.goto('/')
   await page.getByRole('button', { name: 'Play', exact: true }).click()
-  const input = page.getByRole('combobox', { name: 'Which country or territory is this?' })
+  const input = page.getByRole('combobox', { name: 'Country name' })
   await expect(input).toBeEnabled()
   const answer = await page.getByTestId('warmup-answer').innerText()
   await input.fill('not a country')
@@ -273,9 +263,7 @@ test('wrong answers flash, then remain beside the previous flag', async ({ page 
   await start(page)
   const src = await page.getByAltText('Flag to identify').getAttribute('src')
   const country = manifest.countries.find((c) => src.includes(c.asset))
-  await page
-    .getByRole('combobox', { name: 'Which country or territory is this?' })
-    .fill('not a country')
+  await page.getByRole('combobox', { name: 'Country name' }).fill('not a country')
   await page.getByRole('button', { name: /Submit/ }).click()
   await expect(page.locator('.answer-flash')).toContainText(country.name)
   await expect(page.getByRole('complementary', { name: 'Previous answer' })).toContainText(
@@ -285,5 +273,26 @@ test('wrong answers flash, then remain beside the previous flag', async ({ page 
   await expect(
     page.getByRole('complementary', { name: 'Previous answer' }).locator('img'),
   ).toHaveAttribute('src', src)
-  await expect(page.locator('.score-panel dd').nth(2)).toHaveText('1')
+  await expect(page.locator('.score-panel dd')).toHaveCount(2)
+})
+
+test('empty Enter skips once, including whitespace, but cannot skip the warm-up', async ({
+  page,
+}) => {
+  await page.goto('/')
+  await page.getByRole('radio', { name: /^Practice$/ }).check()
+  await page.getByRole('button', { name: 'Play', exact: true }).click()
+  const input = page.getByRole('combobox', { name: 'Country name' })
+  await expect(input).toBeEnabled()
+  await input.press('Enter')
+  await expect(page.getByTestId('warmup-answer')).toBeVisible()
+  await warmup(page)
+  await input.press('Enter')
+  await expect(page.locator('.score-panel dd').nth(1)).toHaveText('1')
+  await expect(input).toBeEnabled()
+  await input.fill('   ')
+  await input.press('Enter')
+  await expect(page.locator('.score-panel dd').nth(1)).toHaveText('2')
+  await page.getByRole('button', { name: /Finish round/ }).click()
+  await expect(page.locator('.review-card.skipped')).toHaveCount(2)
 })

@@ -41,3 +41,10 @@ Temporary fixes to the old Flask UI were superseded by regression-tested replace
 - Autocomplete highlights the first match and submits it on one Enter. Arrow keys change selection; Escape preserves exact typed input; pointer selection fills the input.
 - Centred the current flag between a smaller previous flag/answer and the score counters. Moved the timer bar above the board; narrow screens place previous-answer and score panels below the input. Incorrect/skipped answers show the correct name for three seconds.
 - Verification: 34 Python tests, 3 search tests, 58 browser checks across Chromium, Firefox, WebKit and mobile, plus final visual checks. Six duplicate timer/screenshot checks are intentionally skipped outside Chromium. Production build, TypeScript, ESLint, Ruff, formatting and accessibility checks pass. Desktop/mobile setup, warm-up and active-game screenshots were inspected locally.
+
+## Controls and typography follow-up
+
+- Restored the original Bootstrap system font stack without reintroducing Bootstrap. Theme choices use equal-width grid columns; all borders are square and the dark background is darker.
+- Enlarged and centred the timer; removed the visible game heading, input helper copy, wrong/skipped counters (including the skipped results count), and reset-progress control. Input and icon button retain accessible names.
+- Replaced the submit label with a square Enter-symbol button. Empty or whitespace-only Enter skips during play but cannot skip the warm-up.
+- Build and lint pass. All 62 applicable browser scenarios passed across the initial run and targeted accessibility/layout rerun after restoring a screen-reader-only heading; six duplicate timer/screenshot scenarios remain intentionally skipped. Desktop and mobile screenshots were inspected.

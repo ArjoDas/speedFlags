@@ -46,10 +46,6 @@ export function Results({ game, best, saved, replay, practice, setup }: Props) {
           </strong>
         </div>
         <div>
-          <span>Skipped</span>
-          <strong>{game.skipped}</strong>
-        </div>
-        <div>
           <span>Personal best</span>
           <strong>{game.settings.mode === 'timed' ? best : '—'}</strong>
         </div>

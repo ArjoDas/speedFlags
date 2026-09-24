@@ -35,7 +35,11 @@ export function AnswerInput({ countries, disabled, questionId, onAnswer, onSkip 
       className="answer-form"
       onSubmit={(event) => {
         event.preventDefault()
-        if (disabled || composing.current || !text.trim()) return
+        if (disabled || composing.current) return
+        if (!text.trim()) {
+          onSkip?.()
+          return
+        }
         if (open && active >= 0 && options[active]) {
           choose(options[active].name)
           onAnswer(options[active].name)
@@ -45,7 +49,6 @@ export function AnswerInput({ countries, disabled, questionId, onAnswer, onSkip 
         onAnswer(text.trim())
       }}
     >
-      <label htmlFor="answer">Which country or territory is this?</label>
       <div className="input-row">
         <input
           ref={input}
@@ -59,7 +62,7 @@ export function AnswerInput({ countries, disabled, questionId, onAnswer, onSkip 
           aria-controls="country-options"
           aria-expanded={open && options.length > 0}
           aria-activedescendant={open && options[active] ? `option-${active}` : undefined}
-          aria-describedby="answer-help"
+          aria-label="Country name"
           placeholder="Type a country name…"
           maxLength={100}
           value={text}
@@ -103,8 +106,14 @@ export function AnswerInput({ countries, disabled, questionId, onAnswer, onSkip 
             if (!event.currentTarget.form?.contains(event.relatedTarget)) setOpen(false)
           }}
         />
-        <button className="primary submit" type="submit" disabled={disabled || !text.trim()}>
-          Submit <span aria-hidden="true">↵</span>
+        <button
+          className="primary submit"
+          type="submit"
+          aria-label="Submit answer"
+          title="Submit answer"
+          disabled={disabled || (!text.trim() && !onSkip)}
+        >
+          <span aria-hidden="true">↵</span>
         </button>
       </div>
       {open && options.length > 0 && (
@@ -130,7 +139,6 @@ export function AnswerInput({ countries, disabled, questionId, onAnswer, onSkip 
         </ul>
       )}
       <div className="answer-footer">
-        <p id="answer-help">Enter submits the highlighted suggestion.</p>
         {onSkip && (
           <button type="button" className="text-button" onClick={onSkip} disabled={disabled}>
             Skip flag <span aria-hidden="true">→</span>

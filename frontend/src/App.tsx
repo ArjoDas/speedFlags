@@ -238,35 +238,27 @@ export default function App() {
         )}
         {game && game.status !== 'finished' && (
           <section className="play-layout" aria-label="Flag game">
+            <h1 className="sr-only">Flag game</h1>
             <div className="play-top">
-              <h1>
-                {game.status === 'ready'
-                  ? 'Ready'
-                  : game.settings.mode === 'timed'
-                    ? 'Timed game'
-                    : 'Practice'}
-              </h1>
-              <div className="game-state">
-                <span
-                  className={`timer ${remaining < 10000 ? 'urgent' : ''}`}
-                  aria-label={
-                    game.settings.mode === 'timed'
-                      ? `${game.status === 'ready' ? game.settings.duration : Math.ceil(remaining / 1000)} seconds remaining`
-                      : 'Untimed practice'
-                  }
-                >
-                  {game.settings.mode === 'timed'
-                    ? `${game.status === 'ready' ? game.settings.duration : (remaining / 1000).toFixed(1)}s`
-                    : 'Untimed'}
-                </span>
-                <button
-                  className="text-button"
-                  onClick={game.status === 'ready' ? reset : finish}
-                  disabled={busy}
-                >
-                  {game.status === 'ready' ? 'Change settings' : 'Finish round'}
-                </button>
-              </div>
+              <span
+                className={`timer ${remaining < 10000 ? 'urgent' : ''}`}
+                aria-label={
+                  game.settings.mode === 'timed'
+                    ? `${game.status === 'ready' ? game.settings.duration : Math.ceil(remaining / 1000)} seconds remaining`
+                    : 'Untimed practice'
+                }
+              >
+                {game.settings.mode === 'timed'
+                  ? `${game.status === 'ready' ? game.settings.duration : (remaining / 1000).toFixed(1)}s`
+                  : 'Untimed'}
+              </span>
+              <button
+                className="text-button"
+                onClick={game.status === 'ready' ? reset : finish}
+                disabled={busy}
+              >
+                {game.status === 'ready' ? 'Change settings' : 'Finish round'}
+              </button>
             </div>
             {game.settings.mode === 'timed' && (
               <div
@@ -380,14 +372,6 @@ export default function App() {
                     <dt>Total</dt>
                     <dd>{game.attempts}</dd>
                   </div>
-                  <div className="incorrect">
-                    <dt>Wrong</dt>
-                    <dd>{game.attempts - game.score - game.skipped}</dd>
-                  </div>
-                  <div>
-                    <dt>Skipped</dt>
-                    <dd>{game.skipped}</dd>
-                  </div>
                 </dl>
               </aside>
             </div>
@@ -424,23 +408,6 @@ export default function App() {
           />
         )}
       </main>
-      <footer className="site-footer">
-        <button
-          className="text-button"
-          onClick={() => {
-            try {
-              localStorage.removeItem('speedflags.bests.v1')
-              localStorage.removeItem('speedflags.settings.v1')
-            } catch {
-              /* optional */
-            }
-            setSettings(loadSettings())
-            dispatch({ type: 'saved', best: 0, saved: true })
-          }}
-        >
-          Reset saved progress
-        </button>
-      </footer>
     </div>
   )
 }

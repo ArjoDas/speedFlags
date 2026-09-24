@@ -29,9 +29,7 @@ test('small viewport and dark layout remain usable', async ({ page }) => {
   await page.getByRole('button', { name: 'Dark', exact: true }).click()
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy()
   await page.getByRole('button', { name: 'Play', exact: true }).click()
-  await expect(
-    page.getByRole('combobox', { name: 'Which country or territory is this?' }),
-  ).toBeEnabled()
+  await expect(page.getByRole('combobox', { name: 'Country name' })).toBeEnabled()
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy()
   const flag = await page.getByAltText('Flag to identify').boundingBox()
   expect(flag!.width).toBeLessThanOrEqual(292)
@@ -44,11 +42,9 @@ test('capture desktop, mobile and flag contact sheets', async ({ page }, testInf
   await page.getByRole('button', { name: 'Light', exact: true }).click()
   await page.screenshot({ path: '/tmp/speedflags-setup.png', fullPage: true })
   await page.getByRole('button', { name: 'Play', exact: true }).click()
-  await expect(
-    page.getByRole('combobox', { name: 'Which country or territory is this?' }),
-  ).toBeEnabled()
+  await expect(page.getByRole('combobox', { name: 'Country name' })).toBeEnabled()
   await page.screenshot({ path: '/tmp/speedflags-warmup.png', fullPage: true })
-  const input = page.getByRole('combobox', { name: 'Which country or territory is this?' })
+  const input = page.getByRole('combobox', { name: 'Country name' })
   await input.fill(await page.getByTestId('warmup-answer').innerText())
   await input.press('Enter')
   await expect(page.getByTestId('warmup-answer')).toHaveCount(0)
