@@ -53,28 +53,6 @@ export function Results({ game, best, saved, replay, practice, setup }: Props) {
           {share && (
             <div className="daily-share">
               <pre aria-label="Share preview">{share}</pre>
-              <button
-                className="primary"
-                onClick={async () => {
-                  try {
-                    await navigator.clipboard.writeText(share)
-                    setCopyState('Copied')
-                  } catch {
-                    setCopyState('Could not copy. Select and copy the text below.')
-                  }
-                }}
-              >
-                Copy result
-              </button>
-              <p role="status">{copyState}</p>
-              {copyState.startsWith('Could') && (
-                <textarea
-                  aria-label="Result to copy"
-                  readOnly
-                  value={share}
-                  onFocus={(event) => event.target.select()}
-                />
-              )}
             </div>
           )}
         </div>
@@ -118,7 +96,36 @@ export function Results({ game, best, saved, replay, practice, setup }: Props) {
         <button className="text-button" onClick={setup}>
           Change settings
         </button>
+        {share && (
+          <button
+            className="primary copy-result"
+            onClick={async () => {
+              try {
+                await navigator.clipboard.writeText(share)
+                setCopyState('Copied')
+              } catch {
+                setCopyState('Could not copy. Select and copy the text below.')
+              }
+            }}
+          >
+            Copy result
+          </button>
+        )}
       </div>
+      {share && copyState && (
+        <div className="share-status">
+          {' '}
+          <p role="status">{copyState}</p>
+          {copyState.startsWith('Could') && (
+            <textarea
+              aria-label="Result to copy"
+              readOnly
+              value={share}
+              onFocus={(event) => event.target.select()}
+            />
+          )}
+        </div>
+      )}
       {!game.challenge_date && (
         <p className="result-note">
           Accuracy includes skipped flags. Unanswered flags are not counted.{' '}

@@ -757,7 +757,7 @@ legend {
   margin: 12px 0;
   white-space: pre;
 }
-.daily-share textarea {
+.share-status textarea {
   width: 100%;
   min-height: 200px;
   background: var(--card);
@@ -774,13 +774,14 @@ legend {
 }
 .daily-share {
   display: grid;
-  justify-items: start;
+  justify-items: end;
+  text-align: right;
   gap: 8px;
 }
 .daily-share pre {
   margin: 0;
 }
-.daily-share > p {
+.share-status > p {
   color: var(--muted);
   font-size: 0.85rem;
 }
@@ -789,4 +790,20 @@ legend {
     grid-template-columns: 1fr;
     gap: 16px;
   }
+}
+
+.result-actions {
+  align-items: center;
+}
+.copy-result {
+  margin-left: auto;
+}
+.share-status {
+  display: grid;
+  justify-items: end;
+  text-align: right;
+  gap: 8px;
+}
+.share-status textarea {
+  max-width: 430px;
 }
