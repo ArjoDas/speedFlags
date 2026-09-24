@@ -24,6 +24,18 @@ def prepare(client, **settings):
     return response.json()
 
 
+def test_flag_collection_is_complete_unique_and_cacheable(setup):
+    service, client, _, _ = setup
+    response = client.get("/api/v1/flags")
+    assert response.status_code == 200
+    assert response.headers["Cache-Control"] == "public, max-age=300"
+    data = response.json()
+    assert data["version"] == service.countries.version
+    assert data["assets"] == [f"/flags/{asset}.svg" for asset in sorted(service.countries.groups)]
+    assert len(data["assets"]) == 245
+    assert set(data) == {"version", "assets"}
+
+
 def start(client, game):
     response = client.post(
         f"/api/v1/games/{game['id']}/start", json={"token": game["token"], "answer": game["warmup_answer"]}

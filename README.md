@@ -58,6 +58,8 @@ npm run api:types
 
 A failed API request is never scored as an incorrect answer. Retry reuses the captured question and submission ID. The client blocks overlapping submissions and discards results from an abandoned game. Missing/expired contexts produce a visible recovery path rather than `undefined` flags or names.
 
+Before preparing a game, the browser loads all 245 flags with six concurrent downloads and shows progress. Failed downloads can be retried before the timer or daily attempt starts. Loaded images remain in memory for the page lifetime; immutable HTTP caching reuses downloads across visits, subject to browser eviction. `/api/v1/flags` lists the complete collection in asset order, without exposing the upcoming game sequence. API latency still counts toward server-measured time; reloading an already-started game does not pause its clock.
+
 ## Data and maintenance
 
 The original `speedflags.db` is preserved unchanged. FastAPI uses `data/generated/countries.db` read-only; SVGs are separate local assets with content-derived filenames. See [data provenance and refresh instructions](docs/DATA.md), the generated [flag contact sheet](docs/flags.html), and [the modernization plan](PLAN.md).

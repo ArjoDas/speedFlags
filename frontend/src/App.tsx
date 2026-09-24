@@ -8,8 +8,14 @@ import { SettingsDialog } from './ui/SettingsDialog'
 import { Theme } from './ui/Theme'
 import { formatTime } from './game/daily'
 import { normalize } from './game/search'
+import { preloadFlags, type FlagProgress } from './game/flags'
 
-async function prepareGame(settings: Settings, signal: AbortSignal): Promise<Game> {
+async function prepareGame(
+  settings: Settings,
+  signal: AbortSignal,
+  onProgress: (progress: FlagProgress | null) => void,
+): Promise<Game> {
+  await preloadFlags(signal, onProgress)
   const prepared = await api.create(settings, signal)
   const saved = prepared.challenge_date ? storedDaily(prepared) : null
   if (saved?.status === 'finished') return saved
@@ -57,6 +63,7 @@ export default function App() {
   const [settingsOpen, setSettingsOpen] = useState(true)
   const [settingsVisible, setSettingsVisible] = useState(true)
   const [countries, setCountries] = useState<Country[]>([])
+  const [flagProgress, setFlagProgress] = useState<FlagProgress | null>(null)
   const [remaining, setRemaining] = useState(0)
   const [elapsed, setElapsed] = useState(0)
   const dailyClock = useRef({ received: 0, elapsed: 0 })
@@ -164,7 +171,7 @@ export default function App() {
 
   const initialSettings = useRef(settings)
   useEffect(() => {
-    run((signal) => prepareGame(initialSettings.current, signal), true)
+    run((signal) => prepareGame(initialSettings.current, signal, setFlagProgress), true)
     return () => {
       epoch.current += 1
       controller.current?.abort()
@@ -174,7 +181,7 @@ export default function App() {
 
   function begin(next = settings) {
     write('settings.v2', { ...next, country_ids: [] })
-    run((signal) => prepareGame(next, signal))
+    run((signal) => prepareGame(next, signal, setFlagProgress))
   }
   function reset() {
     setSettingsOpen(true)
@@ -326,6 +333,11 @@ export default function App() {
         </div>
       </header>
       <main id="main">
+        {!settingsOpen && busy && flagProgress && (
+          <p role="status">
+            Loading flags… {flagProgress.loaded}/{flagProgress.total}
+          </p>
+        )}
         {error && !settingsOpen && (
           <div className="error-banner" role="alert">
             <div>
@@ -398,6 +410,11 @@ export default function App() {
             onChange={setSettings}
             onStart={() => begin()}
           />
+          {busy && flagProgress && (
+            <p role="status">
+              Loading flags… {flagProgress.loaded}/{flagProgress.total}
+            </p>
+          )}
         </SettingsDialog>
         {game && game.status !== 'finished' && (
           <section className="play-layout" aria-label="Flag game">

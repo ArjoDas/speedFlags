@@ -39,6 +39,24 @@
         }
       }
     },
+    "/api/v1/flags": {
+      "get": {
+        "summary": "Flags",
+        "operationId": "flags_api_v1_flags_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlagList"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/games": {
       "post": {
         "summary": "Create",
@@ -664,6 +682,27 @@
           "error"
         ],
         "title": "ErrorResponse"
+      },
+      "FlagList": {
+        "properties": {
+          "version": {
+            "type": "string",
+            "title": "Version"
+          },
+          "assets": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Assets"
+          }
+        },
+        "type": "object",
+        "required": [
+          "version",
+          "assets"
+        ],
+        "title": "FlagList"
       },
       "GameResponse": {
         "properties": {

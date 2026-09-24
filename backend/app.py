@@ -15,6 +15,7 @@ from backend.models import (
     ContextRequest,
     CountryList,
     ErrorResponse,
+    FlagList,
     GameResponse,
     Settings,
     StartRequest,
@@ -110,6 +111,13 @@ def create_app(service: GameService | None = None) -> FastAPI:
                 {"id": r["id"], "name": r["name"], "aliases": [r["official"], *r["aliases"]]} for r in data.rows
             ],
         )
+
+    @app.get("/api/v1/flags", response_model=FlagList)
+    def flags(request: Request, response: Response):
+        response.headers["Cache-Control"] = "public, max-age=300"
+        data = request.app.state.game.countries
+        # Full collection in asset order, never a game's upcoming sequence.
+        return FlagList(version=data.version, assets=[f"/flags/{asset}.svg" for asset in sorted(data.groups)])
 
     @app.post("/api/v1/games", response_model=GameResponse, responses=errors)
     def create(settings: Settings, request: Request):

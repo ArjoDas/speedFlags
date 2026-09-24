@@ -186,7 +186,7 @@ test('failed first asset can retry without starting the clock', async ({ page })
   let fail = true
   await page.route('**/flags/*.svg', (route) => (fail ? route.abort() : route.continue()))
   await page.goto('/')
-  await expect(page.getByRole('alert')).toContainText('flag could not load')
+  await expect(page.getByRole('alert')).toContainText('Could not load all flags')
   await expect(page.getByRole('region', { name: 'Flag game' })).toHaveCount(0)
   fail = false
   await page.getByRole('button', { name: 'Retry', exact: true }).click()
@@ -354,6 +354,7 @@ test('settings modal defaults to Challenge, preserves the warm-up on cancel and 
   await expect(modal.getByRole('radio', { name: 'Daily Challenge', exact: true })).toBeChecked()
   await expect(modal).toContainText('30 flags daily')
   await expect(modal.getByRole('radio', { name: '120s' })).toHaveCount(0)
+  await expect(modal.getByRole('button', { name: 'Close settings' })).toBeEnabled()
   await page.keyboard.press('Escape')
   await expect(modal).not.toBeVisible()
   await page.getByRole('button', { name: /^(Settings|Change settings)$/ }).click()

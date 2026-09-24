@@ -38,6 +38,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/flags": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Flags */
+        get: operations["flags_api_v1_flags_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/games": {
         parameters: {
             query?: never;
@@ -198,6 +215,13 @@ export interface components {
         ErrorResponse: {
             error: components["schemas"]["ErrorDetail"];
         };
+        /** FlagList */
+        FlagList: {
+            /** Version */
+            version: string;
+            /** Assets */
+            assets: string[];
+        };
         /** GameResponse */
         GameResponse: {
             /** Id */
@@ -347,6 +371,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CountryList"];
+                };
+            };
+        };
+    };
+    flags_api_v1_flags_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FlagList"];
                 };
             };
         };

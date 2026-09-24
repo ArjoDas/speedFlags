@@ -48,6 +48,11 @@ class CountryList(BaseModel):
     countries: list[Country]
 
 
+class FlagList(BaseModel):
+    version: str
+    assets: list[str]
+
+
 class Question(BaseModel):
     id: str
     sequence: int

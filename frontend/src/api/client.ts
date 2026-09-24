@@ -101,6 +101,21 @@ export function validGame(data: Game): Game {
 }
 
 export const api = {
+  flags: async (signal: AbortSignal) => {
+    const data = await request<components['schemas']['FlagList']>('flags', undefined, signal)
+    if (
+      !data ||
+      typeof data.version !== 'string' ||
+      !Array.isArray(data.assets) ||
+      data.assets.length === 0 ||
+      data.assets.length > 500 ||
+      data.assets.some(
+        (url) => typeof url !== 'string' || !/^\/flags\/[a-f0-9]{24}\.svg$/.test(url),
+      )
+    )
+      throw new ApiError('Could not load the flag collection. Please retry.')
+    return data.assets
+  },
   countries: async (signal?: AbortSignal) => {
     const data = await request<components['schemas']['CountryList']>('countries', undefined, signal)
     if (
@@ -125,7 +140,7 @@ export const api = {
     validGame(await request<Game>(`games/${game.id}/finish`, { token: game.token }, signal)),
 }
 
-export function preload(url: string, signal: AbortSignal): Promise<void> {
+export function preload(url: string, signal: AbortSignal): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const image = new Image()
     const finish = (error?: Error) => {
@@ -134,7 +149,7 @@ export function preload(url: string, signal: AbortSignal): Promise<void> {
       image.onload = null
       image.onerror = null
       if (error) reject(error)
-      else resolve()
+      else resolve(image)
     }
     const abort = () => finish(new Error('Cancelled'))
     const timer = setTimeout(
