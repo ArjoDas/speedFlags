@@ -4,7 +4,7 @@
   "functions": {
     "backend/app.py": {
       "maxDuration": 15,
-      "includeFiles": "data/generated/countries.db"
+      "includeFiles": "{data/generated/countries.db,frontend/public/flags/**,frontend/dist/**}"
     }
   },
   "headers": [

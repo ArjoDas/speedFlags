@@ -6,7 +6,7 @@ Use the repository root as the project root and the **FastAPI** framework preset
 
 The native FastAPI integration promotes `app.frontend()` and static mounts to the CDN. `[tool.vercel.fastapi.static] cdn = true` is intentional: top-level middleware otherwise disables this promotion. CDN files bypass Python middleware, so `vercel.json` sets their security/cache headers. API validation and game tokens are never handled by a static route. See [Vercel's FastAPI integration](https://vercel.com/docs/frameworks/backend/fastapi).
 
-The country database is explicitly included in the function bundle. Original snapshots, test artifacts and environments are excluded from deployment. `requirements.txt` is generated from the locked runtime dependencies; `uv.lock` also locks development tools.
+The country database, source flags and built frontend are explicitly included in the function bundle through `functions["backend/app.py"].includeFiles` in `vercel.json`. Keep the static directories at their original paths: FastAPI mounts them during import and may serve them as a fallback even when the CDN handles normal asset requests. Omitting `frontend/public/flags` caused the first preview's `FUNCTION_INVOCATION_FAILED` error before any API route could run. Original snapshots, test artifacts and environments are excluded from deployment. `requirements.txt` is generated from the locked runtime dependencies; `uv.lock` also locks development tools.
 
 ## Secrets
 
@@ -23,7 +23,7 @@ For rotation, provide `new-key,previous-key`. New responses use the first key an
 5. Measure cold and warm API latency on the deployed region/network. Local timings do not predict serverless cold starts. Test two tabs, session expiration, deployment/data-version change, asset failure and uncertain-request retries.
 6. Observe usage after launch. A normal N-answer game uses about N + 3 API calls (create/start/finish); each tab-resume sync and retry adds a call, while autocomplete and results images do not add API calls. Do not equate request allowance with usable capacity: CPU, memory, transfer, static edge requests and abuse also matter.
 
-No deployment or remote push has been performed. Hosted cold-start behavior, actual CDN promotion and live quota consumption still need this preview check after the user connects the repository.
+The first user-deployed preview exposed a missing static directory in the Python bundle. Redeploy with the explicit file inclusions above, then complete this checklist; hosted cold-start behavior, actual CDN promotion and live quota consumption still need verification.
 
 ## Rollback
 
