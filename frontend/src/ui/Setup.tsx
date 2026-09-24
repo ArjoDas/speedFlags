@@ -40,8 +40,7 @@ export function Setup({ settings, onChange, onStart, disabled }: Props) {
             +5s per wrong answer or skip
           </p>
           <p>
-            One attempt per day on this browser. Refresh to resume; finishing or leaving early uses
-            your attempt. Resets at midnight UTC.
+            One attempt per day
           </p>
         </div>
       )}

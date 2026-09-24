@@ -451,7 +451,7 @@ export default function App() {
             )}
             {game.challenge_date && (
               <p className="daily-status">
-                {game.challenge_date} · One daily attempt per browser · {game.attempts}/30 · +
+                {game.challenge_date} · One daily attempt · {game.attempts}/30 · +
                 {game.penalty_seconds}s penalties
               </p>
             )}
