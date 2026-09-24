@@ -126,7 +126,6 @@ h2 {
 .theme-options button[aria-pressed='true'] {
   background: var(--blue-soft);
   color: var(--blue);
-  font-weight: 650;
 }
 main {
   flex: 1;
