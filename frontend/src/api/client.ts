@@ -69,6 +69,7 @@ function validGame(data: Game): Game {
     !Number.isInteger(data.attempts) ||
     data.attempts < data.score ||
     !['ready', 'playing', 'finished'].includes(data.status) ||
+    (data.status === 'ready' && (typeof data.warmup_answer !== 'string' || !data.warmup_answer)) ||
     !data.settings ||
     !['timed', 'practice'].includes(data.settings.mode!) ||
     ![30, 45, 60, 120].includes(data.settings.duration!) ||
@@ -107,8 +108,8 @@ export const api = {
   },
   create: async (settings: Settings, signal: AbortSignal) =>
     validGame(await request<Game>('games', settings, signal)),
-  start: async (game: Game, signal: AbortSignal) =>
-    validGame(await request<Game>(`games/${game.id}/start`, { token: game.token }, signal)),
+  start: async (game: Game, answer: string, signal: AbortSignal) =>
+    validGame(await request<Game>(`games/${game.id}/start`, { token: game.token, answer }, signal)),
   answer: async (game: Game, answer: Answer, signal: AbortSignal) =>
     validGame(await request<Game>(`games/${game.id}/answers`, answer, signal)),
   sync: async (game: Game, signal: AbortSignal) =>

@@ -137,7 +137,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ContextRequest"
+                "$ref": "#/components/schemas/StartRequest"
               }
             }
           }
@@ -728,6 +728,17 @@
               }
             ]
           },
+          "warmup_answer": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Warmup Answer"
+          },
           "last_attempt": {
             "anyOf": [
               {
@@ -866,6 +877,29 @@
         "additionalProperties": false,
         "type": "object",
         "title": "Settings"
+      },
+      "StartRequest": {
+        "properties": {
+          "token": {
+            "type": "string",
+            "maxLength": 65536,
+            "minLength": 40,
+            "title": "Token"
+          },
+          "answer": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Answer"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "token",
+          "answer"
+        ],
+        "title": "StartRequest"
       }
     }
   }

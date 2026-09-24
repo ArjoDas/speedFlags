@@ -24,14 +24,17 @@ export function Theme() {
     return () => media.removeEventListener('change', apply)
   }, [theme])
   return (
-    <label className="theme-select">
-      <span className="sr-only">Color theme</span>
-      <span aria-hidden="true">◐</span>
-      <select aria-label="Color theme" value={theme} onChange={(e) => setTheme(e.target.value)}>
-        <option value="system">System</option>
-        <option value="light">Light</option>
-        <option value="dark">Dark</option>
-      </select>
-    </label>
+    <div className="theme-options" role="group" aria-label="Color theme">
+      {(['system', 'light', 'dark'] as const).map((value) => (
+        <button
+          key={value}
+          type="button"
+          aria-pressed={theme === value}
+          onClick={() => setTheme(value)}
+        >
+          {value === 'system' ? 'System' : value === 'light' ? 'Light' : 'Dark'}
+        </button>
+      ))}
+    </div>
   )
 }

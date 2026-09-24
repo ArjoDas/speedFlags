@@ -7,18 +7,18 @@ type Props = {
   disabled: boolean
   questionId: string
   onAnswer: (text: string) => void
-  onSkip: () => void
+  onSkip?: () => void
 }
 export function AnswerInput({ countries, disabled, questionId, onAnswer, onSkip }: Props) {
   const [text, setText] = useState('')
-  const [active, setActive] = useState(-1)
+  const [active, setActive] = useState(0)
   const [open, setOpen] = useState(false)
   const composing = useRef(false)
   const input = useRef<HTMLInputElement>(null)
   const options = useMemo(() => suggestions(countries, text), [countries, text])
   useEffect(() => {
     setText('')
-    setActive(-1)
+    setActive(0)
     setOpen(false)
   }, [questionId])
   useEffect(() => {
@@ -26,7 +26,7 @@ export function AnswerInput({ countries, disabled, questionId, onAnswer, onSkip 
   }, [disabled, questionId])
   function choose(name: string) {
     setText(name)
-    setActive(-1)
+    setActive(0)
     setOpen(false)
     input.current?.focus()
   }
@@ -38,6 +38,7 @@ export function AnswerInput({ countries, disabled, questionId, onAnswer, onSkip 
         if (disabled || composing.current || !text.trim()) return
         if (open && active >= 0 && options[active]) {
           choose(options[active].name)
+          onAnswer(options[active].name)
           return
         }
         setOpen(false)
@@ -57,7 +58,7 @@ export function AnswerInput({ countries, disabled, questionId, onAnswer, onSkip 
           aria-autocomplete="list"
           aria-controls="country-options"
           aria-expanded={open && options.length > 0}
-          aria-activedescendant={open && active >= 0 ? `option-${active}` : undefined}
+          aria-activedescendant={open && options[active] ? `option-${active}` : undefined}
           aria-describedby="answer-help"
           placeholder="Type a country name…"
           maxLength={100}
@@ -71,7 +72,7 @@ export function AnswerInput({ countries, disabled, questionId, onAnswer, onSkip 
           }}
           onChange={(event) => {
             setText(event.target.value)
-            setActive(-1)
+            setActive(0)
             setOpen(true)
           }}
           onKeyDown={(event) => {
@@ -90,12 +91,12 @@ export function AnswerInput({ countries, disabled, questionId, onAnswer, onSkip 
             }
             if (event.key === 'ArrowUp') {
               event.preventDefault()
-              setActive((i) => Math.max(-1, i - 1))
+              setActive((i) => Math.max(0, i - 1))
             }
             if (event.key === 'Escape') {
               event.preventDefault()
               setOpen(false)
-              setActive(-1)
+              setActive(0)
             }
           }}
           onBlur={(event) => {
@@ -129,10 +130,12 @@ export function AnswerInput({ countries, disabled, questionId, onAnswer, onSkip 
         </ul>
       )}
       <div className="answer-footer">
-        <p id="answer-help">Type an answer or choose a suggestion.</p>
-        <button type="button" className="text-button" onClick={onSkip} disabled={disabled}>
-          Skip flag <span aria-hidden="true">→</span>
-        </button>
+        <p id="answer-help">Enter submits the highlighted suggestion.</p>
+        {onSkip && (
+          <button type="button" className="text-button" onClick={onSkip} disabled={disabled}>
+            Skip flag <span aria-hidden="true">→</span>
+          </button>
+        )}
       </div>
     </form>
   )

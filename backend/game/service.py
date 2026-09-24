@@ -42,7 +42,7 @@ class GameService:
             raise GameError("invalid_context", "This game has expired or is invalid. Start a new game.", 401) from None
         if state.get("id") != game_id:
             raise GameError("wrong_game", "This answer belongs to another game.", 409)
-        if state.get("version") != self.countries.version or state.get("rules") != 1:
+        if state.get("version") != self.countries.version or state.get("rules") != 2:
             raise GameError("dataset_changed", "The game data has been updated. Start a new game.", 409)
         if self.clock() - state["created"] >= MAX_AGE:
             raise GameError("expired", "This game has expired. Start a new game.", 410)
@@ -61,12 +61,13 @@ class GameService:
         state = {
             "id": secrets.token_hex(16),
             "version": self.countries.version,
-            "rules": 1,
+            "rules": 2,
             "created": now,
             "start": None,
             "deadline": None,
             "settings": settings.model_dump(),
             "deck": deck,
+            "warmup": deck[-1],
             "history": [],
             "score": 0,
             "status": "ready",
@@ -74,10 +75,12 @@ class GameService:
         }
         return self.response(state)
 
-    def start(self, game_id: str, token: str) -> GameResponse:
+    def start(self, game_id: str, token: str, answer: str) -> GameResponse:
         state = self.decode(token, game_id)
         if state["status"] != "ready":
             raise GameError("already_started", "This game has already started.", 409)
+        if not self.countries.correct(state["warmup"], answer):
+            raise GameError("wrong_warmup", "Enter the displayed country to start.")
         now = self.clock()
         state.update(
             status="playing",
@@ -147,11 +150,15 @@ class GameService:
     def response(self, state: dict) -> GameResponse:
         index = len(state["history"])
         finished = state["status"] == "finished"
+        ready = state["status"] == "ready"
+        asset = state["warmup"] if ready else state["deck"][index] if not finished else None
         question = (
             None
             if finished
             else Question(
-                id=self.question_id(state, index), sequence=index, asset_url=f"/flags/{state['deck'][index]}.svg"
+                id=f"{state['id']}:warmup" if ready else self.question_id(state, index),
+                sequence=index,
+                asset_url=f"/flags/{asset}.svg",
             )
         )
         return GameResponse(
@@ -166,6 +173,7 @@ class GameService:
             attempts=index,
             skipped=sum(row[1] == "skipped" for row in state["history"]),
             question=question,
+            warmup_answer=self.countries.names(asset)[0] if ready else None,
             last_attempt=self.attempt(state, index - 1) if index else None,
             history=[self.attempt(state, i) for i in range(index)] if finished else None,
             finish_reason=state["reason"],

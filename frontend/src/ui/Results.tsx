@@ -19,16 +19,15 @@ export function Results({ game, best, saved, replay, practice, setup }: Props) {
   return (
     <section className="results">
       <div className="result-heading">
-        <span className="eyebrow">A LITTLE MORE WORLDLY</span>
         <h1 ref={heading} tabIndex={-1}>
-          That’s a wrap<span>.</span>
+          Results
         </h1>
         <p>
           {game.finish_reason === 'time'
-            ? 'Time’s up. Here’s how your trip around the world went.'
+            ? 'Time’s up.'
             : game.finish_reason === 'deck'
-              ? 'You made it through every flag in this collection.'
-              : 'Your round is complete. Every flag is a chance to learn.'}
+              ? 'All flags completed.'
+              : 'Round finished.'}
         </p>
       </div>
       <div className="result-stats">
@@ -76,8 +75,8 @@ export function Results({ game, best, saved, replay, practice, setup }: Props) {
         {!saved && 'Browser storage is unavailable; this result could not be saved.'}
       </p>
       <div className="review-heading">
-        <h2>Your field notes</h2>
-        <span>{history.length} flags explored</span>
+        <h2>Answers</h2>
+        <span>{history.length} answers</span>
       </div>
       {!history.length ? (
         <p className="empty-review">No answers this time. Start a new round when you’re ready.</p>
@@ -99,7 +98,7 @@ export function Results({ game, best, saved, replay, practice, setup }: Props) {
                     ? '✓ Correct'
                     : attempt.result === 'skipped'
                       ? '→ Skipped'
-                      : '× Not quite'}
+                      : '× Incorrect'}
                 </span>
                 <h3>{attempt.accepted_names.join(' / ')}</h3>
                 <p>

@@ -223,6 +223,8 @@ export interface components {
             /** Skipped */
             skipped: number;
             question: components["schemas"]["Question"] | null;
+            /** Warmup Answer */
+            warmup_answer?: string | null;
             last_attempt?: components["schemas"]["Attempt"] | null;
             /** History */
             history?: components["schemas"]["Attempt"][] | null;
@@ -271,6 +273,13 @@ export interface components {
             scope: "starter" | "all";
             /** Country Ids */
             country_ids?: string[];
+        };
+        /** StartRequest */
+        StartRequest: {
+            /** Token */
+            token: string;
+            /** Answer */
+            answer: string;
         };
     };
     responses: never;
@@ -401,7 +410,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["ContextRequest"];
+                "application/json": components["schemas"]["StartRequest"];
             };
         };
         responses: {

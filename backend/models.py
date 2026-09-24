@@ -19,6 +19,10 @@ class ContextRequest(StrictModel):
     token: str = Field(min_length=40, max_length=65536)
 
 
+class StartRequest(ContextRequest):
+    answer: str = Field(min_length=1, max_length=100)
+
+
 class AnswerRequest(ContextRequest):
     question_id: str = Field(min_length=1, max_length=100)
     sequence: int = Field(ge=0, le=250, strict=True)
@@ -65,6 +69,7 @@ class GameResponse(BaseModel):
     attempts: int
     skipped: int
     question: Question | None
+    warmup_answer: str | None = None
     last_attempt: Attempt | None = None
     history: list[Attempt] | None = None
     finish_reason: Literal["time", "deck", "ended", "session"] | None = None

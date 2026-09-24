@@ -10,7 +10,15 @@ from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException
 
 from backend.game.service import GameError, GameService
-from backend.models import AnswerRequest, ContextRequest, CountryList, ErrorResponse, GameResponse, Settings
+from backend.models import (
+    AnswerRequest,
+    ContextRequest,
+    CountryList,
+    ErrorResponse,
+    GameResponse,
+    Settings,
+    StartRequest,
+)
 from backend.repositories.countries import ROOT, Countries
 
 
@@ -108,8 +116,8 @@ def create_app(service: GameService | None = None) -> FastAPI:
         return request.app.state.game.create(settings)
 
     @app.post("/api/v1/games/{game_id}/start", response_model=GameResponse, responses=errors)
-    def start(game_id: str, body: ContextRequest, request: Request):
-        return request.app.state.game.start(game_id, body.token)
+    def start(game_id: str, body: StartRequest, request: Request):
+        return request.app.state.game.start(game_id, body.token, body.answer)
 
     @app.post("/api/v1/games/{game_id}/answers", response_model=GameResponse, responses=errors)
     def answer(game_id: str, body: AnswerRequest, request: Request):

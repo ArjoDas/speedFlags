@@ -5,6 +5,7 @@ import { AnswerInput } from './ui/AnswerInput'
 import { Results } from './ui/Results'
 import { Setup } from './ui/Setup'
 import { Theme } from './ui/Theme'
+import { normalize } from './game/search'
 
 type State = { game: Game | null; busy: boolean; error: string; best: number; saved: boolean }
 type Action =
@@ -34,6 +35,8 @@ export default function App() {
   const [settings, setSettings] = useState<Settings>(loadSettings)
   const [countries, setCountries] = useState<Country[]>([])
   const [remaining, setRemaining] = useState(0)
+  const [warmupError, setWarmupError] = useState('')
+  const [flash, setFlash] = useState(false)
   const [imageStatus, setImageStatus] = useState<'loading' | 'ready' | 'error'>('loading')
   const [imageRetry, setImageRetry] = useState(0)
   const currentQuestion = useRef('')
@@ -105,10 +108,11 @@ export default function App() {
     run(async (signal) => {
       prepared ??= await api.create(next, signal)
       await preload(prepared.question!.asset_url, signal)
-      return api.start(prepared, signal)
+      return prepared
     })
   }
   function reset() {
+    setWarmupError('')
     epoch.current += 1
     controller.current?.abort()
     lock.current = false
@@ -121,6 +125,17 @@ export default function App() {
   }
   function answer(text: string, skip = false) {
     if (!game?.question || busy || error || imageStatus !== 'ready') return
+    if (game.status === 'ready') {
+      const expected = countries.find((country) => country.name === game.warmup_answer)
+      const accepted = [game.warmup_answer!, ...(expected?.aliases ?? [])]
+      if (!accepted.some((name) => normalize(name) === normalize(text))) {
+        setWarmupError(`Type ${game.warmup_answer} to start.`)
+        return
+      }
+      setWarmupError('')
+      run((signal) => api.start(game, text, signal))
+      return
+    }
     const body = {
       token: game.token,
       question_id: game.question.id,
@@ -161,6 +176,12 @@ export default function App() {
       run((signal) => api.finish(game, signal))
   }, [game, remaining, busy, error, run])
 
+  useEffect(() => {
+    setFlash(!!game?.last_attempt && game.last_attempt.result !== 'correct')
+    const timer = setTimeout(() => setFlash(false), 3000)
+    return () => clearTimeout(timer)
+  }, [game?.last_attempt?.question_id, game?.last_attempt?.result])
+
   const progress = game
     ? Math.min(100, Math.max(0, remaining / (game.settings.duration * 10)))
     : 100
@@ -177,16 +198,15 @@ export default function App() {
           }}
           aria-label="speedFlags home"
         >
-          <svg aria-hidden="true" viewBox="0 0 32 32">
-            <path d="M7 27V5h19l-5 7 5 7H7" />
-          </svg>
+          <img src="/logo.png" alt="" />
           <span>
-            speed<span>Flags</span>
-            <i>.</i>
+            <strong>
+              <em>speed</em>
+            </strong>
+            <span>Flags</span>
           </span>
         </a>
         <div className="header-right">
-          <span className="header-tag">KNOW YOUR WORLD</span>
           <Theme />
         </div>
       </header>
@@ -194,7 +214,6 @@ export default function App() {
         {error && (
           <div className="error-banner" role="alert">
             <div>
-              <strong>A small detour.</strong>
               <p>{error}</p>
             </div>
             <div>
@@ -217,29 +236,72 @@ export default function App() {
             onStart={() => begin()}
           />
         )}
-        {game?.status === 'playing' && (
+        {game && game.status !== 'finished' && (
           <section className="play-layout" aria-label="Flag game">
             <div className="play-top">
-              <div>
-                <span className="eyebrow">
-                  {game.settings.mode === 'timed' ? 'AGAINST THE CLOCK' : 'ROOM TO EXPLORE'}
+              <h1>
+                {game.status === 'ready'
+                  ? 'Ready'
+                  : game.settings.mode === 'timed'
+                    ? 'Timed game'
+                    : 'Practice'}
+              </h1>
+              <div className="game-state">
+                <span
+                  className={`timer ${remaining < 10000 ? 'urgent' : ''}`}
+                  aria-label={
+                    game.settings.mode === 'timed'
+                      ? `${game.status === 'ready' ? game.settings.duration : Math.ceil(remaining / 1000)} seconds remaining`
+                      : 'Untimed practice'
+                  }
+                >
+                  {game.settings.mode === 'timed'
+                    ? `${game.status === 'ready' ? game.settings.duration : (remaining / 1000).toFixed(1)}s`
+                    : 'Untimed'}
                 </span>
-                <h1>
-                  {game.settings.mode === 'timed' ? 'Trust your instincts.' : 'One flag at a time.'}
-                </h1>
+                <button
+                  className="text-button"
+                  onClick={game.status === 'ready' ? reset : finish}
+                  disabled={busy}
+                >
+                  {game.status === 'ready' ? 'Change settings' : 'Finish round'}
+                </button>
               </div>
-              <button className="text-button" onClick={finish} disabled={busy}>
-                Finish round <span aria-hidden="true">↗</span>
-              </button>
             </div>
+            {game.settings.mode === 'timed' && (
+              <div
+                className="time-track"
+                role="progressbar"
+                aria-label="Time remaining"
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={game.status === 'ready' ? 100 : Math.round(progress)}
+              >
+                <div style={{ width: `${game.status === 'ready' ? 100 : progress}%` }} />
+              </div>
+            )}
             <div className="game-workspace">
+              <aside className="previous-panel" aria-label="Previous answer">
+                {feedback && (
+                  <>
+                    <h2>Previous flag</h2>
+                    <img
+                      src={feedback.asset_url}
+                      alt={`${feedback.accepted_names.join(' / ')} flag`}
+                    />
+                    <strong>{feedback.accepted_names.join(' / ')}</strong>
+                    <p className={feedback.result}>
+                      {feedback.result === 'correct'
+                        ? '✓ Correct'
+                        : feedback.result === 'skipped'
+                          ? 'Skipped'
+                          : '× Incorrect'}
+                    </p>
+                    {feedback.result === 'incorrect' && <p>Your answer: {feedback.answer}</p>}
+                  </>
+                )}
+              </aside>
               <div className="game-card">
-                <div className="flag-card-heading">
-                  <span className="eyebrow">FLAG {String(game.attempts + 1).padStart(2, '0')}</span>
-                  <span className="collection-label">
-                    {game.settings.scope === 'starter' ? 'The starting fifty' : 'The whole world'}
-                  </span>
-                </div>
                 <div className="flag-stage">
                   {game.question && (
                     <img
@@ -253,12 +315,17 @@ export default function App() {
                   )}
                   {imageStatus === 'loading' && (
                     <p className="asset-status" role="status">
-                      Loading your flag…
+                      Loading flag…
                     </p>
                   )}
                   {imageStatus === 'error' && (
                     <div className="asset-status" role="alert">
-                      <p>This flag could not load. The clock keeps running.</p>
+                      <p>
+                        This flag could not load.
+                        {game.status === 'playing' && game.settings.mode === 'timed'
+                          ? ' The clock keeps running.'
+                          : ''}
+                      </p>
                       <button
                         className="secondary"
                         onClick={() => {
@@ -277,103 +344,51 @@ export default function App() {
                   aria-label="Answer feedback"
                   aria-live="polite"
                 >
-                  {feedback ? (
-                    <>
-                      <span className={`feedback-dot ${feedback.result}`}>
-                        {feedback.result === 'correct'
-                          ? '✓'
-                          : feedback.result === 'skipped'
-                            ? '→'
-                            : '×'}
-                      </span>
-                      <span>
-                        {feedback.result === 'correct'
-                          ? 'Nicely spotted.'
-                          : feedback.result === 'skipped'
-                            ? 'Keep exploring.'
-                            : 'A new one to remember.'}{' '}
-                        <strong>{feedback.accepted_names.join(' / ')}</strong>
-                      </span>
-                    </>
-                  ) : (
-                    <span>A fresh flag. A fresh start.</span>
-                  )}
+                  {game.status === 'ready' ? (
+                    <div className="warmup">
+                      <strong data-testid="warmup-answer">{game.warmup_answer}</strong>
+                      <p>
+                        Enter this country to{' '}
+                        {game.settings.mode === 'timed' ? 'start the timer' : 'start playing'}.
+                      </p>
+                      {warmupError && <p className="incorrect">{warmupError}</p>}
+                    </div>
+                  ) : flash && feedback ? (
+                    <div className="answer-flash">
+                      {feedback.result === 'skipped' ? 'Skipped.' : 'Incorrect.'} Correct answer:{' '}
+                      <strong>{feedback.accepted_names.join(' / ')}</strong>
+                    </div>
+                  ) : feedback?.result === 'correct' ? (
+                    <span className="correct">✓ Correct</span>
+                  ) : null}
                 </div>
                 <AnswerInput
                   countries={countries}
                   questionId={game.question!.id}
                   disabled={busy || !!error || imageStatus !== 'ready' || remaining <= 0}
                   onAnswer={(text) => answer(text)}
-                  onSkip={() => answer('', true)}
+                  onSkip={game.status === 'playing' ? () => answer('', true) : undefined}
                 />
               </div>
               <aside className="score-panel" aria-label="Round statistics">
-                <div className="timer-block">
-                  <span className="eyebrow">
-                    {game.settings.mode === 'timed' ? 'TIME REMAINING' : 'YOUR PACE'}
-                  </span>
-                  <div
-                    className={`timer ${remaining < 10000 ? 'urgent' : ''}`}
-                    aria-label={
-                      game.settings.mode === 'timed'
-                        ? `${Math.ceil(remaining / 1000)} seconds remaining`
-                        : 'Untimed practice'
-                    }
-                  >
-                    {game.settings.mode === 'timed' ? (
-                      <>
-                        {(remaining / 1000).toFixed(1)}
-                        <small>s</small>
-                      </>
-                    ) : (
-                      '∞'
-                    )}
-                  </div>
-                  {game.settings.mode === 'timed' && (
-                    <div
-                      className="time-track"
-                      role="progressbar"
-                      aria-label="Time remaining"
-                      aria-valuemin={0}
-                      aria-valuemax={100}
-                      aria-valuenow={Math.round(progress)}
-                    >
-                      <div style={{ width: `${progress}%` }} />
-                    </div>
-                  )}
-                  <p>
-                    {game.settings.mode === 'timed'
-                      ? game.settings.bonus
-                        ? '+5 seconds for every correct flag'
-                        : 'Keep your eyes on the next flag.'
-                      : 'Time to look a little closer.'}
-                  </p>
-                </div>
-                <div className="score-count">
-                  <span>Correct flags</span>
-                  <strong>
-                    {game.score}
-                    <i aria-hidden="true">↗</i>
-                  </strong>
-                </div>
-                <div className="minor-stats">
-                  <div>
-                    <span>Attempts</span>
-                    <strong>{game.attempts}</strong>
+                <dl>
+                  <div className="correct">
+                    <dt>Correct</dt>
+                    <dd>{game.score}</dd>
                   </div>
                   <div>
-                    <span>Skipped</span>
-                    <strong>{game.skipped}</strong>
+                    <dt>Total</dt>
+                    <dd>{game.attempts}</dd>
                   </div>
-                </div>
-                <div className="field-tip">
-                  <span aria-hidden="true">✳</span>
-                  <p>
-                    Some places share a flag.
-                    <br />
-                    Any accepted name earns the point.
-                  </p>
-                </div>
+                  <div className="incorrect">
+                    <dt>Wrong</dt>
+                    <dd>{game.attempts - game.score - game.skipped}</dd>
+                  </div>
+                  <div>
+                    <dt>Skipped</dt>
+                    <dd>{game.skipped}</dd>
+                  </div>
+                </dl>
               </aside>
             </div>
           </section>
@@ -410,8 +425,6 @@ export default function App() {
         )}
       </main>
       <footer className="site-footer">
-        <span>Made for curious minds.</span>
-        <span>Casual play · No account needed</span>
         <button
           className="text-button"
           onClick={() => {

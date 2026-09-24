@@ -25,7 +25,9 @@ def prepare(client, **settings):
 
 
 def start(client, game):
-    response = client.post(f"/api/v1/games/{game['id']}/start", json={"token": game["token"]})
+    response = client.post(
+        f"/api/v1/games/{game['id']}/start", json={"token": game["token"], "answer": game["warmup_answer"]}
+    )
     assert response.status_code == 200, response.text
     return response.json()
 
@@ -145,7 +147,12 @@ def test_invalid_requests_and_errors(setup):
     assert submit(client, game).status_code == 400
     assert submit(client, game, "x" * 101).status_code == 422
     assert submit(client, game, token=game["token"][:-10] + "aaaaaaaaaa").status_code == 401
-    assert client.post("/api/v1/games/other/start", json={"token": ready["token"]}).status_code == 409
+    assert (
+        client.post(
+            "/api/v1/games/other/start", json={"token": ready["token"], "answer": ready["warmup_answer"]}
+        ).status_code
+        == 409
+    )
     for value in (None, [], "hello", 10):
         assert (
             client.post(
@@ -211,3 +218,19 @@ def test_static_and_api_missing_paths_do_not_return_spa(setup):
         response = client.get(path, headers={"Accept": "text/html"})
         assert response.status_code == 404
         assert "<!doctype" not in response.text.lower()
+
+
+def test_warmup_waits_for_correct_entry_and_is_unscored(setup):
+    _, client, clock, _ = setup
+    ready = prepare(client)
+    assert ready["warmup_answer"] and ready["deadline"] is None
+    clock[0] += 120
+    wrong = client.post(f"/api/v1/games/{ready['id']}/start", json={"token": ready["token"], "answer": "not a country"})
+    assert wrong.status_code == 400
+    synced = client.post(f"/api/v1/games/{ready['id']}/sync", json={"token": ready["token"]}).json()
+    assert synced["status"] == "ready" and synced["deadline"] is None
+    game = start(client, synced)
+    assert game["deadline"] == 1150 and game["score"] == game["attempts"] == 0
+    assert game["warmup_answer"] is None
+    assert game["question"]["id"] != ready["question"]["id"]
+    assert game["question"]["asset_url"] != ready["question"]["asset_url"]

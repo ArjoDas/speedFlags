@@ -33,3 +33,11 @@ Implemented on `modernise`, 24 September 2026. No push, remote configuration or 
 - Optional later features remain deferred: regional challenges, multiple choice, a learning gallery, daily challenges and installable/offline support. No paid service was introduced.
 
 Temporary fixes to the old Flask UI were superseded by regression-tested replacements on this branch; the original application remains in Git history.
+
+## UI review follow-up
+
+- Restored the original logo and stacked branding: bold italic “speed”, regular “Flags”. Replaced the theme dropdown with buttons and reduced setup to game settings.
+- Added a revealed, unscored warm-up. `/start` now requires its correct answer; the server keeps the deadline unset until then. The scored deck remains complete, including one-flag practice lists. Existing game contexts are invalidated by the rules version change.
+- Autocomplete highlights the first match and submits it on one Enter. Arrow keys change selection; Escape preserves exact typed input; pointer selection fills the input.
+- Centred the current flag between a smaller previous flag/answer and the score counters. Moved the timer bar above the board; narrow screens place previous-answer and score panels below the input. Incorrect/skipped answers show the correct name for three seconds.
+- Verification: 34 Python tests, 3 search tests, 58 browser checks across Chromium, Firefox, WebKit and mobile, plus final visual checks. Six duplicate timer/screenshot checks are intentionally skipped outside Chromium. Production build, TypeScript, ESLint, Ruff, formatting and accessibility checks pass. Desktop/mobile setup, warm-up and active-game screenshots were inspected locally.
