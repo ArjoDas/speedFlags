@@ -1,14 +1,134 @@
 {
   "schema_version": 1,
-  "shared_groups": [["FR", "MF"], ["BV", "NO", "SJ"], ["UM", "US"]],
+  "shared_groups": [
+    [
+      "FR",
+      "MF"
+    ],
+    [
+      "BV",
+      "NO",
+      "SJ"
+    ],
+    [
+      "UM",
+      "US"
+    ]
+  ],
   "aliases": {
-    "US": ["USA", "United States of America", "US"],
-    "GB": ["UK", "United Kingdom", "Britain", "Great Britain"],
-    "AE": ["UAE"], "CZ": ["Czech Republic"], "CI": ["Ivory Coast", "Côte d’Ivoire"],
-    "KR": ["South Korea"], "KP": ["North Korea"], "CD": ["DR Congo", "Democratic Republic of the Congo"],
-    "CG": ["Republic of the Congo"], "SZ": ["Swaziland"], "TL": ["East Timor"],
-    "TR": ["Türkiye", "Turkey"], "VA": ["Vatican", "Vatican City"], "JP": ["Nippon"]
+    "US": [
+      "USA",
+      "United States of America",
+      "US"
+    ],
+    "GB": [
+      "UK",
+      "United Kingdom",
+      "Britain",
+      "Great Britain"
+    ],
+    "AE": [
+      "UAE"
+    ],
+    "CZ": [
+      "Czech Republic"
+    ],
+    "CI": [
+      "Ivory Coast",
+      "Côte d’Ivoire"
+    ],
+    "KR": [
+      "South Korea"
+    ],
+    "KP": [
+      "North Korea"
+    ],
+    "CD": [
+      "DR Congo",
+      "Democratic Republic of the Congo"
+    ],
+    "CG": [
+      "Republic of the Congo"
+    ],
+    "SZ": [
+      "Swaziland"
+    ],
+    "TL": [
+      "East Timor"
+    ],
+    "TR": [
+      "Türkiye",
+      "Turkey"
+    ],
+    "VA": [
+      "Vatican",
+      "Vatican City"
+    ],
+    "JP": [
+      "Nippon"
+    ]
   },
-  "starter": ["AR", "AU", "AT", "BE", "BR", "CA", "CL", "CN", "CO", "DK", "EG", "FI", "FR", "DE", "GR", "IN", "ID", "IE", "IL", "IT", "JP", "KE", "MY", "MX", "MA", "NL", "NZ", "NG", "NO", "PK", "PE", "PH", "PL", "PT", "RO", "RU", "SA", "SG", "ZA", "KR", "ES", "SE", "CH", "TH", "TR", "UA", "AE", "GB", "US", "VN"],
-  "notes": "All entries are countries or territories from the original dataset, not a sovereignty list. Shared flag-only questions accept every named entity in their group. Starter is a curated introductory set, not a geographic classification."
+  "starter": [
+    "AR",
+    "AU",
+    "AT",
+    "BE",
+    "BR",
+    "CA",
+    "CL",
+    "CN",
+    "CO",
+    "DK",
+    "EG",
+    "FI",
+    "FR",
+    "DE",
+    "GR",
+    "IN",
+    "ID",
+    "IE",
+    "IL",
+    "IT",
+    "JP",
+    "KE",
+    "MY",
+    "MX",
+    "MA",
+    "NL",
+    "NZ",
+    "NG",
+    "NO",
+    "PK",
+    "PE",
+    "PH",
+    "PL",
+    "PT",
+    "RO",
+    "RU",
+    "SA",
+    "SG",
+    "ZA",
+    "KR",
+    "ES",
+    "SE",
+    "CH",
+    "TH",
+    "TR",
+    "UA",
+    "AE",
+    "GB",
+    "US",
+    "VN"
+  ],
+  "notes": "All entries are countries or territories from the original dataset, not a sovereignty list. Shared flag-only questions accept every named entity in their group. Starter is a curated introductory set, not a geographic classification.",
+  "visual_equivalence": [
+    {
+      "codes": [
+        "AU",
+        "HM"
+      ],
+      "source": "https://flagpedia.net/heard-island-and-mcdonald-islands",
+      "reason": "Same flag, different SVG encoding; use the Australian asset for both."
+    }
+  ]
 }

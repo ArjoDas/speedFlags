@@ -89,14 +89,14 @@ def test_no_repeats_and_stale_questions(setup):
     _, client, _, _ = setup
     game = start(client, prepare(client, mode="practice", scope="all"))
     seen = set()
-    for _ in range(246):
+    for _ in range(245):
         assert game["question"]["asset_url"] not in seen
         seen.add(game["question"]["asset_url"])
         old = game
         game = submit(client, game, skip=True).json()
         stale = submit(client, old, token=game["token"])
         assert stale.status_code == 409
-    assert game["status"] == "finished" and len(game["history"]) == 246
+    assert game["status"] == "finished" and len(game["history"]) == 245
     assert len(game["token"]) < 65536
 
 

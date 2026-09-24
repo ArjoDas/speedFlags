@@ -975,10 +975,12 @@
       "name": "Heard Island and McDonald Islands",
       "official": "Heard Island and McDonald Islands",
       "aliases": [],
-      "asset": "1fff6af9a474221a31f19940",
+      "asset": "b826e039804d5cf313bd7e22",
       "source": "https://flagcdn.com/hm.svg",
       "retrieved": "2026-09-24",
-      "starter": false
+      "starter": false,
+      "source_asset": "1fff6af9a474221a31f19940",
+      "asset_source": "https://flagcdn.com/au.svg"
     },
     {
       "id": "HN",
@@ -2543,6 +2545,10 @@
   ],
   "shared_groups": [
     [
+      "AU",
+      "HM"
+    ],
+    [
       "BV",
       "NO",
       "SJ"
@@ -2556,5 +2562,30 @@
       "US"
     ]
   ],
-  "version": "9cdf92ca39bd9fa4"
+  "exact_duplicate_groups": [
+    [
+      "BV",
+      "NO",
+      "SJ"
+    ],
+    [
+      "FR",
+      "MF"
+    ],
+    [
+      "UM",
+      "US"
+    ]
+  ],
+  "visual_equivalence": [
+    {
+      "codes": [
+        "AU",
+        "HM"
+      ],
+      "source": "https://flagpedia.net/heard-island-and-mcdonald-islands",
+      "reason": "Same flag, different SVG encoding; use the Australian asset for both."
+    }
+  ],
+  "version": "8cf537938d46eb9e"
 }

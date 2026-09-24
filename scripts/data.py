@@ -145,12 +145,26 @@ def build(refresh=False, check=False):
     expected = sorted(sorted(codes) for codes in policy["shared_groups"])
     if duplicates != expected:
         raise ValueError(f"Shared groups need review: {duplicates}")
+    by_id = {country["id"]: country for country in countries}
+    for equivalence in policy.get("visual_equivalence", []):
+        canonical = by_id[equivalence["codes"][0]]
+        for code in equivalence["codes"][1:]:
+            country = by_id[code]
+            country["source_asset"] = country["asset"]
+            country["asset"] = canonical["asset"]
+            country["asset_source"] = canonical["source"]
+    groups = {}
+    for country in countries:
+        groups.setdefault(country["asset"], []).append(country["id"])
+    assets = {key: value for key, value in assets.items() if key in groups}
     manifest = {
         "schema": 1,
         "baseline_sha256": digest((ROOT / "speedflags.db").read_bytes()),
         "policy": policy["notes"],
         "countries": countries,
-        "shared_groups": duplicates,
+        "shared_groups": sorted(sorted(codes) for codes in groups.values() if len(codes) > 1),
+        "exact_duplicate_groups": duplicates,
+        "visual_equivalence": policy.get("visual_equivalence", []),
     }
     version = digest(json.dumps(manifest, sort_keys=True).encode())[:16]
     manifest["version"] = version
