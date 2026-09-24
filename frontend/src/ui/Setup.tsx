@@ -140,6 +140,16 @@ export function Setup({ settings, onChange, onStart, disabled }: Props) {
             : 'Take your time. Finish whenever you like.'}
         </p>
       </div>
+      <details className="rules">
+        <summary>How scoring works</summary>
+        <p>
+          Each correct flag earns one point. Skip advances without a point and counts as an attempt.
+          Equivalent shared flags accept any listed name. Timed rounds keep running during tab
+          changes and network delays; optional bonus time adds five seconds per correct answer. All
+          rounds last at most 15 minutes. Finish early whenever you like, but only completed timed
+          rounds update your personal best.
+        </p>
+      </details>
       <div className="how-to">
         <span className="eyebrow">A QUICK FIELD GUIDE</span>
         <div>

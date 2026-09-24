@@ -1251,3 +1251,49 @@ legend,
     transition: none !important;
   }
 }
+
+.rules {
+  grid-column: 1/-1;
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: -24px;
+}
+.rules summary {
+  cursor: pointer;
+  min-height: 44px;
+  padding: 12px 0;
+  font-weight: 600;
+}
+.rules p {
+  line-height: 1.8;
+  max-width: 850px;
+  padding: 0 0 16px;
+}
+@media (max-width: 720px) and (max-height: 600px) {
+  .site-header {
+    height: 48px;
+  }
+  .play-layout {
+    padding-top: 12px;
+  }
+  .play-top {
+    margin-bottom: 12px;
+  }
+  .play-top h1 {
+    font-size: 22px;
+  }
+  .score-panel {
+    padding: 8px 14px;
+  }
+  .timer {
+    font-size: 26px;
+  }
+  .flag-stage {
+    height: 130px;
+    margin: 6px 0;
+  }
+  .feedback {
+    min-height: 32px;
+    margin-bottom: 5px;
+  }
+}

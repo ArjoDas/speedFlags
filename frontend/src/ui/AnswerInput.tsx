@@ -13,7 +13,7 @@ export function AnswerInput({ countries, disabled, questionId, onAnswer, onSkip 
   const [text, setText] = useState('')
   const [active, setActive] = useState(-1)
   const [open, setOpen] = useState(false)
-  const [composing, setComposing] = useState(false)
+  const composing = useRef(false)
   const input = useRef<HTMLInputElement>(null)
   const options = useMemo(() => suggestions(countries, text), [countries, text])
   useEffect(() => {
@@ -35,7 +35,7 @@ export function AnswerInput({ countries, disabled, questionId, onAnswer, onSkip 
       className="answer-form"
       onSubmit={(event) => {
         event.preventDefault()
-        if (disabled || composing || !text.trim()) return
+        if (disabled || composing.current || !text.trim()) return
         if (open && active >= 0 && options[active]) {
           choose(options[active].name)
           return
@@ -63,15 +63,26 @@ export function AnswerInput({ countries, disabled, questionId, onAnswer, onSkip 
           maxLength={100}
           value={text}
           disabled={disabled}
-          onCompositionStart={() => setComposing(true)}
-          onCompositionEnd={() => setComposing(false)}
+          onCompositionStart={() => {
+            composing.current = true
+          }}
+          onCompositionEnd={() => {
+            composing.current = false
+          }}
           onChange={(event) => {
             setText(event.target.value)
             setActive(-1)
             setOpen(true)
           }}
           onKeyDown={(event) => {
-            if (event.nativeEvent.isComposing) return
+            if (
+              composing.current ||
+              event.nativeEvent.isComposing ||
+              event.nativeEvent.keyCode === 229
+            ) {
+              if (event.key === 'Enter') event.preventDefault()
+              return
+            }
             if (event.key === 'ArrowDown') {
               event.preventDefault()
               setOpen(true)

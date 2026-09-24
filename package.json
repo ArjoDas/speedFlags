@@ -15,7 +15,9 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "data:validate": "python3 scripts/data.py --check",
-    "api:types": "openapi-typescript data/openapi.json -o frontend/src/api/schema.d.ts"
+    "api:types": "openapi-typescript data/openapi.json -o frontend/src/api/schema.d.ts",
+    "format": "prettier --write frontend/src tests/browser frontend/index.html *.ts *.js",
+    "format:check": "prettier --check frontend/src tests/browser frontend/index.html *.ts *.js"
   },
   "dependencies": {
     "react": "^19.2.0",
