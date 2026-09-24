@@ -1,0 +1,2591 @@
+{
+  "schema": 1,
+  "baseline_sha256": "2bf239b7ab787e0ff3ab63c862e0d8630bce047fae684247dc1df5d150b5adcb",
+  "policy": "All entries are countries or territories from the original dataset, not a sovereignty list. Shared flag-only questions accept every named entity in their group. Starter is a curated introductory set, not a geographic classification.",
+  "countries": [
+    {
+      "id": "AD",
+      "name": "Andorra",
+      "official": "Principality of Andorra",
+      "aliases": [],
+      "asset": "3f83263a4a6b7142e0a2df39",
+      "source": "https://flagcdn.com/ad.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "AE",
+      "name": "United Arab Emirates",
+      "official": "United Arab Emirates",
+      "aliases": [
+        "UAE"
+      ],
+      "asset": "8db8bfc3d1a711967e44fbe2",
+      "source": "https://flagcdn.com/ae.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "AF",
+      "name": "Afghanistan",
+      "official": "Islamic Republic of Afghanistan",
+      "aliases": [],
+      "asset": "22b8e89d20dd605fbb198e35",
+      "source": "https://flagcdn.com/af.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "AG",
+      "name": "Antigua and Barbuda",
+      "official": "Antigua and Barbuda",
+      "aliases": [],
+      "asset": "73f382e91c9e9ba8e786696f",
+      "source": "https://flagcdn.com/ag.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "AI",
+      "name": "Anguilla",
+      "official": "Anguilla",
+      "aliases": [],
+      "asset": "c3d8787d86722e49a8e82d8e",
+      "source": "https://flagcdn.com/ai.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "AL",
+      "name": "Albania",
+      "official": "Republic of Albania",
+      "aliases": [],
+      "asset": "95d6a89b1b40f692cf6dd141",
+      "source": "https://flagcdn.com/al.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "AM",
+      "name": "Armenia",
+      "official": "Republic of Armenia",
+      "aliases": [],
+      "asset": "7a58aecd8ecc3b0d06b5ebd7",
+      "source": "https://flagcdn.com/am.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "AO",
+      "name": "Angola",
+      "official": "Republic of Angola",
+      "aliases": [],
+      "asset": "5c37368b322d9c808ab38baf",
+      "source": "https://flagcdn.com/ao.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "AQ",
+      "name": "Antarctica",
+      "official": "Antarctica",
+      "aliases": [],
+      "asset": "d1df8eebaf08d3e041b92233",
+      "source": "https://flagcdn.com/aq.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "AR",
+      "name": "Argentina",
+      "official": "Argentine Republic",
+      "aliases": [],
+      "asset": "86300ae6e8d8bebb7baad0a4",
+      "source": "https://flagcdn.com/ar.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "AS",
+      "name": "American Samoa",
+      "official": "American Samoa",
+      "aliases": [],
+      "asset": "4e88cb60d072d8f6499a07c0",
+      "source": "https://flagcdn.com/as.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "AT",
+      "name": "Austria",
+      "official": "Republic of Austria",
+      "aliases": [],
+      "asset": "b562da9687026586dba96bb0",
+      "source": "https://flagcdn.com/at.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "AU",
+      "name": "Australia",
+      "official": "Commonwealth of Australia",
+      "aliases": [],
+      "asset": "b826e039804d5cf313bd7e22",
+      "source": "https://flagcdn.com/au.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "AW",
+      "name": "Aruba",
+      "official": "Aruba",
+      "aliases": [],
+      "asset": "2c9121a16748576e5bf0a2c2",
+      "source": "https://flagcdn.com/aw.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "AX",
+      "name": "Aland Islands",
+      "official": "Aland Islands",
+      "aliases": [],
+      "asset": "df64c5be1cc6592dc1aa6bd6",
+      "source": "https://flagcdn.com/ax.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "AZ",
+      "name": "Azerbaijan",
+      "official": "Republic of Azerbaijan",
+      "aliases": [],
+      "asset": "204482581a61ab7652c7f695",
+      "source": "https://flagcdn.com/az.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "BA",
+      "name": "Bosnia and Herzegovina",
+      "official": "Bosnia and Herzegovina",
+      "aliases": [],
+      "asset": "1c83a2cf7e8366afb9d724f8",
+      "source": "https://flagcdn.com/ba.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "BB",
+      "name": "Barbados",
+      "official": "Barbados",
+      "aliases": [],
+      "asset": "b38fe14e1e967ea658331d38",
+      "source": "https://flagcdn.com/bb.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "BD",
+      "name": "Bangladesh",
+      "official": "People's Republic of Bangladesh",
+      "aliases": [],
+      "asset": "b509e5c29b8c32761c273449",
+      "source": "https://flagcdn.com/bd.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "BE",
+      "name": "Belgium",
+      "official": "Kingdom of Belgium",
+      "aliases": [],
+      "asset": "fdf70b07a2d06b4f384e61b9",
+      "source": "https://flagcdn.com/be.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "BF",
+      "name": "Burkina Faso",
+      "official": "Burkina Faso",
+      "aliases": [],
+      "asset": "b7783190d4a720b95cf9a006",
+      "source": "https://flagcdn.com/bf.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "BG",
+      "name": "Bulgaria",
+      "official": "Republic of Bulgaria",
+      "aliases": [],
+      "asset": "829c1f5f6f403632fd4710b8",
+      "source": "https://flagcdn.com/bg.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "BH",
+      "name": "Bahrain",
+      "official": "Kingdom of Bahrain",
+      "aliases": [],
+      "asset": "4cb584ef406f6bc57ea9c935",
+      "source": "https://flagcdn.com/bh.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "BI",
+      "name": "Burundi",
+      "official": "Republic of Burundi",
+      "aliases": [],
+      "asset": "00f86f0400888d0ecf5a2b9b",
+      "source": "https://flagcdn.com/bi.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "BJ",
+      "name": "Benin",
+      "official": "Republic of Benin",
+      "aliases": [],
+      "asset": "5c43e0cd6ddcb6b0f46a33c8",
+      "source": "https://flagcdn.com/bj.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "BL",
+      "name": "Saint Barthelemy",
+      "official": "Collectivity of Saint Barthelemy",
+      "aliases": [],
+      "asset": "863f20b771a407641f97ecf1",
+      "source": "https://flagcdn.com/bl.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "BM",
+      "name": "Bermuda",
+      "official": "Bermuda",
+      "aliases": [],
+      "asset": "e9de0350151d1df4b8712cb3",
+      "source": "https://flagcdn.com/bm.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "BN",
+      "name": "Brunei",
+      "official": "Nation of Brunei, Abode of Peace",
+      "aliases": [],
+      "asset": "10b64d481406d9ae55afc19a",
+      "source": "https://flagcdn.com/bn.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "BO",
+      "name": "Bolivia",
+      "official": "Plurinational State of Bolivia",
+      "aliases": [],
+      "asset": "7d724dac914eaed951a3e3dd",
+      "source": "https://flagcdn.com/bo.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "BQ",
+      "name": "Caribbean Netherlands",
+      "official": "Bonaire, Sint Eustatius and Saba",
+      "aliases": [],
+      "asset": "c05d6c9f222b2a0a08579d9d",
+      "source": "https://flagcdn.com/bq.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "BR",
+      "name": "Brazil",
+      "official": "Federative Republic of Brazil",
+      "aliases": [],
+      "asset": "e0215eff9f53b0236db88596",
+      "source": "https://flagcdn.com/br.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "BS",
+      "name": "Bahamas",
+      "official": "Commonwealth of the Bahamas",
+      "aliases": [],
+      "asset": "44946f0ba5ad43cabe8bfa6c",
+      "source": "https://flagcdn.com/bs.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "BT",
+      "name": "Bhutan",
+      "official": "Kingdom of Bhutan",
+      "aliases": [],
+      "asset": "2030ad750ac8d991c6c9c1b9",
+      "source": "https://flagcdn.com/bt.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "BV",
+      "name": "Bouvet Island",
+      "official": "Bouvet Island",
+      "aliases": [],
+      "asset": "0d4b9a52f0a6bd264258baac",
+      "source": "https://flagcdn.com/bv.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "BW",
+      "name": "Botswana",
+      "official": "Republic of Botswana",
+      "aliases": [],
+      "asset": "e89b9cb27040b2995d2f66fc",
+      "source": "https://flagcdn.com/bw.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "BY",
+      "name": "Belarus",
+      "official": "Republic of Belarus",
+      "aliases": [],
+      "asset": "2af1ac1ecbfda4690e8b1b07",
+      "source": "https://flagcdn.com/by.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "BZ",
+      "name": "Belize",
+      "official": "Belize",
+      "aliases": [],
+      "asset": "cc7f6a3315dd73b4008f700e",
+      "source": "https://flagcdn.com/bz.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "CA",
+      "name": "Canada",
+      "official": "Canada",
+      "aliases": [],
+      "asset": "3cd6c2b9fe12bc0617ef4374",
+      "source": "https://flagcdn.com/ca.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "CC",
+      "name": "Cocos (Keeling) Islands",
+      "official": "Territory of the Cocos (Keeling) Islands",
+      "aliases": [],
+      "asset": "aa90a1a32d390ab49a3a5f4d",
+      "source": "https://flagcdn.com/cc.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "CD",
+      "name": "DR Congo",
+      "official": "Democratic Republic of the Congo",
+      "aliases": [
+        "DR Congo",
+        "Democratic Republic of the Congo"
+      ],
+      "asset": "3286f8d40e9a36a6b9d5ba9f",
+      "source": "https://flagcdn.com/cd.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "CF",
+      "name": "Central African Republic",
+      "official": "Central African Republic",
+      "aliases": [],
+      "asset": "f36cc981bf26cff6c9111be3",
+      "source": "https://flagcdn.com/cf.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "CG",
+      "name": "Republic of the Congo",
+      "official": "Republic of the Congo",
+      "aliases": [
+        "Republic of the Congo"
+      ],
+      "asset": "a6685d9601a2ad07d54d0541",
+      "source": "https://flagcdn.com/cg.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "CH",
+      "name": "Switzerland",
+      "official": "Swiss Confederation",
+      "aliases": [],
+      "asset": "a5ec3bbf0f3e686ea05ae17f",
+      "source": "https://flagcdn.com/ch.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "CI",
+      "name": "Ivory Coast",
+      "official": "Republic of Cote d'Ivoire",
+      "aliases": [
+        "Ivory Coast",
+        "Côte d’Ivoire"
+      ],
+      "asset": "e05c87cd731db70b84ff13b4",
+      "source": "https://flagcdn.com/ci.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "CK",
+      "name": "Cook Islands",
+      "official": "Cook Islands",
+      "aliases": [],
+      "asset": "9bd6978ba96d708f7a318c5f",
+      "source": "https://flagcdn.com/ck.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "CL",
+      "name": "Chile",
+      "official": "Republic of Chile",
+      "aliases": [],
+      "asset": "67d42e9b47b004f15c963e8d",
+      "source": "https://flagcdn.com/cl.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "CM",
+      "name": "Cameroon",
+      "official": "Republic of Cameroon",
+      "aliases": [],
+      "asset": "e00c6cbb0cb7364bc1b825e1",
+      "source": "https://flagcdn.com/cm.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "CN",
+      "name": "China",
+      "official": "People's Republic of China",
+      "aliases": [],
+      "asset": "ea62f52385cceb138f52bd6f",
+      "source": "https://flagcdn.com/cn.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "CO",
+      "name": "Colombia",
+      "official": "Republic of Colombia",
+      "aliases": [],
+      "asset": "074ca0d0d72d05b526477dfe",
+      "source": "https://flagcdn.com/co.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "CR",
+      "name": "Costa Rica",
+      "official": "Republic of Costa Rica",
+      "aliases": [],
+      "asset": "3806c257f06f81e26f1d5843",
+      "source": "https://flagcdn.com/cr.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "CU",
+      "name": "Cuba",
+      "official": "Republic of Cuba",
+      "aliases": [],
+      "asset": "afba6d3e29d510e256c07b23",
+      "source": "https://flagcdn.com/cu.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "CV",
+      "name": "Cape Verde",
+      "official": "Republic of Cabo Verde",
+      "aliases": [],
+      "asset": "4062bd41d26e531c5b86a1e9",
+      "source": "https://flagcdn.com/cv.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "CW",
+      "name": "Curacao",
+      "official": "Country of Curacao",
+      "aliases": [],
+      "asset": "6e35d3452497a8e5766b9c00",
+      "source": "https://flagcdn.com/cw.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "CX",
+      "name": "Christmas Island",
+      "official": "Territory of Christmas Island",
+      "aliases": [],
+      "asset": "72bc59ee3b04cf605151213d",
+      "source": "https://flagcdn.com/cx.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "CY",
+      "name": "Cyprus",
+      "official": "Republic of Cyprus",
+      "aliases": [],
+      "asset": "69cf4f5a60a9250706c44738",
+      "source": "https://flagcdn.com/cy.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "CZ",
+      "name": "Czechia",
+      "official": "Czech Republic",
+      "aliases": [
+        "Czech Republic"
+      ],
+      "asset": "fec909adcf44720836902aa8",
+      "source": "https://flagcdn.com/cz.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "DE",
+      "name": "Germany",
+      "official": "Federal Republic of Germany",
+      "aliases": [],
+      "asset": "595d7718f6a22e5ea9de0cbb",
+      "source": "https://flagcdn.com/de.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "DJ",
+      "name": "Djibouti",
+      "official": "Republic of Djibouti",
+      "aliases": [],
+      "asset": "0f5195e5a1ad82877dcf1230",
+      "source": "https://flagcdn.com/dj.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "DK",
+      "name": "Denmark",
+      "official": "Kingdom of Denmark",
+      "aliases": [],
+      "asset": "eb4ea9929e6491fd0444ea5d",
+      "source": "https://flagcdn.com/dk.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "DM",
+      "name": "Dominica",
+      "official": "Commonwealth of Dominica",
+      "aliases": [],
+      "asset": "b4371e4737d00b0391dbfc43",
+      "source": "https://flagcdn.com/dm.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "DO",
+      "name": "Dominican Republic",
+      "official": "Dominican Republic",
+      "aliases": [],
+      "asset": "d8d2d433bef3760ee3e4d8b4",
+      "source": "https://flagcdn.com/do.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "DZ",
+      "name": "Algeria",
+      "official": "People's Democratic Republic of Algeria",
+      "aliases": [],
+      "asset": "0caeff362c16e1f2e4fb4ef6",
+      "source": "https://flagcdn.com/dz.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "EC",
+      "name": "Ecuador",
+      "official": "Republic of Ecuador",
+      "aliases": [],
+      "asset": "7c525fb9be854f1c1a064ce6",
+      "source": "https://flagcdn.com/ec.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "EE",
+      "name": "Estonia",
+      "official": "Republic of Estonia",
+      "aliases": [],
+      "asset": "a051c84068a52f4e6092d429",
+      "source": "https://flagcdn.com/ee.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "EG",
+      "name": "Egypt",
+      "official": "Arab Republic of Egypt",
+      "aliases": [],
+      "asset": "c3c8e355937c41b3adae6be8",
+      "source": "https://flagcdn.com/eg.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "EH",
+      "name": "Western Sahara",
+      "official": "Sahrawi Arab Democratic Republic",
+      "aliases": [],
+      "asset": "22381d072db86aafdb86fec8",
+      "source": "https://flagcdn.com/eh.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "ER",
+      "name": "Eritrea",
+      "official": "State of Eritrea",
+      "aliases": [],
+      "asset": "69f92c176c843d7c899eaa7b",
+      "source": "https://flagcdn.com/er.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "ES",
+      "name": "Spain",
+      "official": "Kingdom of Spain",
+      "aliases": [],
+      "asset": "835ddbc7799d28fd6c78b05c",
+      "source": "https://flagcdn.com/es.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "ET",
+      "name": "Ethiopia",
+      "official": "Federal Democratic Republic of Ethiopia",
+      "aliases": [],
+      "asset": "9b2e1024a933e36029bc6506",
+      "source": "https://flagcdn.com/et.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "FI",
+      "name": "Finland",
+      "official": "Republic of Finland",
+      "aliases": [],
+      "asset": "5d1ab833fc8f13fd2474b992",
+      "source": "https://flagcdn.com/fi.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "FJ",
+      "name": "Fiji",
+      "official": "Republic of Fiji",
+      "aliases": [],
+      "asset": "cf05dc6536dc9d1f21cf395b",
+      "source": "https://flagcdn.com/fj.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "FK",
+      "name": "Falkland Islands",
+      "official": "Falkland Islands",
+      "aliases": [],
+      "asset": "a884b691671668e45123d08a",
+      "source": "https://flagcdn.com/fk.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "FM",
+      "name": "Micronesia",
+      "official": "Federated States of Micronesia",
+      "aliases": [],
+      "asset": "d88d4388bd3ecf181378e5f7",
+      "source": "https://flagcdn.com/fm.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "FO",
+      "name": "Faroe Islands",
+      "official": "Faroe Islands",
+      "aliases": [],
+      "asset": "ca2942942e55bfbf77cdc0c5",
+      "source": "https://flagcdn.com/fo.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "FR",
+      "name": "France",
+      "official": "French Republic",
+      "aliases": [],
+      "asset": "817de4f751a9801257ea9102",
+      "source": "https://flagcdn.com/fr.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "GA",
+      "name": "Gabon",
+      "official": "Gabonese Republic",
+      "aliases": [],
+      "asset": "201baa829700732761909f8e",
+      "source": "https://flagcdn.com/ga.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "GB",
+      "name": "United Kingdom",
+      "official": "United Kingdom of Great Britain and Northern Ireland",
+      "aliases": [
+        "UK",
+        "United Kingdom",
+        "Britain",
+        "Great Britain"
+      ],
+      "asset": "42f04826dd7a76e4ecdc9a55",
+      "source": "https://flagcdn.com/gb.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "GD",
+      "name": "Grenada",
+      "official": "Grenada",
+      "aliases": [],
+      "asset": "a2068c160dddaf85e5ac1642",
+      "source": "https://flagcdn.com/gd.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "GE",
+      "name": "Georgia",
+      "official": "Georgia",
+      "aliases": [],
+      "asset": "dfba0d29f581ff00c2e46b69",
+      "source": "https://flagcdn.com/ge.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "GF",
+      "name": "French Guiana",
+      "official": "Guiana",
+      "aliases": [],
+      "asset": "7b496b0f31e1b6c0a657f372",
+      "source": "https://flagcdn.com/gf.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "GG",
+      "name": "Guernsey",
+      "official": "Bailiwick of Guernsey",
+      "aliases": [],
+      "asset": "05fb56e4a8b3b94470f678ce",
+      "source": "https://flagcdn.com/gg.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "GH",
+      "name": "Ghana",
+      "official": "Republic of Ghana",
+      "aliases": [],
+      "asset": "b8a115fd64a76663beb3c739",
+      "source": "https://flagcdn.com/gh.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "GI",
+      "name": "Gibraltar",
+      "official": "Gibraltar",
+      "aliases": [],
+      "asset": "e5f4e6d23324e3b8682aad70",
+      "source": "https://flagcdn.com/gi.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "GL",
+      "name": "Greenland",
+      "official": "Greenland",
+      "aliases": [],
+      "asset": "f32a2bfa923186ebfa567af9",
+      "source": "https://flagcdn.com/gl.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "GM",
+      "name": "Gambia",
+      "official": "Republic of the Gambia",
+      "aliases": [],
+      "asset": "d4418b31447cb5b7ddfcc3b4",
+      "source": "https://flagcdn.com/gm.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "GN",
+      "name": "Guinea",
+      "official": "Republic of Guinea",
+      "aliases": [],
+      "asset": "2ad34cf682115cbf8b7ccb03",
+      "source": "https://flagcdn.com/gn.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "GP",
+      "name": "Guadeloupe",
+      "official": "Guadeloupe",
+      "aliases": [],
+      "asset": "209a4c520dedebc18eb7acb4",
+      "source": "https://flagcdn.com/gp.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "GQ",
+      "name": "Equatorial Guinea",
+      "official": "Republic of Equatorial Guinea",
+      "aliases": [],
+      "asset": "c9127828406765ae4faf593a",
+      "source": "https://flagcdn.com/gq.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "GR",
+      "name": "Greece",
+      "official": "Hellenic Republic",
+      "aliases": [],
+      "asset": "e8a25b9e3e3cb19c68241041",
+      "source": "https://flagcdn.com/gr.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "GS",
+      "name": "South Georgia",
+      "official": "South Georgia and the South Sandwich Islands",
+      "aliases": [],
+      "asset": "7a8ecd90c5b62caec55d378d",
+      "source": "https://flagcdn.com/gs.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "GT",
+      "name": "Guatemala",
+      "official": "Republic of Guatemala",
+      "aliases": [],
+      "asset": "757170eb0574edeebe79ab1e",
+      "source": "https://flagcdn.com/gt.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "GU",
+      "name": "Guam",
+      "official": "Guam",
+      "aliases": [],
+      "asset": "eafa46d689d3a0f56a33770a",
+      "source": "https://flagcdn.com/gu.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "GW",
+      "name": "Guinea-Bissau",
+      "official": "Republic of Guinea-Bissau",
+      "aliases": [],
+      "asset": "00dd3c3891158fcb6de6afc3",
+      "source": "https://flagcdn.com/gw.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "GY",
+      "name": "Guyana",
+      "official": "Co-operative Republic of Guyana",
+      "aliases": [],
+      "asset": "910830b8f1f35c778f37eb37",
+      "source": "https://flagcdn.com/gy.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "HK",
+      "name": "Hong Kong",
+      "official": "Hong Kong Special Administrative Region of the People's Republic of China",
+      "aliases": [],
+      "asset": "b5195c1e8547406faf0e3ec0",
+      "source": "https://flagcdn.com/hk.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "HM",
+      "name": "Heard Island and McDonald Islands",
+      "official": "Heard Island and McDonald Islands",
+      "aliases": [],
+      "asset": "b826e039804d5cf313bd7e22",
+      "source": "https://flagcdn.com/hm.svg",
+      "retrieved": "2026-09-24",
+      "starter": false,
+      "source_asset": "1fff6af9a474221a31f19940",
+      "asset_source": "https://flagcdn.com/au.svg"
+    },
+    {
+      "id": "HN",
+      "name": "Honduras",
+      "official": "Republic of Honduras",
+      "aliases": [],
+      "asset": "d2dd47a43f01a52ffff72cc8",
+      "source": "https://flagcdn.com/hn.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "HR",
+      "name": "Croatia",
+      "official": "Republic of Croatia",
+      "aliases": [],
+      "asset": "0f3e7dd725f72112380258df",
+      "source": "https://flagcdn.com/hr.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "HT",
+      "name": "Haiti",
+      "official": "Republic of Haiti",
+      "aliases": [],
+      "asset": "873f60095ed6717b7a64b750",
+      "source": "https://flagcdn.com/ht.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "HU",
+      "name": "Hungary",
+      "official": "Hungary",
+      "aliases": [],
+      "asset": "9e986a38ff8c2bd5c805fe35",
+      "source": "https://flagcdn.com/hu.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "ID",
+      "name": "Indonesia",
+      "official": "Republic of Indonesia",
+      "aliases": [],
+      "asset": "e5031ff2fbb987a54d6ab7ef",
+      "source": "https://flagcdn.com/id.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "IE",
+      "name": "Ireland",
+      "official": "Republic of Ireland",
+      "aliases": [],
+      "asset": "26d00c4780743189c7eabded",
+      "source": "https://flagcdn.com/ie.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "IL",
+      "name": "Israel",
+      "official": "State of Israel",
+      "aliases": [],
+      "asset": "d013a0fcd01f954a78b0178a",
+      "source": "https://flagcdn.com/il.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "IM",
+      "name": "Isle of Man",
+      "official": "Isle of Man",
+      "aliases": [],
+      "asset": "1445d81bc38e485375bd646e",
+      "source": "https://flagcdn.com/im.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "IN",
+      "name": "India",
+      "official": "Republic of India",
+      "aliases": [],
+      "asset": "ea9966697a16e75d64b4e6a9",
+      "source": "https://flagcdn.com/in.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "IO",
+      "name": "British Indian Ocean Territory",
+      "official": "British Indian Ocean Territory",
+      "aliases": [],
+      "asset": "a5ee98e6186097656f49139c",
+      "source": "https://flagcdn.com/io.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "IQ",
+      "name": "Iraq",
+      "official": "Republic of Iraq",
+      "aliases": [],
+      "asset": "b0de86ef9c1cfb0067e0989b",
+      "source": "https://flagcdn.com/iq.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "IR",
+      "name": "Iran",
+      "official": "Islamic Republic of Iran",
+      "aliases": [],
+      "asset": "258ee4b67755cd68a43a7420",
+      "source": "https://flagcdn.com/ir.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "IS",
+      "name": "Iceland",
+      "official": "Iceland",
+      "aliases": [],
+      "asset": "b14a90783cbe55b65c663efb",
+      "source": "https://flagcdn.com/is.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "IT",
+      "name": "Italy",
+      "official": "Italian Republic",
+      "aliases": [],
+      "asset": "7f818fa8e36ca606a8cbd351",
+      "source": "https://flagcdn.com/it.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "JE",
+      "name": "Jersey",
+      "official": "Bailiwick of Jersey",
+      "aliases": [],
+      "asset": "5a86a26a3395121362c27ea1",
+      "source": "https://flagcdn.com/je.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "JM",
+      "name": "Jamaica",
+      "official": "Jamaica",
+      "aliases": [],
+      "asset": "44504dda9d5bff31dfbcf5c8",
+      "source": "https://flagcdn.com/jm.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "JO",
+      "name": "Jordan",
+      "official": "Hashemite Kingdom of Jordan",
+      "aliases": [],
+      "asset": "fb2b2896420258e37d2e27a1",
+      "source": "https://flagcdn.com/jo.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "JP",
+      "name": "Japan",
+      "official": "Japan",
+      "aliases": [
+        "Nippon"
+      ],
+      "asset": "458c33115d4477b42ffbfea5",
+      "source": "https://flagcdn.com/jp.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "KE",
+      "name": "Kenya",
+      "official": "Republic of Kenya",
+      "aliases": [],
+      "asset": "0c65788e07b97827d85662c0",
+      "source": "https://flagcdn.com/ke.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "KG",
+      "name": "Kyrgyzstan",
+      "official": "Kyrgyz Republic",
+      "aliases": [],
+      "asset": "b6e67c6fce0ab4dcd376abf4",
+      "source": "https://flagcdn.com/kg.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "KH",
+      "name": "Cambodia",
+      "official": "Kingdom of Cambodia",
+      "aliases": [],
+      "asset": "545e4cdfa7987fd14f75036e",
+      "source": "https://flagcdn.com/kh.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "KI",
+      "name": "Kiribati",
+      "official": "Independent and Sovereign Republic of Kiribati",
+      "aliases": [],
+      "asset": "3c5c18f1a61d1c782f2f313f",
+      "source": "https://flagcdn.com/ki.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "KM",
+      "name": "Comoros",
+      "official": "Union of the Comoros",
+      "aliases": [],
+      "asset": "21e3ee9de83bf7ac6b57400e",
+      "source": "https://flagcdn.com/km.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "KN",
+      "name": "Saint Kitts and Nevis",
+      "official": "Federation of Saint Christopher and Nevis",
+      "aliases": [],
+      "asset": "5274df62085604bfd3586bc8",
+      "source": "https://flagcdn.com/kn.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "KP",
+      "name": "North Korea",
+      "official": "Democratic People's Republic of Korea",
+      "aliases": [
+        "North Korea"
+      ],
+      "asset": "2891274f3603b50b8eb795f5",
+      "source": "https://flagcdn.com/kp.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "KR",
+      "name": "South Korea",
+      "official": "Republic of Korea",
+      "aliases": [
+        "South Korea"
+      ],
+      "asset": "4e0b6d5fa63e2fc1c3d86fda",
+      "source": "https://flagcdn.com/kr.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "KW",
+      "name": "Kuwait",
+      "official": "State of Kuwait",
+      "aliases": [],
+      "asset": "ce62298731cb48e5f502af92",
+      "source": "https://flagcdn.com/kw.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "KY",
+      "name": "Cayman Islands",
+      "official": "Cayman Islands",
+      "aliases": [],
+      "asset": "86b2fc99935eadff41e998bc",
+      "source": "https://flagcdn.com/ky.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "KZ",
+      "name": "Kazakhstan",
+      "official": "Republic of Kazakhstan",
+      "aliases": [],
+      "asset": "15821803f5155fd3926b9a7e",
+      "source": "https://flagcdn.com/kz.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "LA",
+      "name": "Laos",
+      "official": "Lao People's Democratic Republic",
+      "aliases": [],
+      "asset": "3fd4d9d281669bf68fb54a0a",
+      "source": "https://flagcdn.com/la.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "LB",
+      "name": "Lebanon",
+      "official": "Lebanese Republic",
+      "aliases": [],
+      "asset": "453f0e9c1f2f7c056a148c12",
+      "source": "https://flagcdn.com/lb.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "LC",
+      "name": "Saint Lucia",
+      "official": "Saint Lucia",
+      "aliases": [],
+      "asset": "13f4f19e5d3a4a590ba7698e",
+      "source": "https://flagcdn.com/lc.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "LI",
+      "name": "Liechtenstein",
+      "official": "Principality of Liechtenstein",
+      "aliases": [],
+      "asset": "c8e5f0d8f4d2cb9a8fa6b94a",
+      "source": "https://flagcdn.com/li.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "LK",
+      "name": "Sri Lanka",
+      "official": "Democratic Socialist Republic of Sri Lanka",
+      "aliases": [],
+      "asset": "37382ec3e9015cdbb773386b",
+      "source": "https://flagcdn.com/lk.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "LR",
+      "name": "Liberia",
+      "official": "Republic of Liberia",
+      "aliases": [],
+      "asset": "b722560baa4a55e843b78f3a",
+      "source": "https://flagcdn.com/lr.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "LS",
+      "name": "Lesotho",
+      "official": "Kingdom of Lesotho",
+      "aliases": [],
+      "asset": "66002ab481b35579ef88633f",
+      "source": "https://flagcdn.com/ls.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "LT",
+      "name": "Lithuania",
+      "official": "Republic of Lithuania",
+      "aliases": [],
+      "asset": "4ff10d761fba1849c8409da0",
+      "source": "https://flagcdn.com/lt.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "LU",
+      "name": "Luxembourg",
+      "official": "Grand Duchy of Luxembourg",
+      "aliases": [],
+      "asset": "0c5b18554233cd30dbd366b3",
+      "source": "https://flagcdn.com/lu.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "LV",
+      "name": "Latvia",
+      "official": "Republic of Latvia",
+      "aliases": [],
+      "asset": "e07f22030556bb8daff7ca2c",
+      "source": "https://flagcdn.com/lv.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "LY",
+      "name": "Libya",
+      "official": "State of Libya",
+      "aliases": [],
+      "asset": "e2c8189fd45d0d0db304da38",
+      "source": "https://flagcdn.com/ly.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "MA",
+      "name": "Morocco",
+      "official": "Kingdom of Morocco",
+      "aliases": [],
+      "asset": "1f6f0d1bf2e6d69fc943eb0e",
+      "source": "https://flagcdn.com/ma.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "MC",
+      "name": "Monaco",
+      "official": "Principality of Monaco",
+      "aliases": [],
+      "asset": "e910a14b4fb9a637c7169f2f",
+      "source": "https://flagcdn.com/mc.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "MD",
+      "name": "Moldova",
+      "official": "Republic of Moldova",
+      "aliases": [],
+      "asset": "f65dea7e9a597eff30536f46",
+      "source": "https://flagcdn.com/md.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "ME",
+      "name": "Montenegro",
+      "official": "Montenegro",
+      "aliases": [],
+      "asset": "d051f3e44afbd68e466325bc",
+      "source": "https://flagcdn.com/me.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "MF",
+      "name": "Saint Martin",
+      "official": "Saint Martin",
+      "aliases": [],
+      "asset": "817de4f751a9801257ea9102",
+      "source": "https://flagcdn.com/mf.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "MG",
+      "name": "Madagascar",
+      "official": "Republic of Madagascar",
+      "aliases": [],
+      "asset": "935fe0c34ddf711c4623fe49",
+      "source": "https://flagcdn.com/mg.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "MH",
+      "name": "Marshall Islands",
+      "official": "Republic of the Marshall Islands",
+      "aliases": [],
+      "asset": "4d9431d294c64f7e972d1747",
+      "source": "https://flagcdn.com/mh.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "MK",
+      "name": "North Macedonia",
+      "official": "Republic of North Macedonia",
+      "aliases": [],
+      "asset": "72a37e581f614d791fa6d888",
+      "source": "https://flagcdn.com/mk.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "ML",
+      "name": "Mali",
+      "official": "Republic of Mali",
+      "aliases": [],
+      "asset": "3da9f9dc03b7e48c660ce768",
+      "source": "https://flagcdn.com/ml.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "MM",
+      "name": "Myanmar",
+      "official": "Republic of the Union of Myanmar",
+      "aliases": [],
+      "asset": "2ebf5312f5a4d89646aba232",
+      "source": "https://flagcdn.com/mm.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "MN",
+      "name": "Mongolia",
+      "official": "Mongolia",
+      "aliases": [],
+      "asset": "cbff4e60b6fd7725461cfa2a",
+      "source": "https://flagcdn.com/mn.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "MO",
+      "name": "Macau",
+      "official": "Macao Special Administrative Region of the People's Republic of China",
+      "aliases": [],
+      "asset": "f163f905ead86c901f7345c7",
+      "source": "https://flagcdn.com/mo.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "MP",
+      "name": "Northern Mariana Islands",
+      "official": "Commonwealth of the Northern Mariana Islands",
+      "aliases": [],
+      "asset": "f4d7305aa7c5f53025bfef7c",
+      "source": "https://flagcdn.com/mp.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "MQ",
+      "name": "Martinique",
+      "official": "Martinique",
+      "aliases": [],
+      "asset": "04653aa1be75661f4d444052",
+      "source": "https://flagcdn.com/mq.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "MR",
+      "name": "Mauritania",
+      "official": "Islamic Republic of Mauritania",
+      "aliases": [],
+      "asset": "1655e7ed2d848678e50138df",
+      "source": "https://flagcdn.com/mr.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "MS",
+      "name": "Montserrat",
+      "official": "Montserrat",
+      "aliases": [],
+      "asset": "094c43833e567bf6a8d06081",
+      "source": "https://flagcdn.com/ms.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "MT",
+      "name": "Malta",
+      "official": "Republic of Malta",
+      "aliases": [],
+      "asset": "708f8eef0bca92371fd77cdf",
+      "source": "https://flagcdn.com/mt.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "MU",
+      "name": "Mauritius",
+      "official": "Republic of Mauritius",
+      "aliases": [],
+      "asset": "fb5ab47f3b65e649aa299404",
+      "source": "https://flagcdn.com/mu.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "MV",
+      "name": "Maldives",
+      "official": "Republic of the Maldives",
+      "aliases": [],
+      "asset": "805b44631efeb06981ff8297",
+      "source": "https://flagcdn.com/mv.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "MW",
+      "name": "Malawi",
+      "official": "Republic of Malawi",
+      "aliases": [],
+      "asset": "81a7dc8d3f32fcdc7cd98408",
+      "source": "https://flagcdn.com/mw.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "MX",
+      "name": "Mexico",
+      "official": "United Mexican States",
+      "aliases": [],
+      "asset": "50306c6580de34253312ca6f",
+      "source": "https://flagcdn.com/mx.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "MY",
+      "name": "Malaysia",
+      "official": "Malaysia",
+      "aliases": [],
+      "asset": "1d3284c77094859fb63c1880",
+      "source": "https://flagcdn.com/my.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "MZ",
+      "name": "Mozambique",
+      "official": "Republic of Mozambique",
+      "aliases": [],
+      "asset": "d28b04524a479d6107c4dd90",
+      "source": "https://flagcdn.com/mz.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "NA",
+      "name": "Namibia",
+      "official": "Republic of Namibia",
+      "aliases": [],
+      "asset": "ddc9fc887177f92e80fed160",
+      "source": "https://flagcdn.com/na.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "NC",
+      "name": "New Caledonia",
+      "official": "New Caledonia",
+      "aliases": [],
+      "asset": "a1c55e47475ff655c4617a20",
+      "source": "https://flagcdn.com/nc.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "NE",
+      "name": "Niger",
+      "official": "Republic of Niger",
+      "aliases": [],
+      "asset": "44609a37addb0772d38cadfb",
+      "source": "https://flagcdn.com/ne.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "NF",
+      "name": "Norfolk Island",
+      "official": "Territory of Norfolk Island",
+      "aliases": [],
+      "asset": "4e6b98866928006843940ffb",
+      "source": "https://flagcdn.com/nf.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "NG",
+      "name": "Nigeria",
+      "official": "Federal Republic of Nigeria",
+      "aliases": [],
+      "asset": "3dbebd9f8e31821d5fa22f97",
+      "source": "https://flagcdn.com/ng.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "NI",
+      "name": "Nicaragua",
+      "official": "Republic of Nicaragua",
+      "aliases": [],
+      "asset": "8c2ba890ea24dd68556de0af",
+      "source": "https://flagcdn.com/ni.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "NL",
+      "name": "Netherlands",
+      "official": "Kingdom of the Netherlands",
+      "aliases": [],
+      "asset": "2f7463573cdc3a0f7760c184",
+      "source": "https://flagcdn.com/nl.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "NO",
+      "name": "Norway",
+      "official": "Kingdom of Norway",
+      "aliases": [],
+      "asset": "0d4b9a52f0a6bd264258baac",
+      "source": "https://flagcdn.com/no.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "NP",
+      "name": "Nepal",
+      "official": "Federal Democratic Republic of Nepal",
+      "aliases": [],
+      "asset": "f4a65e693806dbb31a5b2808",
+      "source": "https://flagcdn.com/np.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "NR",
+      "name": "Nauru",
+      "official": "Republic of Nauru",
+      "aliases": [],
+      "asset": "19bd261738aafd88f88ea4e7",
+      "source": "https://flagcdn.com/nr.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "NU",
+      "name": "Niue",
+      "official": "Niue",
+      "aliases": [],
+      "asset": "33af519360a2305beb3a58a4",
+      "source": "https://flagcdn.com/nu.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "NZ",
+      "name": "New Zealand",
+      "official": "New Zealand",
+      "aliases": [],
+      "asset": "3c5040525e91680756f2ee10",
+      "source": "https://flagcdn.com/nz.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "OM",
+      "name": "Oman",
+      "official": "Sultanate of Oman",
+      "aliases": [],
+      "asset": "c14fc539f238e52aec476a3a",
+      "source": "https://flagcdn.com/om.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "PA",
+      "name": "Panama",
+      "official": "Republic of Panama",
+      "aliases": [],
+      "asset": "8e8c7cf854aa3367d9ed9eda",
+      "source": "https://flagcdn.com/pa.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "PE",
+      "name": "Peru",
+      "official": "Republic of Peru",
+      "aliases": [],
+      "asset": "739e2e071f2804f0786ce5a7",
+      "source": "https://flagcdn.com/pe.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "PF",
+      "name": "French Polynesia",
+      "official": "French Polynesia",
+      "aliases": [],
+      "asset": "5165aa6c277a27529fbc242a",
+      "source": "https://flagcdn.com/pf.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "PG",
+      "name": "Papua New Guinea",
+      "official": "Independent State of Papua New Guinea",
+      "aliases": [],
+      "asset": "d98adee3bf8945b389144b04",
+      "source": "https://flagcdn.com/pg.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "PH",
+      "name": "Philippines",
+      "official": "Republic of the Philippines",
+      "aliases": [],
+      "asset": "d554297356ab66a5061df4c7",
+      "source": "https://flagcdn.com/ph.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "PK",
+      "name": "Pakistan",
+      "official": "Islamic Republic of Pakistan",
+      "aliases": [],
+      "asset": "2011fe01e332cfc8f16c861d",
+      "source": "https://flagcdn.com/pk.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "PL",
+      "name": "Poland",
+      "official": "Republic of Poland",
+      "aliases": [],
+      "asset": "da6d9e34f2007194b0082d4c",
+      "source": "https://flagcdn.com/pl.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "PM",
+      "name": "Saint Pierre and Miquelon",
+      "official": "Saint Pierre and Miquelon",
+      "aliases": [],
+      "asset": "2e210b75c1024a800b1367b2",
+      "source": "https://flagcdn.com/pm.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "PN",
+      "name": "Pitcairn Islands",
+      "official": "Pitcairn Group of Islands",
+      "aliases": [],
+      "asset": "2affa299bd92330f8eaab988",
+      "source": "https://flagcdn.com/pn.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "PR",
+      "name": "Puerto Rico",
+      "official": "Commonwealth of Puerto Rico",
+      "aliases": [],
+      "asset": "28a0d42a45ae8d00fce6115a",
+      "source": "https://flagcdn.com/pr.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "PS",
+      "name": "Palestine",
+      "official": "State of Palestine",
+      "aliases": [],
+      "asset": "6ccd9cbaff9c67f772dfa215",
+      "source": "https://flagcdn.com/ps.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "PT",
+      "name": "Portugal",
+      "official": "Portuguese Republic",
+      "aliases": [],
+      "asset": "c7ff39edf788e7cc7f230db3",
+      "source": "https://flagcdn.com/pt.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "PW",
+      "name": "Palau",
+      "official": "Republic of Palau",
+      "aliases": [],
+      "asset": "2c300493ff3bfeb8f5fa5ae4",
+      "source": "https://flagcdn.com/pw.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "PY",
+      "name": "Paraguay",
+      "official": "Republic of Paraguay",
+      "aliases": [],
+      "asset": "dc7474149d9324633f47eba8",
+      "source": "https://flagcdn.com/py.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "QA",
+      "name": "Qatar",
+      "official": "State of Qatar",
+      "aliases": [],
+      "asset": "5332c024cb6bac6d7ca2f963",
+      "source": "https://flagcdn.com/qa.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "RE",
+      "name": "Reunion",
+      "official": "Reunion Island",
+      "aliases": [],
+      "asset": "d331ea0782d4c246e19f4387",
+      "source": "https://flagcdn.com/re.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "RO",
+      "name": "Romania",
+      "official": "Romania",
+      "aliases": [],
+      "asset": "20c8e69585273d35ba38fe2c",
+      "source": "https://flagcdn.com/ro.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "RS",
+      "name": "Serbia",
+      "official": "Republic of Serbia",
+      "aliases": [],
+      "asset": "ce84077ebc169f198c24d087",
+      "source": "https://flagcdn.com/rs.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "RU",
+      "name": "Russia",
+      "official": "Russian Federation",
+      "aliases": [],
+      "asset": "eb1dbd977fdb824dcae7767c",
+      "source": "https://flagcdn.com/ru.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "RW",
+      "name": "Rwanda",
+      "official": "Republic of Rwanda",
+      "aliases": [],
+      "asset": "21b67e23f19a1bca9b4ad87f",
+      "source": "https://flagcdn.com/rw.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "SA",
+      "name": "Saudi Arabia",
+      "official": "Kingdom of Saudi Arabia",
+      "aliases": [],
+      "asset": "2968dcc0a8a32b555b67ac20",
+      "source": "https://flagcdn.com/sa.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "SB",
+      "name": "Solomon Islands",
+      "official": "Solomon Islands",
+      "aliases": [],
+      "asset": "56e24d58d3912dcd3c89187e",
+      "source": "https://flagcdn.com/sb.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "SC",
+      "name": "Seychelles",
+      "official": "Republic of Seychelles",
+      "aliases": [],
+      "asset": "b7a1ccdf0b210a2273426eaf",
+      "source": "https://flagcdn.com/sc.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "SD",
+      "name": "Sudan",
+      "official": "Republic of the Sudan",
+      "aliases": [],
+      "asset": "807d340142a907bef83d69a0",
+      "source": "https://flagcdn.com/sd.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "SE",
+      "name": "Sweden",
+      "official": "Kingdom of Sweden",
+      "aliases": [],
+      "asset": "426348d99d9cace2df6eaa6d",
+      "source": "https://flagcdn.com/se.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "SG",
+      "name": "Singapore",
+      "official": "Republic of Singapore",
+      "aliases": [],
+      "asset": "d8782c5cc56587009a4939e9",
+      "source": "https://flagcdn.com/sg.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "SH",
+      "name": "Saint Helena, Ascension and Tristan da Cunha",
+      "official": "Saint Helena, Ascension and Tristan da Cunha",
+      "aliases": [],
+      "asset": "66b7470e6b4431435e904e46",
+      "source": "https://flagcdn.com/sh.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "SI",
+      "name": "Slovenia",
+      "official": "Republic of Slovenia",
+      "aliases": [],
+      "asset": "31b0d198128163affed8e660",
+      "source": "https://flagcdn.com/si.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "SJ",
+      "name": "Svalbard and Jan Mayen",
+      "official": "Svalbard og Jan Mayen",
+      "aliases": [],
+      "asset": "0d4b9a52f0a6bd264258baac",
+      "source": "https://flagcdn.com/sj.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "SK",
+      "name": "Slovakia",
+      "official": "Slovak Republic",
+      "aliases": [],
+      "asset": "e684da4cc4c07969475456c6",
+      "source": "https://flagcdn.com/sk.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "SL",
+      "name": "Sierra Leone",
+      "official": "Republic of Sierra Leone",
+      "aliases": [],
+      "asset": "393d2bb10730328c5aaca2d8",
+      "source": "https://flagcdn.com/sl.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "SM",
+      "name": "San Marino",
+      "official": "Republic of San Marino",
+      "aliases": [],
+      "asset": "55e4e9e326d6f84b67316729",
+      "source": "https://flagcdn.com/sm.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "SN",
+      "name": "Senegal",
+      "official": "Republic of Senegal",
+      "aliases": [],
+      "asset": "deda01a8dd9169916c898fb1",
+      "source": "https://flagcdn.com/sn.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "SO",
+      "name": "Somalia",
+      "official": "Federal Republic of Somalia",
+      "aliases": [],
+      "asset": "04c73fe5a158ffb8f07a85da",
+      "source": "https://flagcdn.com/so.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "SR",
+      "name": "Suriname",
+      "official": "Republic of Suriname",
+      "aliases": [],
+      "asset": "163badfea319dc4f090185b2",
+      "source": "https://flagcdn.com/sr.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "SS",
+      "name": "South Sudan",
+      "official": "Republic of South Sudan",
+      "aliases": [],
+      "asset": "f4a444b02b37cab4e74f763c",
+      "source": "https://flagcdn.com/ss.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "ST",
+      "name": "Sao Tome and Principe",
+      "official": "Democratic Republic of Sao Tome and Principe",
+      "aliases": [],
+      "asset": "a95075950bff55641b427443",
+      "source": "https://flagcdn.com/st.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "SV",
+      "name": "El Salvador",
+      "official": "Republic of El Salvador",
+      "aliases": [],
+      "asset": "705f9e5f51d08c1e1da46a51",
+      "source": "https://flagcdn.com/sv.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "SX",
+      "name": "Sint Maarten",
+      "official": "Sint Maarten",
+      "aliases": [],
+      "asset": "bdac036a1743de07c39c0c88",
+      "source": "https://flagcdn.com/sx.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "SY",
+      "name": "Syria",
+      "official": "Syrian Arab Republic",
+      "aliases": [],
+      "asset": "853fd52ad553413e6f69e86b",
+      "source": "https://flagcdn.com/sy.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "SZ",
+      "name": "Eswatini",
+      "official": "Kingdom of Eswatini",
+      "aliases": [
+        "Swaziland"
+      ],
+      "asset": "11dabce8460ab897af9ed2bf",
+      "source": "https://flagcdn.com/sz.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "TC",
+      "name": "Turks and Caicos Islands",
+      "official": "Turks and Caicos Islands",
+      "aliases": [],
+      "asset": "d32ec58140866a2108647bc6",
+      "source": "https://flagcdn.com/tc.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "TD",
+      "name": "Chad",
+      "official": "Republic of Chad",
+      "aliases": [],
+      "asset": "78b9c11f5216f18a9dc4a4ad",
+      "source": "https://flagcdn.com/td.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "TF",
+      "name": "French Southern and Antarctic Lands",
+      "official": "Territory of the French Southern and Antarctic Lands",
+      "aliases": [],
+      "asset": "cb943c0deb7152160889835a",
+      "source": "https://flagcdn.com/tf.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "TG",
+      "name": "Togo",
+      "official": "Togolese Republic",
+      "aliases": [],
+      "asset": "c8c7d30791597c02ae8e5c8e",
+      "source": "https://flagcdn.com/tg.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "TH",
+      "name": "Thailand",
+      "official": "Kingdom of Thailand",
+      "aliases": [],
+      "asset": "b834f793e471eb858da5044e",
+      "source": "https://flagcdn.com/th.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "TJ",
+      "name": "Tajikistan",
+      "official": "Republic of Tajikistan",
+      "aliases": [],
+      "asset": "0932b4da969103c9918fd599",
+      "source": "https://flagcdn.com/tj.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "TK",
+      "name": "Tokelau",
+      "official": "Tokelau",
+      "aliases": [],
+      "asset": "e2c91dbbfeecfd389589d6aa",
+      "source": "https://flagcdn.com/tk.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "TL",
+      "name": "Timor-Leste",
+      "official": "Democratic Republic of Timor-Leste",
+      "aliases": [
+        "East Timor"
+      ],
+      "asset": "1f25223cf5d05c32593ca66f",
+      "source": "https://flagcdn.com/tl.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "TM",
+      "name": "Turkmenistan",
+      "official": "Turkmenistan",
+      "aliases": [],
+      "asset": "cbd5b1bc3dc107cd170cc788",
+      "source": "https://flagcdn.com/tm.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "TN",
+      "name": "Tunisia",
+      "official": "Tunisian Republic",
+      "aliases": [],
+      "asset": "b0d8964ee6ff40309779e0a1",
+      "source": "https://flagcdn.com/tn.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "TO",
+      "name": "Tonga",
+      "official": "Kingdom of Tonga",
+      "aliases": [],
+      "asset": "aaf4a1b55742a45ae0133034",
+      "source": "https://flagcdn.com/to.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "TR",
+      "name": "Turkey",
+      "official": "Republic of Turkey",
+      "aliases": [
+        "Türkiye",
+        "Turkey"
+      ],
+      "asset": "f15da84b4e5b23f54b817712",
+      "source": "https://flagcdn.com/tr.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "TT",
+      "name": "Trinidad and Tobago",
+      "official": "Republic of Trinidad and Tobago",
+      "aliases": [],
+      "asset": "89fa29d1f4a553154be8ae34",
+      "source": "https://flagcdn.com/tt.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "TV",
+      "name": "Tuvalu",
+      "official": "Tuvalu",
+      "aliases": [],
+      "asset": "8596575d86d9ca070a2453f8",
+      "source": "https://flagcdn.com/tv.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "TW",
+      "name": "Taiwan",
+      "official": "Republic of China (Taiwan)",
+      "aliases": [],
+      "asset": "5e68330a1f2a298257ebbd32",
+      "source": "https://flagcdn.com/tw.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "TZ",
+      "name": "Tanzania",
+      "official": "United Republic of Tanzania",
+      "aliases": [],
+      "asset": "0bdf0b45ec36def31a5ef9e1",
+      "source": "https://flagcdn.com/tz.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "UA",
+      "name": "Ukraine",
+      "official": "Ukraine",
+      "aliases": [],
+      "asset": "bf8178f26e4289a3ffa0dd69",
+      "source": "https://flagcdn.com/ua.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "UG",
+      "name": "Uganda",
+      "official": "Republic of Uganda",
+      "aliases": [],
+      "asset": "42f7767a588bf8def6b7bac1",
+      "source": "https://flagcdn.com/ug.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "UM",
+      "name": "United States Minor Outlying Islands",
+      "official": "United States Minor Outlying Islands",
+      "aliases": [],
+      "asset": "e1792c011daad918fdbd99a2",
+      "source": "https://flagcdn.com/um.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "US",
+      "name": "United States",
+      "official": "United States of America",
+      "aliases": [
+        "USA",
+        "United States of America",
+        "US"
+      ],
+      "asset": "e1792c011daad918fdbd99a2",
+      "source": "https://flagcdn.com/us.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "UY",
+      "name": "Uruguay",
+      "official": "Oriental Republic of Uruguay",
+      "aliases": [],
+      "asset": "856fc0e14ff877b68a68c891",
+      "source": "https://flagcdn.com/uy.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "UZ",
+      "name": "Uzbekistan",
+      "official": "Republic of Uzbekistan",
+      "aliases": [],
+      "asset": "523cd5726039173790151f1e",
+      "source": "https://flagcdn.com/uz.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "VA",
+      "name": "Vatican City",
+      "official": "Vatican City State",
+      "aliases": [
+        "Vatican",
+        "Vatican City"
+      ],
+      "asset": "f785d28ddd1a3bb1e65b6ff7",
+      "source": "https://flagcdn.com/va.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "VC",
+      "name": "Saint Vincent and the Grenadines",
+      "official": "Saint Vincent and the Grenadines",
+      "aliases": [],
+      "asset": "c2a36b00c4c8c637b6847ed2",
+      "source": "https://flagcdn.com/vc.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "VE",
+      "name": "Venezuela",
+      "official": "Bolivarian Republic of Venezuela",
+      "aliases": [],
+      "asset": "756f64b7ab11de19928d6ee6",
+      "source": "https://flagcdn.com/ve.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "VG",
+      "name": "British Virgin Islands",
+      "official": "Virgin Islands",
+      "aliases": [],
+      "asset": "03efd26b874898b829be2226",
+      "source": "https://flagcdn.com/vg.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "VI",
+      "name": "United States Virgin Islands",
+      "official": "Virgin Islands of the United States",
+      "aliases": [],
+      "asset": "f38cfcf80eb16ae36559a4f5",
+      "source": "https://flagcdn.com/vi.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "VN",
+      "name": "Vietnam",
+      "official": "Socialist Republic of Vietnam",
+      "aliases": [],
+      "asset": "bd236e52dc564431ea569bca",
+      "source": "https://flagcdn.com/vn.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "VU",
+      "name": "Vanuatu",
+      "official": "Republic of Vanuatu",
+      "aliases": [],
+      "asset": "18232f22b21730b4ec64a83c",
+      "source": "https://flagcdn.com/vu.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "WF",
+      "name": "Wallis and Futuna",
+      "official": "Territory of the Wallis and Futuna Islands",
+      "aliases": [],
+      "asset": "ac87487bf4186f4e8b5d5787",
+      "source": "https://flagcdn.com/wf.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "WS",
+      "name": "Samoa",
+      "official": "Independent State of Samoa",
+      "aliases": [],
+      "asset": "acedd8fb18df15e9483cc8c0",
+      "source": "https://flagcdn.com/ws.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "XK",
+      "name": "Kosovo",
+      "official": "Republic of Kosovo",
+      "aliases": [],
+      "asset": "2827a799155a8b375d4a6039",
+      "source": "https://flagcdn.com/xk.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "YE",
+      "name": "Yemen",
+      "official": "Republic of Yemen",
+      "aliases": [],
+      "asset": "1379ff649727ba471d5dde32",
+      "source": "https://flagcdn.com/ye.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "YT",
+      "name": "Mayotte",
+      "official": "Department of Mayotte",
+      "aliases": [],
+      "asset": "51a1291a2e80b59a9d3be2bf",
+      "source": "https://flagcdn.com/yt.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "ZA",
+      "name": "South Africa",
+      "official": "Republic of South Africa",
+      "aliases": [],
+      "asset": "6fbf0b68db7024ac996c92b1",
+      "source": "https://flagcdn.com/za.svg",
+      "retrieved": "2026-09-24",
+      "starter": true
+    },
+    {
+      "id": "ZM",
+      "name": "Zambia",
+      "official": "Republic of Zambia",
+      "aliases": [],
+      "asset": "b64a4ec9612720033a3e8de8",
+      "source": "https://flagcdn.com/zm.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    },
+    {
+      "id": "ZW",
+      "name": "Zimbabwe",
+      "official": "Republic of Zimbabwe",
+      "aliases": [],
+      "asset": "f0b79e8841f06a4afed5a901",
+      "source": "https://flagcdn.com/zw.svg",
+      "retrieved": "2026-09-24",
+      "starter": false
+    }
+  ],
+  "shared_groups": [
+    [
+      "AU",
+      "HM"
+    ],
+    [
+      "BV",
+      "NO",
+      "SJ"
+    ],
+    [
+      "FR",
+      "MF"
+    ],
+    [
+      "UM",
+      "US"
+    ]
+  ],
+  "exact_duplicate_groups": [
+    [
+      "BV",
+      "NO",
+      "SJ"
+    ],
+    [
+      "FR",
+      "MF"
+    ],
+    [
+      "UM",
+      "US"
+    ]
+  ],
+  "visual_equivalence": [
+    {
+      "codes": [
+        "AU",
+        "HM"
+      ],
+      "source": "https://flagpedia.net/heard-island-and-mcdonald-islands",
+      "reason": "Same flag, different SVG encoding; use the Australian asset for both."
+    }
+  ],
+  "version": "8cf537938d46eb9e"
+}

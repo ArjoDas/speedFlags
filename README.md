@@ -1,96 +1,85 @@
 # speedFlags
 
-#### Video Demo:  
-[<YouTube Presentation>](https://youtu.be/p_8dHJ_5BW4)
-#### Description:
-speedFlags is an interactive web-based game that challenges players to identify country flags as quickly as possible.
-While building this game, I learnt many skills, including SASS, Bootstrap, and Vanilla JavaScript. I also learnt many concepts inside the domain of Javascript, such as Object-Orientated Programming, Promises, Event Listeners, Asynchronous Programming, Closures & Scope, DOM Manipulation Techniques, Web debugging, APIs like fetch, and perhaps most importantly, understood how the Javascript event loop worked under the hood.
+A flag game with timed rounds, relaxed practice, shared-flag answers, and a review of every attempt. Built with **FastAPI, React, TypeScript, Vite and Tailwind CSS**.
 
-### Project Overview
+The server owns question selection, answer validation, deadlines and scoring. The browser handles the interface and local preferences/personal bests. The reviewed collection contains 250 countries and territories represented by 245 distinct playable flags, including a curated starter collection of 50.
 
-speedFlags is built using a combination of Flask (Python) for the backend and vanilla JavaScript for the frontend. The game utilises SVG images for flag rendering, ensuring crisp visuals at any scale. Bootstrap employs their themes and styles, making the game accessible on various devices, while custom aesthetic changes have been added through SCSS.
+## Run locally
 
-### File Structure and Functionality
+Requirements: Node 22.12+ (22 LTS recommended), [uv](https://docs.astral.sh/uv/), and Python 3.12. `uv` can install the pinned Python version. The old project environment is not used.
 
-#### Backend (Python/Flask)
+```sh
+UV_PROJECT_ENVIRONMENT=.venv-modernise uv sync --locked
+npm ci
+.venv-modernise/bin/python scripts/dev-key.py
+npm run build
+.venv-modernise/bin/uvicorn backend.app:app --host 127.0.0.1 --port 8000
+```
 
-1. `app.py`
-Contains the main Flask application and handles routing, server-side logic, and manages game sessions and data persistence.
-`app.py` includes 1 webpage endpoint (index) and 5 API endpoints, of which 3 deliver SVGs and other information to the frontend javascript, while the other 2 are used for the autocomplete and answer checking features.
+Open **http://127.0.0.1:8000**. `.env` is generated locally, is ignored by Git, and is not overwritten if it already exists. The app intentionally fails startup if `SPEEDFLAGS_KEYS` is absent or invalid. On Windows, use the environment's `Scripts` executables instead of `bin`.
 
-2. `requirements.txt`
-- Lists all Python dependencies required for the project
-- Notable packages include Flask and SQLAlchemy.
+For frontend hot reload, keep FastAPI running and run `npm run dev` in another terminal. Open the Vite URL; `/api` requests are proxied to port 8000 and flags are served locally by Vite.
 
-#### Frontend (JavaScript/HTML/CSS)
+## Verify changes
 
-1. `static/js/newgame.js`
-- Core game logic implementation
-- Manages game state, timer, and user interactions
-- Handles AJAX requests to the server for flag data and answer validation
+```sh
+python3 scripts/data.py --check
+npm run lint
+npm run format:check
+npm test
+npm run build
+.venv-modernise/bin/ruff check backend scripts
+.venv-modernise/bin/pytest -q
+npx playwright install chromium firefox webkit
+npm run test:e2e
+```
 
-2. `static/js/theme_toggler.js` (mentioned in layout.html)
-- Implements dark/light mode functionality
+The browser suite starts the backend if necessary and tests the built app. Run the build first. CI performs the same checks, including generated API contracts. Browser reports are written to ignored `playwright-report/` and `test-results/` directories.
 
-3. `static/custom.css`
-- Custom styles for the application
-- Extends and overrides Bootstrap styles for a unique look
+After changing API models/routes:
 
-4. `templates/layout.html`
-- Base template for the application
-- Includes common elements like the navbar and theme toggle.
+```sh
+.venv-modernise/bin/python -m scripts.openapi
+npm run api:types
+```
 
-5. `templates/index.html`
-Main game interface template
-Contains the structure for the game board, timer, and user input.
+## How games work
 
-#### Configuration and Assets
+- **Daily Challenge (default):** 30 distinct flags from the full collection, in the same deterministic order for the UTC date and dataset version. A separate warm-up starts the count-up clock. Every answer/skip advances; each wrong answer or skip adds five seconds. The comparison metric is elapsed time (rounded up to a whole second) plus penalties, lowest first. Only completing all 30 produces a shareable result. Copies contain five rows of six outcome blocks and the adjusted time only.
+- **Timed:** choose 30, 45, 60 or 120 seconds and a bonus of 0, +2 or +5 seconds per correct answer.
+- **Starting:** settings open in an animated modal while the game loads behind it. Dismissing the popup reveals a playable warm-up without pressing Play. Close with ×, Escape or a backdrop click; cancelling preserves an existing warm-up. The first flag is an unscored warm-up with its answer displayed. Enter that answer to start the server clock; loading the game alone does not start it. Time continues during tab changes and network delays; resuming a tab resynchronizes with the server.
+- **Practice:** no score timer. Finish whenever you like, or complete the selected deck. All rounds have a 15-minute lifetime; prepared contexts expire after one hour.
+- **Answers:** case, punctuation, accents and whitespace are normalized. Common/official names and reviewed aliases are accepted. The first suggestion is selected automatically. Enter submits the highlighted suggestion immediately; arrows change the selection, and Escape dismisses suggestions to submit your exact text. Touch/click fills the selected name. Enter with empty or whitespace-only input skips the current flag during play; it cannot skip the warm-up. Incorrect answers flash the accepted answer for three seconds; the previous flag and answer remain beside the current flag.
+- **Shared flags:** any accepted country/territory name earns the point. Equivalent assets appear once per deck. Similar designs with different proportions or colors remain distinct.
+- **Skip:** records an attempt without a point. Accuracy is correct / attempts, including skips. An unanswered flag at expiry is not counted.
+- **Results:** include the exact flag used, accepted names and your answer. Replay or practice missed flags. Early-ended rounds do not update Challenge or Timed personal bests. Personal bests are separated by settings and dataset version.
+- **Daily recovery:** the first attempt is saved on this browser after each server response. Reload and dismiss the settings popup to resume it or view its completed result; the server clock keeps running. Only one Daily Challenge attempt is available per UTC day on this browser. Daily replays are disabled; Timed, Practice and missed-flag practice remain available. Daily play requires browser storage. Ending a round early consumes the daily attempt and produces an incomplete result; the 15-minute session limit still applies. These are device-local controls, not verified global rankings: clearing storage, multiple tabs/devices and replayed contexts cannot be reliably policed without durable shared storage.
+- **Storage:** settings/theme, the daily attempt and personal bests stay on this device. No account or cross-device synchronization. Storage failure does not prevent playing.
 
-1. `package.json`
-- Defines project dependencies (Bootstrap)
+A failed API request is never scored as an incorrect answer. Retry reuses the captured question and submission ID. The client blocks overlapping submissions and discards results from an abandoned game. Missing/expired contexts produce a visible recovery path rather than `undefined` flags or names.
 
-2. `.gitignore`
-- Specifies files and directories to be ignored by version control.
+## Data and maintenance
 
-3. `temp_files/temp1.py - temp4.py`
-- These scripts were used to obtain the flag svg codes from the REST Countries API. Though my initial plan was to get the svg codes from the REST Countries APIs directly through the front-end. It turned out to take too long and since quick delivery was important I downloaded the SVGs into my own `speedflags.db` and made my own APIs to serve the flags to the front end from there.
+The original `speedflags.db` is preserved unchanged. FastAPI uses `data/generated/countries.db` read-only; SVGs are separate local assets with content-derived filenames. See [data provenance and refresh instructions](docs/DATA.md), the generated [flag contact sheet](docs/flags.html), and [the modernization plan](PLAN.md).
 
-### Key Features and Design Choices
+```sh
+python3 scripts/data.py          # rebuild from the reviewed, committed snapshot
+python3 scripts/data.py --check  # validate without network access
+python3 scripts/data.py --refresh # download a new snapshot into staging for review
+```
 
-1. **Modular JavaScript Architecture**: The game logic is organised into modular objects (e.g., `gameStatsObject`, `svgMethods`, `gameInitialiser`), promoting code organisation and maintainability. The initial version of `game.js` had virtually no use of Javascript objects, which made debugging very hard as functions were all over the place. This led to me eventually giving up on debugging and rewriting the `game.js` from scratch, which I named `newgame.js`.
+A refresh aborts if downloading/validation fails or exact duplicate groups change. Review all generated changes together before committing. Data refresh is never part of normal production requests or deployment builds.
 
-2. **SVG Flag Rendering**: The decision to use SVG for flags ensures high-quality visuals across different screen sizes and resolutions. I had vastly underestimated how difficult it would be to manipulate the SVGs to be coherent with the rest of the page and had to understand how to use `viewPorts` and 'viewBoxes', which took a while.
+## Hosting and competitions
 
-3. **Asynchronous Operations**: Extensive use of async/await for smooth user experience and efficient server communication. This took me a pretty long time to fully grasp as I was used to more linear languages like Python and C. But after understanding how JavaScript worked under the hood—how the `heap`, 'queue', and'stack` help a webpage to run—everything fell into place.
+Deployment targets Vercel Hobby: FastAPI as a Python Function and the React build/flags on its CDN. Set a **separate production `SPEEDFLAGS_KEYS`**, use the repository root, and remove old dashboard build/output overrides. See [deployment and rollback](docs/DEPLOYMENT.md).
 
-4. **Customisable Game Settings**: Players can adjust game duration and scoring rules, enhancing replayability.
+This release is **casual play**, not a secure competition platform. Encrypted, expiring context removes dependence on ephemeral server session files, but a stateless token cannot globally prevent replay/branching or persist results. Public rankings require shared durable storage, participant identity, atomic attempt consumption/idempotency, rate controls and a fairness policy. Those remain deferred; the backend has a separate data repository and game service to support that work.
 
-5. **Accessibility Considerations**: Keyboard navigation support and clear visual feedback contribute to a more inclusive user experience.
+No push or deployment is performed by the modernization work. Free-tier availability and quotas must be checked before hosting or enabling competitions.
 
-6. **Performance Optimisation**: Techniques like batched DOM updates and efficient event handling are employed to ensure smooth gameplay.
+## Origins and attribution
 
-7. **Security Measures**: Basic input sanitisation and server-side answer validation protect against common vulnerabilities.
+Originally built as a Flask/vanilla-JavaScript project. [Original video demo](https://youtu.be/p_8dHJ_5BW4).
 
-### Development Decisions and Tradeoffs
-
-1. **Vanilla JS vs. Framework**: The choice to use vanilla JavaScript instead of a framework like React or Vue.js was likely made to reduce complexity and dependencies for a relatively simple game. However, this may limit scalability for future feature additions.
-
-2. **Server-Side Rendering**: Using Flask's templating engine for initial page loads provides faster initial render times but may result in less dynamic content updates compared to a single-page application approach.
-
-3. **CSS Framework**: Bootstrap was chosen for rapid development and responsive design. While this ensures consistency and cross-browser compatibility, it may lead to larger CSS file sizes and potential styling conflicts.
-
-4. **SVG Manipulation**: Custom SVG handling provides precise control over flag rendering but requires more complex code compared to using pre-rendered images.
-
-### Future Improvements
-
-1. Implement a more robust state management solution for complex game states.
-2. Enhance accessibility features, including ARIA attributes and screen reader support.
-3. Add internationalisation (i18n) for multi-language support.
-4. Develop a comprehensive test suite for both frontend and backend components.
-5. Optimise performance further, especially for mobile devices.
-6. Implement offline support using service workers.
-7. Expand the game with additional modes or educational features. We could add accounts where people can use active-recall and spaced-repetition with an alogirthm similiar to Anki's and optally remember flags from there.
-
-### Conclusion
-
-speedFlags demonstrates a well-structured web application that combines educational content with engaging gameplay. The project showcases effective use of modern web technologies while maintaining simplicity in its core design. Its modular architecture and thoughtful feature implementations provide a solid foundation for future enhancements and expansions.
+Flag images come from FlagCDN/Flagpedia; see [data attribution](docs/DATA.md). Third-party packages retain their respective licenses. No new license for the original application is asserted here.
