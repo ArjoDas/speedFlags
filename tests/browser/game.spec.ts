@@ -296,3 +296,36 @@ test('empty Enter skips once, including whitespace, but cannot skip the warm-up'
   await page.getByRole('button', { name: /Finish round/ }).click()
   await expect(page.locator('.review-card.skipped')).toHaveCount(2)
 })
+
+test('answered flag moves to the previous slot without blocking input', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' })
+  await start(page)
+  await page.evaluate(() => {
+    const animate = Element.prototype.animate
+    Element.prototype.animate = function (...args) {
+      const animation = animate.apply(this, args)
+      if (this.matches('.previous-panel img')) {
+        animation.pause()
+        ;(window as Window & { flagAnimation?: Animation }).flagAnimation = animation
+      }
+      return animation
+    }
+  })
+  const current = await page.getByAltText('Flag to identify').boundingBox()
+  await page.getByRole('combobox', { name: 'Country name' }).press('Enter')
+  await expect(page.locator('.score-panel dd').nth(1)).toHaveText('1')
+  const previous = page.locator('.previous-panel img')
+  const moving = await previous.boundingBox()
+  expect(Math.abs(moving!.x - current!.x)).toBeLessThan(2)
+  expect(Math.abs(moving!.width - current!.width)).toBeLessThan(2)
+  await expect(page.getByRole('combobox', { name: 'Country name' })).toBeEnabled()
+  await page.evaluate(() =>
+    (window as Window & { flagAnimation?: Animation }).flagAnimation!.finish(),
+  )
+  await expect.poll(() => previous.evaluate((el) => el.getAnimations().length)).toBe(0)
+  expect((await previous.boundingBox())!.width).toBeLessThanOrEqual(128)
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.getByRole('combobox', { name: 'Country name' }).press('Enter')
+  await expect(page.locator('.score-panel dd').nth(1)).toHaveText('2')
+  expect(await previous.evaluate((el) => el.getAnimations().length)).toBe(0)
+})

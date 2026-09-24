@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useReducer, useRef, useState } from 'react'
 import { api, ApiError, preload, type Country, type Game, type Settings } from './api/client'
 import { loadSettings, recordBest, write } from './storage/preferences'
 import { AnswerInput } from './ui/AnswerInput'
@@ -40,6 +40,9 @@ export default function App() {
   const [imageStatus, setImageStatus] = useState<'loading' | 'ready' | 'error'>('loading')
   const [imageRetry, setImageRetry] = useState(0)
   const currentQuestion = useRef('')
+  const currentFlag = useRef<HTMLImageElement>(null)
+  const previousFlag = useRef<HTMLImageElement>(null)
+  const outgoingFlag = useRef<{ id: string; bounds: DOMRect } | null>(null)
   const lock = useRef(false)
   const controller = useRef<AbortController | null>(null)
   const retry = useRef<(() => void) | null>(null)
@@ -80,6 +83,12 @@ export default function App() {
               : Math.max(0, (result.deadline - result.server_time) * 1000),
         }
         setRemaining(sync.current.remaining)
+        if (result.last_attempt?.question_id === currentQuestion.current && currentFlag.current) {
+          outgoingFlag.current = {
+            id: currentQuestion.current,
+            bounds: currentFlag.current.getBoundingClientRect(),
+          }
+        }
         if (result.question?.id !== currentQuestion.current) setImageStatus('loading')
         currentQuestion.current = result.question?.id ?? ''
         dispatch({ type: 'game', game: result })
@@ -182,6 +191,35 @@ export default function App() {
     return () => clearTimeout(timer)
   }, [game?.last_attempt?.question_id, game?.last_attempt?.result])
 
+  useLayoutEffect(() => {
+    const source = outgoingFlag.current
+    outgoingFlag.current = null
+    const target = previousFlag.current
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)')
+    if (!source || !target || source.id !== game?.last_attempt?.question_id || media.matches) return
+    const destination = target.getBoundingClientRect()
+    if (!destination.width || !destination.height) return
+    const animation = target.animate(
+      [
+        {
+          transform: `translate(${source.bounds.x - destination.x}px, ${source.bounds.y - destination.y}px) scale(${source.bounds.width / destination.width}, ${source.bounds.height / destination.height})`,
+        },
+        { transform: 'none' },
+      ],
+      { duration: 420, easing: 'cubic-bezier(.22,.68,0,1)' },
+    )
+    const cancel = () => animation.cancel()
+    window.addEventListener('resize', cancel)
+    window.addEventListener('scroll', cancel, true)
+    media.addEventListener('change', cancel)
+    return () => {
+      cancel()
+      window.removeEventListener('resize', cancel)
+      window.removeEventListener('scroll', cancel, true)
+      media.removeEventListener('change', cancel)
+    }
+  }, [game?.last_attempt?.question_id, game?.status])
+
   const progress = game
     ? Math.min(100, Math.max(0, remaining / (game.settings.duration * 10)))
     : 100
@@ -278,6 +316,8 @@ export default function App() {
                   <>
                     <h2>Previous flag</h2>
                     <img
+                      ref={previousFlag}
+                      key={feedback.question_id}
                       src={feedback.asset_url}
                       alt={`${feedback.accepted_names.join(' / ')} flag`}
                     />
@@ -297,6 +337,7 @@ export default function App() {
                 <div className="flag-stage">
                   {game.question && (
                     <img
+                      ref={currentFlag}
                       key={`${game.question.id}:${imageRetry}`}
                       src={`${game.question.asset_url}${imageRetry ? `?retry=${imageRetry}` : ''}`}
                       alt="Flag to identify"

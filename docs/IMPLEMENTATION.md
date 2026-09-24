@@ -48,3 +48,9 @@ Temporary fixes to the old Flask UI were superseded by regression-tested replace
 - Enlarged and centred the timer; removed the visible game heading, input helper copy, wrong/skipped counters (including the skipped results count), and reset-progress control. Input and icon button retain accessible names.
 - Replaced the submit label with a square Enter-symbol button. Empty or whitespace-only Enter skips during play but cannot skip the warm-up.
 - Build and lint pass. All 62 applicable browser scenarios passed across the initial run and targeted accessibility/layout rerun after restoring a screen-reader-only heading; six duplicate timer/screenshot scenarios remain intentionally skipped. Desktop and mobile screenshots were inspected.
+
+## Spacing and flag transition
+
+- Reduced padding and gaps throughout setup, play and results. Enlarged the centred timer to 72px (56px on small phones), score labels to 19.2px, and score counts to 40px (32px on mobile).
+- Added a 420ms transition that moves and shrinks the answered flag from its actual current position into the previous-flag slot. It runs only after a successful answer response, does not block typing, and cancels on resize, scroll, navigation or the next answer. Reduced-motion preferences disable it.
+- Build, lint and formatting pass. Seventeen targeted browser checks passed across Chromium, Firefox, WebKit and mobile, covering animation geometry, reduced motion, rapid input/recovery, accessibility and responsive layouts. Desktop/mobile screenshots were inspected.

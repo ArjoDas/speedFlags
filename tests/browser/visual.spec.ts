@@ -52,6 +52,9 @@ test('capture desktop, mobile and flag contact sheets', async ({ page }, testInf
   await input.fill('not a country')
   await input.press('Enter')
   await expect(page.locator('.answer-flash')).toBeVisible()
+  await expect
+    .poll(() => page.locator('.previous-panel img').evaluate((el) => el.getAnimations().length))
+    .toBe(0)
   const current = await page.getByAltText('Flag to identify').boundingBox()
   const previous = await page.locator('.previous-panel img').boundingBox()
   const stats = await page.locator('.score-panel').boundingBox()
