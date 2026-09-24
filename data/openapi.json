@@ -295,10 +295,10 @@
         }
       }
     },
-    "/api/v1/games/{game_id}/finish": {
+    "/api/v1/games/{game_id}/sync": {
       "post": {
-        "summary": "Finish",
-        "operationId": "finish_api_v1_games__game_id__finish_post",
+        "summary": "Sync",
+        "operationId": "sync_api_v1_games__game_id__sync_post",
         "parameters": [
           {
             "name": "game_id",
@@ -384,179 +384,91 @@
         }
       }
     },
-    "/api/{path}": {
+    "/api/v1/games/{game_id}/finish": {
       "post": {
-        "summary": "Api Missing",
-        "operationId": "api_missing_api__path__post",
+        "summary": "Finish",
+        "operationId": "finish_api_v1_games__game_id__finish_post",
         "parameters": [
           {
-            "name": "path",
+            "name": "game_id",
             "in": "path",
             "required": true,
             "schema": {
               "type": "string",
-              "title": "Path"
+              "title": "Game Id"
             }
           }
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContextRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/GameResponse"
                 }
               }
             }
-          }
-        }
-      },
-      "patch": {
-        "summary": "Api Missing",
-        "operationId": "api_missing_api__path__post",
-        "parameters": [
-          {
-            "name": "path",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Path"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
           },
-          "422": {
-            "description": "Validation Error",
+          "400": {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            }
-          }
-        }
-      },
-      "get": {
-        "summary": "Api Missing",
-        "operationId": "api_missing_api__path__post",
-        "parameters": [
-          {
-            "name": "path",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Path"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
+            },
+            "description": "Bad Request"
           },
-          "422": {
-            "description": "Validation Error",
+          "401": {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            }
-          }
-        }
-      },
-      "put": {
-        "summary": "Api Missing",
-        "operationId": "api_missing_api__path__post",
-        "parameters": [
-          {
-            "name": "path",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Path"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
+            },
+            "description": "Unauthorized"
           },
-          "422": {
-            "description": "Validation Error",
+          "409": {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            }
-          }
-        }
-      },
-      "delete": {
-        "summary": "Api Missing",
-        "operationId": "api_missing_api__path__post",
-        "parameters": [
-          {
-            "name": "path",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Path"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
+            },
+            "description": "Conflict"
           },
-          "422": {
-            "description": "Validation Error",
+          "410": {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
-            }
+            },
+            "description": "Gone"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
           }
         }
       }
@@ -879,19 +791,6 @@
         ],
         "title": "GameResponse"
       },
-      "HTTPValidationError": {
-        "properties": {
-          "detail": {
-            "items": {
-              "$ref": "#/components/schemas/ValidationError"
-            },
-            "type": "array",
-            "title": "Detail"
-          }
-        },
-        "type": "object",
-        "title": "HTTPValidationError"
-      },
       "Question": {
         "properties": {
           "id": {
@@ -967,46 +866,6 @@
         "additionalProperties": false,
         "type": "object",
         "title": "Settings"
-      },
-      "ValidationError": {
-        "properties": {
-          "loc": {
-            "items": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "integer"
-                }
-              ]
-            },
-            "type": "array",
-            "title": "Location"
-          },
-          "msg": {
-            "type": "string",
-            "title": "Message"
-          },
-          "type": {
-            "type": "string",
-            "title": "Error Type"
-          },
-          "input": {
-            "title": "Input"
-          },
-          "ctx": {
-            "type": "object",
-            "title": "Context"
-          }
-        },
-        "type": "object",
-        "required": [
-          "loc",
-          "msg",
-          "type"
-        ],
-        "title": "ValidationError"
       }
     }
   }

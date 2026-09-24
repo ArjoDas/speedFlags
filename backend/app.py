@@ -105,20 +105,27 @@ def create_app(service: GameService | None = None) -> FastAPI:
     def answer(game_id: str, body: AnswerRequest, request: Request):
         return request.app.state.game.answer(game_id, body)
 
+    @app.post("/api/v1/games/{game_id}/sync", response_model=GameResponse, responses=errors)
+    def sync(game_id: str, body: ContextRequest, request: Request):
+        service = request.app.state.game
+        state = service.decode(body.token, game_id)
+        service.expire(state)
+        return service.response(state)
+
     @app.post("/api/v1/games/{game_id}/finish", response_model=GameResponse, responses=errors)
     def finish(game_id: str, body: ContextRequest, request: Request):
         return request.app.state.game.finish(game_id, body.token)
 
     # API misses must never fall through to the SPA shell.
-    @app.api_route("/api/{path:path}", methods=["GET", "POST", "PUT", "PATCH", "DELETE"])
+    @app.api_route("/api/{path:path}", methods=["GET", "POST", "PUT", "PATCH", "DELETE"], include_in_schema=False)
     def api_missing(path: str):
         raise HTTPException(404)
 
     assets = ROOT / "frontend/public/flags"
     app.mount("/flags", StaticFiles(directory=assets), name="flags")
     dist = ROOT / "frontend/dist"
-    if dist.exists():
-        app.frontend("/", directory=str(dist))
+    app.mount("/assets", StaticFiles(directory=dist / "assets", check_dir=False), name="assets")
+    app.frontend("/", directory=str(dist), check_dir=False)
     return app
 
 

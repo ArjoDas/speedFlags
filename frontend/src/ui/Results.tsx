@@ -1,0 +1,118 @@
+import { useEffect, useRef } from 'react'
+import type { Game } from '../api/client'
+type Props = {
+  game: Game
+  best: number
+  saved: boolean
+  replay: () => void
+  practice: () => void
+  setup: () => void
+}
+export function Results({ game, best, saved, replay, practice, setup }: Props) {
+  const heading = useRef<HTMLHeadingElement>(null)
+  useEffect(() => {
+    heading.current?.focus()
+  }, [])
+  const history = game.history ?? []
+  const missed = history.filter((a) => a.result !== 'correct')
+  const accuracy = game.attempts ? Math.round((game.score / game.attempts) * 100) : 0
+  return (
+    <section className="results">
+      <div className="result-heading">
+        <span className="eyebrow">A LITTLE MORE WORLDLY</span>
+        <h1 ref={heading} tabIndex={-1}>
+          That’s a wrap<span>.</span>
+        </h1>
+        <p>
+          {game.finish_reason === 'time'
+            ? 'Time’s up. Here’s how your trip around the world went.'
+            : game.finish_reason === 'deck'
+              ? 'You made it through every flag in this collection.'
+              : 'Your round is complete. Every flag is a chance to learn.'}
+        </p>
+      </div>
+      <div className="result-stats">
+        <div>
+          <span>Correct flags</span>
+          <strong>
+            {game.score}
+            <small> / {game.attempts}</small>
+          </strong>
+        </div>
+        <div>
+          <span>Accuracy</span>
+          <strong>
+            {accuracy}
+            <small>%</small>
+          </strong>
+        </div>
+        <div>
+          <span>Skipped</span>
+          <strong>{game.skipped}</strong>
+        </div>
+        <div>
+          <span>Personal best</span>
+          <strong>{game.settings.mode === 'timed' ? best : '—'}</strong>
+        </div>
+      </div>
+      <div className="result-actions">
+        <button className="primary" onClick={replay}>
+          Play again <span aria-hidden="true">↗</span>
+        </button>
+        {missed.length > 0 && (
+          <button className="secondary" onClick={practice}>
+            Practice missed flags
+          </button>
+        )}
+        <button className="text-button" onClick={setup}>
+          Change settings
+        </button>
+      </div>
+      <p className="result-note">
+        Accuracy includes skipped flags. Unanswered flags are not counted.{' '}
+        {game.eligible_best
+          ? 'Personal bests use these exact settings and dataset.'
+          : 'This round does not update timed personal bests.'}{' '}
+        {!saved && 'Browser storage is unavailable; this result could not be saved.'}
+      </p>
+      <div className="review-heading">
+        <h2>Your field notes</h2>
+        <span>{history.length} flags explored</span>
+      </div>
+      {!history.length ? (
+        <p className="empty-review">No answers this time. Start a new round when you’re ready.</p>
+      ) : (
+        <div className="review-grid">
+          {history.map((attempt, i) => (
+            <article className={`review-card ${attempt.result}`} key={attempt.question_id}>
+              <div className="review-flag">
+                <span className="flag-number">{String(i + 1).padStart(2, '0')}</span>
+                <img
+                  src={attempt.asset_url}
+                  alt={`${attempt.accepted_names.join(' / ')} flag`}
+                  loading="lazy"
+                />
+              </div>
+              <div className="review-copy">
+                <span className={`result-badge ${attempt.result}`}>
+                  {attempt.result === 'correct'
+                    ? '✓ Correct'
+                    : attempt.result === 'skipped'
+                      ? '→ Skipped'
+                      : '× Not quite'}
+                </span>
+                <h3>{attempt.accepted_names.join(' / ')}</h3>
+                <p>
+                  Your answer: <strong>{attempt.answer || 'Skipped'}</strong>
+                </p>
+                {attempt.accepted_names.length > 1 && (
+                  <small>Shared flag: either name is accepted.</small>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
+    </section>
+  )
+}

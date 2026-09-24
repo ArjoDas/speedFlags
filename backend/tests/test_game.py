@@ -182,3 +182,32 @@ def test_normalization_and_alias_collisions():
 def test_missing_key_fails_closed():
     with pytest.raises(ValueError, match="SPEEDFLAGS_KEYS"):
         GameService(Countries(), [])
+
+
+def test_sync_does_not_restart_or_change_question(setup):
+    _, client, clock, _ = setup
+    game = start(client, prepare(client))
+    clock[0] += 10
+    synced = client.post(f"/api/v1/games/{game['id']}/sync", json={"token": game["token"]}).json()
+    assert synced["question"] == game["question"]
+    assert synced["deadline"] == game["deadline"]
+    assert synced["server_time"] == 1010
+    clock[0] += 20
+    finished = client.post(f"/api/v1/games/{game['id']}/sync", json={"token": synced["token"]}).json()
+    assert finished["status"] == "finished" and finished["finish_reason"] == "time"
+
+
+def test_visual_equivalence_is_accepted(setup):
+    _, client, _, _ = setup
+    game = start(client, prepare(client, mode="practice", scope="all", country_ids=["HM"]))
+    result = submit(client, game, "Australia").json()
+    assert result["score"] == 1 and result["status"] == "finished"
+    assert result["history"][0]["country_ids"] == ["AU", "HM"]
+
+
+def test_static_and_api_missing_paths_do_not_return_spa(setup):
+    _, client, _, _ = setup
+    for path in ("/flags/missing.svg", "/assets/missing.js", "/api/not-a-route"):
+        response = client.get(path, headers={"Accept": "text/html"})
+        assert response.status_code == 404
+        assert "<!doctype" not in response.text.lower()

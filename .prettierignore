@@ -1,0 +1,8 @@
+node_modules
+.venv
+.venv-modernise
+frontend/dist
+frontend/public/flags
+data
+docs/flags.html
+frontend/src/api/schema.d.ts
