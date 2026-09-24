@@ -1,9 +1,9 @@
-import type { Game, Settings } from '../api/client'
+import { validGame, type Game, type Settings } from '../api/client'
 export const defaults: Settings = {
   mode: 'challenge',
   duration: 30,
-  bonus: 2,
-  scope: 'starter',
+  bonus: 0,
+  scope: 'all',
   country_ids: [],
 }
 export function read(key: string): unknown {
@@ -30,8 +30,8 @@ export function loadSettings(): Settings {
       saved.mode === 'timed' && [30, 45, 60, 120].includes(saved.duration ?? 0)
         ? saved.duration!
         : 30,
-    bonus: saved.mode === 'timed' && [0, 2, 5].includes(saved.bonus ?? -1) ? saved.bonus! : 2,
-    scope: saved.scope === 'all' ? 'all' : 'starter',
+    bonus: saved.mode === 'timed' && [0, 2, 5].includes(saved.bonus ?? -1) ? saved.bonus! : 0,
+    scope: saved.mode === 'challenge' || saved.scope === 'all' ? 'all' : 'starter',
     country_ids: [],
   }
 }
@@ -53,4 +53,21 @@ export function recordBest(game: Game): { best: number; saved: boolean } {
   const best = Math.max(bests[key] ?? 0, game.eligible_best ? game.score : 0)
   if (!game.eligible_best) return { best, saved: true }
   return { best, saved: write('bests.v1', { ...bests, [key]: best }) }
+}
+
+export function dailyKey(game: Game): string {
+  return `daily.v1.${game.challenge_date}.${game.dataset_version}`
+}
+export function storedDaily(game: Game): Game | null {
+  const saved = read(dailyKey(game)) as Game | null
+  try {
+    return saved &&
+      saved.challenge_date === game.challenge_date &&
+      saved.dataset_version === game.dataset_version &&
+      saved.settings?.mode === 'challenge'
+      ? validGame(saved)
+      : null
+  } catch {
+    return null
+  }
 }

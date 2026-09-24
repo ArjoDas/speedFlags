@@ -19,7 +19,7 @@ def setup():
 
 
 def prepare(client, **settings):
-    response = client.post("/api/v1/games", json=settings)
+    response = client.post("/api/v1/games", json={"mode": "timed", **settings})
     assert response.status_code == 200, response.text
     return response.json()
 
@@ -236,16 +236,50 @@ def test_warmup_waits_for_correct_entry_and_is_unscored(setup):
     assert game["question"]["asset_url"] != ready["question"]["asset_url"]
 
 
-def test_default_challenge_and_two_second_bonus(setup):
-    service, client, _, _ = setup
-    ready = prepare(client)
-    assert ready["settings"]["mode"] == "challenge"
-    assert ready["settings"]["duration"] == 30 and ready["settings"]["bonus"] == 2
+def test_daily_deck_penalties_and_frozen_result(setup):
+    service, client, clock, key = setup
+    ready = prepare(client, mode="challenge")
+    assert ready["settings"]["bonus"] == 0 and ready["settings"]["scope"] == "all"
+    state = service.decode(ready["token"], ready["id"])
+    assert len(state["deck"]) == len(set(state["deck"])) == 30
+    assert state["warmup"] not in state["deck"]
+    other = GameService(Countries(), [key], lambda: clock[0])
+    from backend.models import Settings
+
+    same = other.create(Settings())
+    assert other.decode(same.token, same.id)["deck"] == state["deck"]
+    clock[0] += 60  # Warm-up time is excluded.
     game = start(client, ready)
-    result = submit(client, game, correct_answer(service, game)).json()
-    assert result["deadline"] == 1032
-    for settings in ({"duration": 60}, {"bonus": 0}, {"bonus": 5}):
-        assert client.post("/api/v1/games", json={"mode": "challenge", **settings}).status_code == 422
+    assert game["deadline"] is None
+    for i in range(30):
+        clock[0] += 3.4
+        game = submit(client, game, correct_answer(service, game) if i < 24 else "unknown", skip=i >= 28).json()
+    assert game["status"] == "finished" and game["score"] == 24
+    assert game["penalty_seconds"] == 30 and game["elapsed_seconds"] == 102
+    assert game["adjusted_seconds"] == 132 and not game["eligible_best"]
+    clock[0] += 60
+    synced = client.post(f"/api/v1/games/{game['id']}/sync", json={"token": game["token"]}).json()
+    assert synced["adjusted_seconds"] == 132
+    clock[0] += 86400
+    tomorrow = prepare(client, mode="challenge")
+    assert tomorrow["challenge_date"] != ready["challenge_date"]
+    assert service.decode(tomorrow["token"], tomorrow["id"])["deck"] != state["deck"]
+
+
+def test_daily_midnight_and_incomplete_round(setup):
+    _, client, clock, _ = setup
+    clock[0] = 86390
+    ready = prepare(client, mode="challenge")
+    clock[0] = 86401
+    assert (
+        client.post(
+            f"/api/v1/games/{ready['id']}/start", json={"token": ready["token"], "answer": ready["warmup_answer"]}
+        ).status_code
+        == 409
+    )
+    game = start(client, prepare(client, mode="challenge"))
+    final = client.post(f"/api/v1/games/{game['id']}/finish", json={"token": game["token"]}).json()
+    assert final["finish_reason"] == "ended" and final["attempts"] == 0
 
 
 @pytest.mark.parametrize("bonus", [0, 2, 5])

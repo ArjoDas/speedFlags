@@ -58,11 +58,18 @@ function validAttempt(value: Attempt | null): boolean {
     value.country_ids.every((id) => typeof id === 'string')
   )
 }
-function validGame(data: Game): Game {
+export function validGame(data: Game): Game {
   if (
     !data ||
     typeof data.token !== 'string' ||
     typeof data.id !== 'string' ||
+    !Number.isInteger(data.total_questions) ||
+    !Number.isInteger(data.elapsed_seconds) ||
+    data.elapsed_seconds! < 0 ||
+    !Number.isInteger(data.penalty_seconds) ||
+    data.penalty_seconds! < 0 ||
+    !Number.isInteger(data.adjusted_seconds) ||
+    data.adjusted_seconds !== data.elapsed_seconds! + data.penalty_seconds! ||
     !Number.isInteger(data.score) ||
     data.score < 0 ||
     !Number.isFinite(data.server_time) ||

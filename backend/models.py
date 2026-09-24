@@ -10,14 +10,14 @@ class StrictModel(BaseModel):
 class Settings(StrictModel):
     mode: Literal["challenge", "timed", "practice"] = "challenge"
     duration: Literal[30, 45, 60, 120] = 30
-    bonus: Literal[0, 2, 5] = 2
-    scope: Literal["starter", "all"] = "starter"
+    bonus: Literal[0, 2, 5] = 0
+    scope: Literal["starter", "all"] = "all"
     country_ids: list[str] = Field(default_factory=list, max_length=250)
 
     @model_validator(mode="after")
     def challenge_rules(self):
-        if self.mode == "challenge" and (self.duration != 30 or self.bonus != 2):
-            raise ValueError("Challenge requires 30 seconds and a 2-second bonus.")
+        if self.mode == "challenge":
+            self.duration, self.bonus, self.scope = 30, 0, "all"
         return self
 
 
@@ -80,6 +80,12 @@ class GameResponse(BaseModel):
     history: list[Attempt] | None = None
     finish_reason: Literal["time", "deck", "ended", "session"] | None = None
     eligible_best: bool = False
+    started_at: float | None = None
+    challenge_date: str | None = None
+    total_questions: int
+    elapsed_seconds: int = 0
+    penalty_seconds: int = 0
+    adjusted_seconds: int = 0
 
 
 class ErrorDetail(BaseModel):

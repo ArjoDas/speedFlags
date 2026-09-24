@@ -45,7 +45,7 @@ npm run api:types
 
 ## How games work
 
-- **Challenge (default):** fixed 30 seconds, with +2 seconds per correct answer, enforced by the server. Future daily games, competitive rankings and country comparisons will use this mode only.
+- **Daily Challenge (default):** 30 distinct flags from the full collection, in the same deterministic order for the UTC date and dataset version. A separate warm-up starts the count-up clock. Every answer/skip advances; each wrong answer or skip adds five seconds. The comparison metric is elapsed time (rounded up to a whole second) plus penalties, lowest first. Only completing all 30 produces a shareable result. Copies contain five rows of six outcome blocks and the adjusted time only.
 - **Timed:** choose 30, 45, 60 or 120 seconds and a bonus of 0, +2 or +5 seconds per correct answer.
 - **Starting:** settings open in an animated modal over a blurred board. Close with ×, Escape or a backdrop click; cancelling preserves an existing warm-up. The first flag is an unscored warm-up with its answer displayed. Enter that answer to start the server clock; loading the game alone does not start it. Time continues during tab changes and network delays; resuming a tab resynchronizes with the server.
 - **Practice:** no score timer. Finish whenever you like, or complete the selected deck. All rounds have a 15-minute lifetime; prepared contexts expire after one hour.
@@ -53,7 +53,8 @@ npm run api:types
 - **Shared flags:** any accepted country/territory name earns the point. Equivalent assets appear once per deck. Similar designs with different proportions or colors remain distinct.
 - **Skip:** records an attempt without a point. Accuracy is correct / attempts, including skips. An unanswered flag at expiry is not counted.
 - **Results:** include the exact flag used, accepted names and your answer. Replay or practice missed flags. Early-ended rounds do not update Challenge or Timed personal bests. Personal bests are separated by settings and dataset version.
-- **Storage:** settings/theme and personal bests stay on this device. No account or cross-device synchronization. Storage failure does not prevent playing.
+- **Daily recovery:** the first attempt is saved on this browser after each server response. Reload and press Play to resume it or view its completed result; the server clock keeps running. Replays are labelled practice and do not replace that first result. Leaving early produces an incomplete result; the 15-minute session limit still applies. These are device-local controls, not verified global rankings: clearing storage, multiple tabs/devices and replayed contexts cannot be reliably policed without durable shared storage.
+- **Storage:** settings/theme, the daily attempt and personal bests stay on this device. No account or cross-device synchronization. Storage failure does not prevent playing.
 
 A failed API request is never scored as an incorrect answer. Retry reuses the captured question and submission ID. The client blocks overlapping submissions and discards results from an abandoned game. Missing/expired contexts produce a visible recovery path rather than `undefined` flags or names.
 

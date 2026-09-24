@@ -236,6 +236,7 @@ test('real timed round expires once and records no unanswered attempt', async ({
     if (request.url().endsWith('/finish')) finishes++
   })
   await page.goto('/')
+  await page.getByRole('radio', { name: 'Timed', exact: true }).check()
   await page.getByRole('button', { name: 'Play', exact: true }).click()
   await expect(page.getByRole('combobox', { name: 'Country name' })).toBeEnabled()
   await warmup(page)
@@ -249,6 +250,7 @@ test('warm-up reveals the answer and leaves the timer stopped until correct entr
   page,
 }) => {
   await page.goto('/')
+  await page.getByRole('radio', { name: 'Timed', exact: true }).check()
   await page.getByRole('button', { name: 'Play', exact: true }).click()
   const input = page.getByRole('combobox', { name: 'Country name' })
   await expect(input).toBeEnabled()
@@ -349,8 +351,8 @@ test('settings modal defaults to Challenge, preserves the warm-up on cancel and 
   await page.goto('/')
   const modal = page.getByRole('dialog', { name: 'New game' })
   await expect(modal).toBeVisible()
-  await expect(modal.getByRole('radio', { name: 'Challenge', exact: true })).toBeChecked()
-  await expect(modal).toContainText('30 seconds · +2s per correct answer')
+  await expect(modal.getByRole('radio', { name: 'Daily Challenge', exact: true })).toBeChecked()
+  await expect(modal).toContainText('30 flags daily · +5s per wrong answer or skip')
   await expect(modal.getByRole('radio', { name: '120s' })).toHaveCount(0)
   await page.keyboard.press('Escape')
   await expect(modal).not.toBeVisible()
@@ -358,7 +360,7 @@ test('settings modal defaults to Challenge, preserves the warm-up on cancel and 
   await modal.getByRole('radio', { name: 'Timed', exact: true }).check()
   await modal.getByRole('radio', { name: '120s' }).check()
   await modal.getByRole('radio', { name: '+5s', exact: true }).check()
-  await modal.getByRole('radio', { name: 'Challenge', exact: true }).check()
+  await modal.getByRole('radio', { name: 'Daily Challenge', exact: true }).check()
   const created = page.waitForResponse(
     (response) =>
       response.url().endsWith('/api/v1/games') && response.request().method() === 'POST',
@@ -367,7 +369,7 @@ test('settings modal defaults to Challenge, preserves the warm-up on cancel and 
   expect((await (await created).json()).settings).toMatchObject({
     mode: 'challenge',
     duration: 30,
-    bonus: 2,
+    bonus: 0,
   })
   await expect(modal).not.toBeVisible()
   const flag = await page.getByAltText('Flag to identify').getAttribute('src')
@@ -389,4 +391,52 @@ test('settings modal defaults to Challenge, preserves the warm-up on cancel and 
   await expect(modal.getByRole('radio', { name: 'Timed', exact: true })).toBeChecked()
   await expect(modal.getByRole('radio', { name: '60s' })).toBeChecked()
   await expect(modal.getByRole('radio', { name: '+2s', exact: true })).toBeChecked()
+})
+
+test('daily challenge resumes, scores 30 flags and copies only blocks and adjusted time', async ({
+  page,
+}, testInfo) => {
+  await page.addInitScript(() =>
+    Object.defineProperty(navigator, 'clipboard', {
+      value: {
+        writeText: async (text: string) => {
+          ;(window as Window & { shared?: string }).shared = text
+        },
+      },
+      configurable: true,
+    }),
+  )
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Play', exact: true }).click()
+  await warmup(page)
+  const input = page.getByRole('combobox', { name: 'Country name' })
+  await input.press('Enter')
+  await expect(page.locator('.score-panel dd').nth(1)).toHaveText('1')
+  const src = await page.getByAltText('Flag to identify').getAttribute('src')
+  await page.reload()
+  await page.getByRole('button', { name: 'Play', exact: true }).click()
+  await expect(input).toBeEnabled()
+  await expect(page.getByAltText('Flag to identify')).toHaveAttribute('src', src!)
+  for (let i = 1; i < 30; i++) {
+    await expect(input).toBeEnabled()
+    await input.press('Enter')
+    if (i < 29) await expect(page.locator('.score-panel dd').nth(1)).toHaveText(String(i + 1))
+  }
+  await expect(page.getByRole('heading', { name: 'Results', exact: true })).toBeVisible()
+  await expect(page.locator('.daily-result')).toContainText('0/30')
+  await expect(page.locator('.daily-result')).toContainText('150s penalties')
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([])
+  if (testInfo.project.name === 'chromium')
+    await page.screenshot({ path: '/tmp/speedflags-daily-results.png', fullPage: true })
+  await page.getByRole('button', { name: 'Copy result' }).click()
+  const shared = await page.evaluate(() => (window as Window & { shared?: string }).shared)
+  expect(shared).toMatch(/^(🟨{6}\n){4}🟨{6}\n\n\d+:\d{2}$/u)
+  expect(shared).toBe(await page.getByLabel('Share preview').innerText())
+  await page.reload()
+  await page.getByRole('button', { name: 'Play', exact: true }).click()
+  await expect(page.getByRole('heading', { name: 'Results', exact: true })).toBeVisible()
+  await expect(page.getByLabel('Share preview')).toHaveText(shared!)
+  await page.getByRole('button', { name: 'Practice today’s flags' }).click()
+  await expect(input).toBeEnabled()
+  await expect(page.locator('.daily-status')).toContainText('Practice attempt')
 })

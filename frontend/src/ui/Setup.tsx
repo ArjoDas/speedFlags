@@ -21,19 +21,19 @@ export function Setup({ settings, onChange, onStart, disabled }: Props) {
                   onChange({
                     ...settings,
                     mode,
-                    ...(mode === 'challenge' ? { duration: 30, bonus: 2 } : {}),
+                    ...(mode === 'challenge' ? { duration: 30, bonus: 0, scope: 'all' } : {}),
                   })
                 }
               />
               <span>
-                {mode === 'challenge' ? 'Challenge' : mode === 'timed' ? 'Timed' : 'Practice'}
+                {mode === 'challenge' ? 'Daily Challenge' : mode === 'timed' ? 'Timed' : 'Practice'}
               </span>
             </label>
           ))}
         </div>
       </fieldset>
       {settings.mode === 'challenge' && (
-        <p className="challenge-rules">30 seconds · +2s per correct answer</p>
+        <p className="challenge-rules">30 flags daily · +5s per wrong answer or skip</p>
       )}
       {settings.mode === 'timed' && (
         <>
@@ -71,22 +71,24 @@ export function Setup({ settings, onChange, onStart, disabled }: Props) {
           </fieldset>
         </>
       )}
-      <fieldset disabled={disabled}>
-        <legend>Flags</legend>
-        <div className="segments">
-          {(['starter', 'all'] as const).map((scope) => (
-            <label key={scope}>
-              <input
-                type="radio"
-                name="scope"
-                checked={settings.scope === scope}
-                onChange={() => onChange({ ...settings, scope, country_ids: [] })}
-              />
-              <span>{scope === 'starter' ? 'Starter 50' : 'All flags'}</span>
-            </label>
-          ))}
-        </div>
-      </fieldset>
+      {settings.mode !== 'challenge' && (
+        <fieldset disabled={disabled}>
+          <legend>Flags</legend>
+          <div className="segments">
+            {(['starter', 'all'] as const).map((scope) => (
+              <label key={scope}>
+                <input
+                  type="radio"
+                  name="scope"
+                  checked={settings.scope === scope}
+                  onChange={() => onChange({ ...settings, scope, country_ids: [] })}
+                />
+                <span>{scope === 'starter' ? 'Starter 50' : 'All flags'}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+      )}
       <button className="primary start-button" disabled={disabled} onClick={onStart}>
         {disabled ? 'Loading…' : 'Play'}
       </button>

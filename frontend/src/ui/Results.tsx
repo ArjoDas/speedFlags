@@ -1,14 +1,18 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { dailyShare, formatTime } from '../game/daily'
 import type { Game } from '../api/client'
 type Props = {
   game: Game
+  dailyPractice: boolean
   best: number
   saved: boolean
   replay: () => void
   practice: () => void
   setup: () => void
 }
-export function Results({ game, best, saved, replay, practice, setup }: Props) {
+export function Results({ game, dailyPractice, best, saved, replay, practice, setup }: Props) {
+  const [copyState, setCopyState] = useState('')
+  const share = dailyShare(game)
   const heading = useRef<HTMLHeadingElement>(null)
   useEffect(() => {
     heading.current?.focus()
@@ -30,29 +34,73 @@ export function Results({ game, best, saved, replay, practice, setup }: Props) {
               : 'Round finished.'}
         </p>
       </div>
-      <div className="result-stats">
-        <div>
-          <span>Correct flags</span>
+      {game.challenge_date ? (
+        <div className="daily-result">
           <strong>
-            {game.score}
-            <small> / {game.attempts}</small>
+            {game.finish_reason === 'deck' ? formatTime(game.adjusted_seconds) : 'Incomplete'} ·{' '}
+            {game.score}/30
           </strong>
+          <p>
+            {formatTime(game.elapsed_seconds)} + {game.penalty_seconds}s penalties
+          </p>
+          <p>
+            {game.challenge_date} ·{' '}
+            {dailyPractice ? 'Practice attempt' : 'Daily attempt on this device'}
+          </p>
+          {share && (
+            <>
+              <pre aria-label="Share preview">{share}</pre>
+              <button
+                className="primary"
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText(share)
+                    setCopyState('Copied')
+                  } catch {
+                    setCopyState('Could not copy. Select and copy the text below.')
+                  }
+                }}
+              >
+                Copy result
+              </button>
+              <p role="status">{copyState}</p>
+              {copyState.startsWith('Could') && (
+                <textarea
+                  aria-label="Result to copy"
+                  readOnly
+                  value={share}
+                  onFocus={(event) => event.target.select()}
+                />
+              )}
+            </>
+          )}
         </div>
-        <div>
-          <span>Accuracy</span>
-          <strong>
-            {accuracy}
-            <small>%</small>
-          </strong>
+      ) : (
+        <div className="result-stats">
+          <div>
+            <span>Correct flags</span>
+            <strong>
+              {game.score}
+              <small> / {game.attempts}</small>
+            </strong>
+          </div>
+          <div>
+            <span>Accuracy</span>
+            <strong>
+              {accuracy}
+              <small>%</small>
+            </strong>
+          </div>
+          <div>
+            <span>Personal best</span>
+            <strong>{game.settings.mode !== 'practice' ? best : '—'}</strong>
+          </div>
         </div>
-        <div>
-          <span>Personal best</span>
-          <strong>{game.settings.mode !== 'practice' ? best : '—'}</strong>
-        </div>
-      </div>
+      )}
       <div className="result-actions">
         <button className="primary" onClick={replay}>
-          Play again <span aria-hidden="true">↗</span>
+          {game.challenge_date ? 'Practice today’s flags' : 'Play again'}{' '}
+          <span aria-hidden="true">↗</span>
         </button>
         {missed.length > 0 && (
           <button className="secondary" onClick={practice}>
@@ -65,9 +113,11 @@ export function Results({ game, best, saved, replay, practice, setup }: Props) {
       </div>
       <p className="result-note">
         Accuracy includes skipped flags. Unanswered flags are not counted.{' '}
-        {game.eligible_best
-          ? 'Personal bests use these exact settings and dataset.'
-          : 'This round does not update timed personal bests.'}{' '}
+        {game.challenge_date
+          ? 'Lowest adjusted time wins. Wrong answers and skips each add 5 seconds.'
+          : game.eligible_best
+            ? 'Personal bests use these exact settings and dataset.'
+            : 'This round does not update timed personal bests.'}{' '}
         {!saved && 'Browser storage is unavailable; this result could not be saved.'}
       </p>
       <div className="review-heading">

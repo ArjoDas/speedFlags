@@ -1,9 +1,12 @@
+import hashlib
 import json
+import math
 import random
 import secrets
 import time
 import zlib
 from collections.abc import Callable
+from datetime import UTC, datetime
 
 from cryptography.fernet import Fernet, InvalidToken, MultiFernet
 
@@ -42,7 +45,7 @@ class GameService:
             raise GameError("invalid_context", "This game has expired or is invalid. Start a new game.", 401) from None
         if state.get("id") != game_id:
             raise GameError("wrong_game", "This answer belongs to another game.", 409)
-        if state.get("version") != self.countries.version or state.get("rules") != 3:
+        if state.get("version") != self.countries.version or state.get("rules") != 4:
             raise GameError("dataset_changed", "The game data has been updated. Start a new game.", 409)
         if self.clock() - state["created"] >= MAX_AGE:
             raise GameError("expired", "This game has expired. Start a new game.", 410)
@@ -56,18 +59,28 @@ class GameService:
         deck = self.countries.deck(settings.scope, settings.country_ids)
         if not deck:
             raise GameError("empty_deck", "No flags match these settings.")
-        random.SystemRandom().shuffle(deck)
         now = self.clock()
+        day = datetime.fromtimestamp(now, UTC).date().isoformat() if settings.mode == "challenge" else None
+        if day:
+            deck.sort(
+                key=lambda asset: hashlib.sha256(f"daily-v1:{day}:{self.countries.version}:{asset}".encode()).digest()
+            )
+            warmup, deck = deck[30], deck[:30]
+        else:
+            random.SystemRandom().shuffle(deck)
+            warmup = deck[-1]
         state = {
             "id": secrets.token_hex(16),
             "version": self.countries.version,
-            "rules": 3,
+            "rules": 4,
             "created": now,
             "start": None,
             "deadline": None,
             "settings": settings.model_dump(),
             "deck": deck,
-            "warmup": deck[-1],
+            "warmup": warmup,
+            "day": day,
+            "end": None,
             "history": [],
             "score": 0,
             "status": "ready",
@@ -79,13 +92,15 @@ class GameService:
         state = self.decode(token, game_id)
         if state["status"] != "ready":
             raise GameError("already_started", "This game has already started.", 409)
+        if state["day"] and state["day"] != datetime.fromtimestamp(self.clock(), UTC).date().isoformat():
+            raise GameError("new_day", "A new daily challenge is available. Start a new game.", 409)
         if not self.countries.correct(state["warmup"], answer):
             raise GameError("wrong_warmup", "Enter the displayed country to start.")
         now = self.clock()
         state.update(
             status="playing",
             start=now,
-            deadline=now + state["settings"]["duration"] if state["settings"]["mode"] != "practice" else None,
+            deadline=now + state["settings"]["duration"] if state["settings"]["mode"] == "timed" else None,
         )
         return self.response(state)
 
@@ -93,9 +108,9 @@ class GameService:
         now = self.clock()
         if state["status"] == "playing":
             if now - state["start"] >= MAX_GAME_SECONDS:
-                state.update(status="finished", reason="session")
+                state.update(status="finished", reason="session", end=state["start"] + MAX_GAME_SECONDS)
             elif state["deadline"] is not None and now >= state["deadline"]:
-                state.update(status="finished", reason="time")
+                state.update(status="finished", reason="time", end=state["deadline"])
         return state["status"] == "finished"
 
     def question_id(self, state: dict, index: int) -> str:
@@ -124,7 +139,7 @@ class GameService:
                     state["deadline"] + state["settings"]["bonus"], state["start"] + MAX_GAME_SECONDS
                 )
         if len(state["history"]) == len(state["deck"]):
-            state.update(status="finished", reason="deck")
+            state.update(status="finished", reason="deck", end=self.clock())
         return self.response(state)
 
     def finish(self, game_id: str, token: str) -> GameResponse:
@@ -132,7 +147,7 @@ class GameService:
         if state["status"] == "ready":
             raise GameError("not_started", "Start the game before finishing.", 409)
         if not self.expire(state):
-            state.update(status="finished", reason="ended")
+            state.update(status="finished", reason="ended", end=self.clock())
         return self.response(state)
 
     def attempt(self, state: dict, index: int) -> Attempt:
@@ -161,7 +176,19 @@ class GameService:
                 asset_url=f"/flags/{asset}.svg",
             )
         )
+        elapsed = (
+            math.ceil(round(max(0, (state["end"] if finished else self.clock()) - state["start"]), 6))
+            if state["start"] is not None
+            else 0
+        )
+        penalty = (index - state["score"]) * 5 if state["day"] else 0
         return GameResponse(
+            started_at=state["start"],
+            challenge_date=state["day"],
+            total_questions=len(state["deck"]),
+            elapsed_seconds=elapsed,
+            penalty_seconds=penalty,
+            adjusted_seconds=elapsed + penalty,
             id=state["id"],
             token=self.encode(state),
             dataset_version=state["version"],
@@ -177,5 +204,5 @@ class GameService:
             last_attempt=self.attempt(state, index - 1) if index else None,
             history=[self.attempt(state, i) for i in range(index)] if finished else None,
             finish_reason=state["reason"],
-            eligible_best=finished and state["settings"]["mode"] != "practice" and state["reason"] in {"time", "deck"},
+            eligible_best=finished and state["settings"]["mode"] == "timed" and state["reason"] in {"time", "deck"},
         )

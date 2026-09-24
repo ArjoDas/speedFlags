@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useLayoutEffect, useReducer, useRef, useState } from 'react'
 import { api, ApiError, preload, type Country, type Game, type Settings } from './api/client'
-import { loadSettings, recordBest, write } from './storage/preferences'
+import { loadSettings, recordBest, write, dailyKey, storedDaily } from './storage/preferences'
 import { AnswerInput } from './ui/AnswerInput'
 import { Results } from './ui/Results'
 import { Setup } from './ui/Setup'
 import { SettingsDialog } from './ui/SettingsDialog'
 import { Theme } from './ui/Theme'
+import { formatTime } from './game/daily'
 import { normalize } from './game/search'
 
 type State = { game: Game | null; busy: boolean; error: string; best: number; saved: boolean }
@@ -38,6 +39,10 @@ export default function App() {
   const [settingsVisible, setSettingsVisible] = useState(true)
   const [countries, setCountries] = useState<Country[]>([])
   const [remaining, setRemaining] = useState(0)
+  const [elapsed, setElapsed] = useState(0)
+  const [dailyPractice, setDailyPractice] = useState(false)
+  const dailyPracticeRef = useRef(false)
+  const dailyClock = useRef({ received: 0, elapsed: 0 })
   const [warmupError, setWarmupError] = useState('')
   const [flash, setFlash] = useState(false)
   const [imageStatus, setImageStatus] = useState<'loading' | 'ready' | 'error'>('loading')
@@ -85,6 +90,18 @@ export default function App() {
               ? Infinity
               : Math.max(0, (result.deadline - result.server_time) * 1000),
         }
+        dailyClock.current = {
+          received: performance.now(),
+          elapsed:
+            result.status === 'playing' && result.started_at != null
+              ? Math.max(0, result.server_time - result.started_at)
+              : (result.elapsed_seconds ?? 0),
+        }
+        setElapsed(dailyClock.current.elapsed)
+        if (result.challenge_date && !dailyPracticeRef.current) {
+          const saved = write(dailyKey(result), result)
+          dispatch({ type: 'saved', best: 0, saved })
+        }
         setRemaining(sync.current.remaining)
         if (result.last_attempt?.question_id === currentQuestion.current && currentFlag.current) {
           outgoingFlag.current = {
@@ -95,9 +112,10 @@ export default function App() {
         if (result.question?.id !== currentQuestion.current) setImageStatus('loading')
         currentQuestion.current = result.question?.id ?? ''
         dispatch({ type: 'game', game: result })
-        if (result.status === 'ready') setSettingsOpen(false)
+        setSettingsOpen(false)
         retry.current = null
-        if (result.status === 'finished') dispatch({ type: 'saved', ...recordBest(result) })
+        if (result.status === 'finished' && !result.challenge_date)
+          dispatch({ type: 'saved', ...recordBest(result) })
       })
       .catch((cause: unknown) => {
         if (abort.signal.aborted || currentEpoch !== epoch.current) return
@@ -114,12 +132,27 @@ export default function App() {
       })
   }, [])
 
-  function begin(next = settings) {
+  function begin(next = settings, practiceDaily = false) {
+    dailyPracticeRef.current = practiceDaily
+    setDailyPractice(practiceDaily)
     write('settings.v2', { ...next, country_ids: [] })
     // A retry reuses a prepared game after creation, rather than allocating another one.
     let prepared: Game | null = null
     run(async (signal) => {
       prepared ??= await api.create(next, signal)
+      if (prepared.challenge_date && !practiceDaily) {
+        const saved = storedDaily(prepared)
+        if (saved) {
+          if (saved.status === 'finished') return saved
+          try {
+            return await api.sync(saved, signal)
+          } catch (cause) {
+            if (!(cause instanceof ApiError) || ![401, 409, 410].includes(cause.status)) throw cause
+            dailyPracticeRef.current = true
+            setDailyPractice(true)
+          }
+        }
+      }
       await preload(prepared.question!.asset_url, signal)
       return prepared
     })
@@ -161,11 +194,16 @@ export default function App() {
     run((signal) => api.answer(game, body, signal))
   }
   useEffect(() => {
-    if (game?.status !== 'playing' || game.deadline === null) return
-    const update = () =>
+    if (game?.status !== 'playing' || (game.deadline === null && !game.challenge_date)) return
+    const update = () => {
+      if (game.challenge_date)
+        setElapsed(
+          dailyClock.current.elapsed + (performance.now() - dailyClock.current.received) / 1000,
+        )
       setRemaining(
         Math.max(0, sync.current.remaining - (performance.now() - sync.current.received)),
       )
+    }
     const id = setInterval(update, 100)
     const resume = () => {
       update()
@@ -181,14 +219,13 @@ export default function App() {
   useEffect(() => {
     if (
       game?.status === 'playing' &&
-      game.deadline !== null &&
-      remaining <= 0 &&
+      ((game.deadline !== null && remaining <= 0) || (game.challenge_date && elapsed >= 900)) &&
       !busy &&
       !error &&
       !lock.current
     )
       run((signal) => api.finish(game, signal))
-  }, [game, remaining, busy, error, run])
+  }, [game, remaining, elapsed, busy, error, run])
 
   useEffect(() => {
     setFlash(!!game?.last_attempt && game.last_attempt.result !== 'correct')
@@ -276,7 +313,11 @@ export default function App() {
             <h1 className="sr-only">speedFlags</h1>
             <div className="play-top">
               <span className="timer">
-                {settings.mode === 'practice' ? 'Untimed' : `${settings.duration}s`}
+                {settings.mode === 'practice'
+                  ? 'Untimed'
+                  : settings.mode === 'challenge'
+                    ? '0:00'
+                    : `${settings.duration}s`}
               </span>
               <button className="text-button" onClick={() => setSettingsOpen(true)}>
                 Settings
@@ -327,14 +368,18 @@ export default function App() {
               <span
                 className={`timer ${remaining < 10000 ? 'urgent' : ''}`}
                 aria-label={
-                  game.settings.mode !== 'practice'
-                    ? `${game.status === 'ready' ? game.settings.duration : Math.ceil(remaining / 1000)} seconds remaining`
-                    : 'Untimed practice'
+                  game.challenge_date
+                    ? `${formatTime(elapsed + (game.penalty_seconds ?? 0))} adjusted time`
+                    : game.settings.mode !== 'practice'
+                      ? `${game.status === 'ready' ? game.settings.duration : Math.ceil(remaining / 1000)} seconds remaining`
+                      : 'Untimed practice'
                 }
               >
-                {game.settings.mode !== 'practice'
-                  ? `${game.status === 'ready' ? game.settings.duration : (remaining / 1000).toFixed(1)}s`
-                  : 'Untimed'}
+                {game.challenge_date
+                  ? formatTime(elapsed + (game.penalty_seconds ?? 0))
+                  : game.settings.mode !== 'practice'
+                    ? `${game.status === 'ready' ? game.settings.duration : (remaining / 1000).toFixed(1)}s`
+                    : 'Untimed'}
               </span>
               <button
                 className="text-button"
@@ -348,13 +393,29 @@ export default function App() {
               <div
                 className="time-track"
                 role="progressbar"
-                aria-label="Time remaining"
+                aria-label={game.challenge_date ? 'Flags completed' : 'Time remaining'}
                 aria-valuemin={0}
                 aria-valuemax={100}
-                aria-valuenow={game.status === 'ready' ? 100 : Math.round(progress)}
+                aria-valuenow={
+                  game.challenge_date
+                    ? Math.round((game.attempts / 30) * 100)
+                    : game.status === 'ready'
+                      ? 100
+                      : Math.round(progress)
+                }
               >
-                <div style={{ width: `${game.status === 'ready' ? 100 : progress}%` }} />
+                <div
+                  style={{
+                    width: `${game.challenge_date ? (game.attempts / 30) * 100 : game.status === 'ready' ? 100 : progress}%`,
+                  }}
+                />
               </div>
+            )}
+            {game.challenge_date && (
+              <p className="daily-status">
+                {game.challenge_date} · {dailyPractice ? 'Practice attempt' : 'Daily attempt'} ·{' '}
+                {game.attempts}/30 · +{game.penalty_seconds}s penalties
+              </p>
             )}
             <div className="game-workspace">
               <aside className="previous-panel" aria-label="Previous answer">
@@ -474,13 +535,14 @@ export default function App() {
         {game?.status === 'finished' && (
           <Results
             game={game}
+            dailyPractice={dailyPractice}
             best={state.best}
             saved={state.saved}
             setup={reset}
             replay={() => {
               reset()
               setSettingsOpen(false)
-              begin(game.settings)
+              begin(game.settings, !!game.challenge_date)
             }}
             practice={() => {
               const missed = [

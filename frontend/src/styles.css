@@ -732,3 +732,36 @@ legend {
     animation: none;
   }
 }
+
+.daily-status {
+  margin: -8px 0 12px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-align: center;
+}
+.daily-result {
+  display: grid;
+  justify-items: start;
+  gap: 8px;
+}
+.daily-result > strong {
+  font-size: 2rem;
+}
+.daily-result p {
+  color: var(--muted);
+}
+.daily-result pre {
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  font-size: 1.25rem;
+  margin: 12px 0;
+  white-space: pre;
+}
+.daily-result textarea {
+  width: 100%;
+  min-height: 200px;
+  background: var(--card);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  padding: 8px;
+}

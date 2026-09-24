@@ -235,6 +235,27 @@ export interface components {
              * @default false
              */
             eligible_best: boolean;
+            /** Started At */
+            started_at?: number | null;
+            /** Challenge Date */
+            challenge_date?: string | null;
+            /** Total Questions */
+            total_questions: number;
+            /**
+             * Elapsed Seconds
+             * @default 0
+             */
+            elapsed_seconds: number;
+            /**
+             * Penalty Seconds
+             * @default 0
+             */
+            penalty_seconds: number;
+            /**
+             * Adjusted Seconds
+             * @default 0
+             */
+            adjusted_seconds: number;
         };
         /** Question */
         Question: {
@@ -261,13 +282,13 @@ export interface components {
             duration: 30 | 45 | 60 | 120;
             /**
              * Bonus
-             * @default 2
+             * @default 0
              * @enum {integer}
              */
             bonus: 0 | 2 | 5;
             /**
              * Scope
-             * @default starter
+             * @default all
              * @enum {string}
              */
             scope: "starter" | "all";

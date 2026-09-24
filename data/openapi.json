@@ -784,6 +784,47 @@
             "type": "boolean",
             "title": "Eligible Best",
             "default": false
+          },
+          "started_at": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Started At"
+          },
+          "challenge_date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Challenge Date"
+          },
+          "total_questions": {
+            "type": "integer",
+            "title": "Total Questions"
+          },
+          "elapsed_seconds": {
+            "type": "integer",
+            "title": "Elapsed Seconds",
+            "default": 0
+          },
+          "penalty_seconds": {
+            "type": "integer",
+            "title": "Penalty Seconds",
+            "default": 0
+          },
+          "adjusted_seconds": {
+            "type": "integer",
+            "title": "Adjusted Seconds",
+            "default": 0
           }
         },
         "type": "object",
@@ -798,7 +839,8 @@
           "score",
           "attempts",
           "skipped",
-          "question"
+          "question",
+          "total_questions"
         ],
         "title": "GameResponse"
       },
@@ -856,7 +898,7 @@
               5
             ],
             "title": "Bonus",
-            "default": 2
+            "default": 0
           },
           "scope": {
             "type": "string",
@@ -865,7 +907,7 @@
               "all"
             ],
             "title": "Scope",
-            "default": "starter"
+            "default": "all"
           },
           "country_ids": {
             "items": {
