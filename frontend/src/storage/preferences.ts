@@ -1,8 +1,8 @@
 import type { Game, Settings } from '../api/client'
 export const defaults: Settings = {
-  mode: 'timed',
+  mode: 'challenge',
   duration: 30,
-  bonus: 0,
+  bonus: 2,
   scope: 'starter',
   country_ids: [],
 }
@@ -22,12 +22,15 @@ export function write(key: string, value: unknown): boolean {
   }
 }
 export function loadSettings(): Settings {
-  const saved = read('settings.v1') as Partial<Settings> | null
+  const saved = read('settings.v2') as Partial<Settings> | null
   if (!saved) return { ...defaults }
   return {
-    mode: saved.mode === 'practice' ? 'practice' : 'timed',
-    duration: [30, 45, 60, 120].includes(saved.duration ?? 0) ? saved.duration! : 30,
-    bonus: saved.bonus === 5 ? 5 : 0,
+    mode: saved.mode === 'practice' || saved.mode === 'timed' ? saved.mode : 'challenge',
+    duration:
+      saved.mode === 'timed' && [30, 45, 60, 120].includes(saved.duration ?? 0)
+        ? saved.duration!
+        : 30,
+    bonus: saved.mode === 'timed' && [0, 2, 5].includes(saved.bonus ?? -1) ? saved.bonus! : 2,
     scope: saved.scope === 'all' ? 'all' : 'starter',
     country_ids: [],
   }

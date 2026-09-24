@@ -45,13 +45,15 @@ npm run api:types
 
 ## How games work
 
-- **Timed:** 30, 45, 60 or 120 seconds, with optional +5 seconds for each correct answer. The first flag is an unscored warm-up with its answer displayed. Enter that answer to start the server clock; loading the game alone does not start it. Time continues during tab changes and network delays; resuming a tab resynchronizes with the server.
+- **Challenge (default):** fixed 30 seconds, with +2 seconds per correct answer, enforced by the server. Future daily games, competitive rankings and country comparisons will use this mode only.
+- **Timed:** choose 30, 45, 60 or 120 seconds and a bonus of 0, +2 or +5 seconds per correct answer.
+- **Starting:** settings open in an animated modal over a blurred board. Close with ×, Escape or a backdrop click; cancelling preserves an existing warm-up. The first flag is an unscored warm-up with its answer displayed. Enter that answer to start the server clock; loading the game alone does not start it. Time continues during tab changes and network delays; resuming a tab resynchronizes with the server.
 - **Practice:** no score timer. Finish whenever you like, or complete the selected deck. All rounds have a 15-minute lifetime; prepared contexts expire after one hour.
 - **Answers:** case, punctuation, accents and whitespace are normalized. Common/official names and reviewed aliases are accepted. The first suggestion is selected automatically. Enter submits the highlighted suggestion immediately; arrows change the selection, and Escape dismisses suggestions to submit your exact text. Touch/click fills the selected name. Enter with empty or whitespace-only input skips the current flag during play; it cannot skip the warm-up. Incorrect answers flash the accepted answer for three seconds; the previous flag and answer remain beside the current flag.
 - **Shared flags:** any accepted country/territory name earns the point. Equivalent assets appear once per deck. Similar designs with different proportions or colors remain distinct.
 - **Skip:** records an attempt without a point. Accuracy is correct / attempts, including skips. An unanswered flag at expiry is not counted.
-- **Results:** include the exact flag used, accepted names and your answer. Replay or practice missed flags. Early-ended rounds do not update timed personal bests. Personal bests are separated by settings and dataset version.
-- **Storage:** settings/theme and personal bests stay on this device. No account or cross-device synchronization. Storage failure does not prevent playing. Reset saved progress from the footer.
+- **Results:** include the exact flag used, accepted names and your answer. Replay or practice missed flags. Early-ended rounds do not update Challenge or Timed personal bests. Personal bests are separated by settings and dataset version.
+- **Storage:** settings/theme and personal bests stay on this device. No account or cross-device synchronization. Storage failure does not prevent playing.
 
 A failed API request is never scored as an incorrect answer. Retry reuses the captured question and submission ID. The client blocks overlapping submissions and discards results from an abandoned game. Missing/expired contexts produce a visible recovery path rather than `undefined` flags or names.
 

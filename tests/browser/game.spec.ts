@@ -112,6 +112,13 @@ test('layout and accessibility in setup, play and results', async ({ page }) => 
   expect(
     await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
   ).toBeTruthy()
+  await expect
+    .poll(() =>
+      page
+        .getByRole('dialog')
+        .evaluate((el) => el.getAnimations().filter((a) => a.playState === 'running').length),
+    )
+    .toBe(0)
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([])
   await start(page)
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([])
@@ -328,4 +335,58 @@ test('answered flag moves to the previous slot without blocking input', async ({
   await page.getByRole('combobox', { name: 'Country name' }).press('Enter')
   await expect(page.locator('.score-panel dd').nth(1)).toHaveText('2')
   expect(await previous.evaluate((el) => el.getAnimations().length)).toBe(0)
+})
+
+test('settings modal defaults to Challenge, preserves the warm-up on cancel and supports custom Timed', async ({
+  page,
+}) => {
+  await page.addInitScript(() =>
+    localStorage.setItem(
+      'speedflags.settings.v1',
+      JSON.stringify({ mode: 'timed', duration: 120, bonus: 5 }),
+    ),
+  )
+  await page.goto('/')
+  const modal = page.getByRole('dialog', { name: 'New game' })
+  await expect(modal).toBeVisible()
+  await expect(modal.getByRole('radio', { name: 'Challenge', exact: true })).toBeChecked()
+  await expect(modal).toContainText('30 seconds · +2s per correct answer')
+  await expect(modal.getByRole('radio', { name: '120s' })).toHaveCount(0)
+  await page.keyboard.press('Escape')
+  await expect(modal).not.toBeVisible()
+  await page.getByRole('button', { name: 'Settings', exact: true }).click()
+  await modal.getByRole('radio', { name: 'Timed', exact: true }).check()
+  await modal.getByRole('radio', { name: '120s' }).check()
+  await modal.getByRole('radio', { name: '+5s', exact: true }).check()
+  await modal.getByRole('radio', { name: 'Challenge', exact: true }).check()
+  const created = page.waitForResponse(
+    (response) =>
+      response.url().endsWith('/api/v1/games') && response.request().method() === 'POST',
+  )
+  await modal.getByRole('button', { name: 'Play', exact: true }).click()
+  expect((await (await created).json()).settings).toMatchObject({
+    mode: 'challenge',
+    duration: 30,
+    bonus: 2,
+  })
+  await expect(modal).not.toBeVisible()
+  const flag = await page.getByAltText('Flag to identify').getAttribute('src')
+  await page.getByRole('button', { name: 'Change settings' }).click()
+  await expect(modal).toBeVisible()
+  await expect.poll(() => modal.evaluate((el) => el.contains(document.activeElement))).toBe(true)
+  await modal.getByRole('button', { name: 'Close settings' }).click()
+  await expect(modal).not.toBeVisible()
+  await expect(page.getByAltText('Flag to identify')).toHaveAttribute('src', flag!)
+  await expect(page.getByRole('combobox', { name: 'Country name' })).toBeFocused()
+  await page.getByRole('button', { name: 'Change settings' }).click()
+  await modal.getByRole('radio', { name: 'Timed', exact: true }).check()
+  await modal.getByRole('radio', { name: '+2s', exact: true }).check()
+  await modal.getByRole('radio', { name: '60s' }).check()
+  await modal.getByRole('button', { name: 'Play', exact: true }).click()
+  await expect(modal).not.toBeVisible()
+  await expect(page.locator('.timer')).toHaveText('60s')
+  await page.reload()
+  await expect(modal.getByRole('radio', { name: 'Timed', exact: true })).toBeChecked()
+  await expect(modal.getByRole('radio', { name: '60s' })).toBeChecked()
+  await expect(modal.getByRole('radio', { name: '+2s', exact: true })).toBeChecked()
 })

@@ -830,11 +830,12 @@
           "mode": {
             "type": "string",
             "enum": [
+              "challenge",
               "timed",
               "practice"
             ],
             "title": "Mode",
-            "default": "timed"
+            "default": "challenge"
           },
           "duration": {
             "type": "integer",
@@ -851,10 +852,11 @@
             "type": "integer",
             "enum": [
               0,
+              2,
               5
             ],
             "title": "Bonus",
-            "default": 0
+            "default": 2
           },
           "scope": {
             "type": "string",

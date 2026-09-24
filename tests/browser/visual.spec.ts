@@ -26,7 +26,9 @@ test('all flag assets decode with usable dimensions', async ({ page }) => {
 test('small viewport and dark layout remain usable', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 740 })
   await page.goto('/')
+  await page.getByRole('button', { name: 'Close settings' }).click()
   await page.getByRole('button', { name: 'Dark', exact: true }).click()
+  await page.getByRole('button', { name: 'Settings', exact: true }).click()
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy()
   await page.getByRole('button', { name: 'Play', exact: true }).click()
   await expect(page.getByRole('combobox', { name: 'Country name' })).toBeEnabled()
@@ -39,7 +41,14 @@ test('capture desktop, mobile and flag contact sheets', async ({ page }, testInf
   test.skip(testInfo.project.name !== 'chromium', 'One visual artifact set is sufficient')
   await page.setViewportSize({ width: 1280, height: 1000 })
   await page.goto('/')
-  await page.getByRole('button', { name: 'Light', exact: true }).click()
+  await page.emulateMedia({ colorScheme: 'light' })
+  await expect
+    .poll(() =>
+      page
+        .getByRole('dialog')
+        .evaluate((el) => el.getAnimations().filter((a) => a.playState === 'running').length),
+    )
+    .toBe(0)
   await page.screenshot({ path: '/tmp/speedflags-setup.png', fullPage: true })
   await page.getByRole('button', { name: 'Play', exact: true }).click()
   await expect(page.getByRole('combobox', { name: 'Country name' })).toBeEnabled()

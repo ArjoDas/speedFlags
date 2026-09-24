@@ -249,10 +249,10 @@ export interface components {
         Settings: {
             /**
              * Mode
-             * @default timed
+             * @default challenge
              * @enum {string}
              */
-            mode: "timed" | "practice";
+            mode: "challenge" | "timed" | "practice";
             /**
              * Duration
              * @default 30
@@ -261,10 +261,10 @@ export interface components {
             duration: 30 | 45 | 60 | 120;
             /**
              * Bonus
-             * @default 0
+             * @default 2
              * @enum {integer}
              */
-            bonus: 0 | 5;
+            bonus: 0 | 2 | 5;
             /**
              * Scope
              * @default starter

@@ -71,7 +71,7 @@ function validGame(data: Game): Game {
     !['ready', 'playing', 'finished'].includes(data.status) ||
     (data.status === 'ready' && (typeof data.warmup_answer !== 'string' || !data.warmup_answer)) ||
     !data.settings ||
-    !['timed', 'practice'].includes(data.settings.mode!) ||
+    !['challenge', 'timed', 'practice'].includes(data.settings.mode!) ||
     ![30, 45, 60, 120].includes(data.settings.duration!) ||
     typeof data.dataset_version !== 'string' ||
     (data.deadline !== null && !Number.isFinite(data.deadline)) ||

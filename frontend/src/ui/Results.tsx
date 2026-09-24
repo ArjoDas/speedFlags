@@ -47,7 +47,7 @@ export function Results({ game, best, saved, replay, practice, setup }: Props) {
         </div>
         <div>
           <span>Personal best</span>
-          <strong>{game.settings.mode === 'timed' ? best : '—'}</strong>
+          <strong>{game.settings.mode !== 'practice' ? best : '—'}</strong>
         </div>
       </div>
       <div className="result-actions">

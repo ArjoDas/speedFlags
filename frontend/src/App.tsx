@@ -4,6 +4,7 @@ import { loadSettings, recordBest, write } from './storage/preferences'
 import { AnswerInput } from './ui/AnswerInput'
 import { Results } from './ui/Results'
 import { Setup } from './ui/Setup'
+import { SettingsDialog } from './ui/SettingsDialog'
 import { Theme } from './ui/Theme'
 import { normalize } from './game/search'
 
@@ -33,6 +34,8 @@ function reducer(state: State, action: Action): State {
 export default function App() {
   const [state, dispatch] = useReducer(reducer, initial)
   const [settings, setSettings] = useState<Settings>(loadSettings)
+  const [settingsOpen, setSettingsOpen] = useState(true)
+  const [settingsVisible, setSettingsVisible] = useState(true)
   const [countries, setCountries] = useState<Country[]>([])
   const [remaining, setRemaining] = useState(0)
   const [warmupError, setWarmupError] = useState('')
@@ -92,6 +95,7 @@ export default function App() {
         if (result.question?.id !== currentQuestion.current) setImageStatus('loading')
         currentQuestion.current = result.question?.id ?? ''
         dispatch({ type: 'game', game: result })
+        if (result.status === 'ready') setSettingsOpen(false)
         retry.current = null
         if (result.status === 'finished') dispatch({ type: 'saved', ...recordBest(result) })
       })
@@ -111,7 +115,7 @@ export default function App() {
   }, [])
 
   function begin(next = settings) {
-    write('settings.v1', { ...next, country_ids: [] })
+    write('settings.v2', { ...next, country_ids: [] })
     // A retry reuses a prepared game after creation, rather than allocating another one.
     let prepared: Game | null = null
     run(async (signal) => {
@@ -121,6 +125,7 @@ export default function App() {
     })
   }
   function reset() {
+    setSettingsOpen(true)
     setWarmupError('')
     epoch.current += 1
     controller.current?.abort()
@@ -249,7 +254,7 @@ export default function App() {
         </div>
       </header>
       <main id="main">
-        {error && (
+        {error && !settingsOpen && (
           <div className="error-banner" role="alert">
             <div>
               <p>{error}</p>
@@ -267,13 +272,54 @@ export default function App() {
           </div>
         )}
         {!game && (
+          <section className="board-preview" aria-label="Game preview">
+            <h1 className="sr-only">speedFlags</h1>
+            <div className="play-top">
+              <span className="timer">
+                {settings.mode === 'practice' ? 'Untimed' : `${settings.duration}s`}
+              </span>
+              <button className="text-button" onClick={() => setSettingsOpen(true)}>
+                Settings
+              </button>
+            </div>
+            <div className="time-track" aria-hidden="true">
+              <div style={{ width: '100%' }} />
+            </div>
+            <div className="preview-flag flag-stage">
+              <img src="/logo.png" alt="" />
+            </div>
+          </section>
+        )}
+        <SettingsDialog
+          onVisibilityChange={setSettingsVisible}
+          open={settingsOpen}
+          busy={busy}
+          onDismiss={() => setSettingsOpen(false)}
+        >
+          {error && (
+            <div className="error-banner" role="alert">
+              <div>
+                <p>{error}</p>
+              </div>
+              <div>
+                {retry.current && (
+                  <button className="secondary" onClick={() => retry.current?.()}>
+                    Retry
+                  </button>
+                )}
+                <button className="text-button" onClick={reset}>
+                  Back to setup
+                </button>
+              </div>
+            </div>
+          )}
           <Setup
             settings={settings}
             disabled={busy}
             onChange={setSettings}
             onStart={() => begin()}
           />
-        )}
+        </SettingsDialog>
         {game && game.status !== 'finished' && (
           <section className="play-layout" aria-label="Flag game">
             <h1 className="sr-only">Flag game</h1>
@@ -281,24 +327,24 @@ export default function App() {
               <span
                 className={`timer ${remaining < 10000 ? 'urgent' : ''}`}
                 aria-label={
-                  game.settings.mode === 'timed'
+                  game.settings.mode !== 'practice'
                     ? `${game.status === 'ready' ? game.settings.duration : Math.ceil(remaining / 1000)} seconds remaining`
                     : 'Untimed practice'
                 }
               >
-                {game.settings.mode === 'timed'
+                {game.settings.mode !== 'practice'
                   ? `${game.status === 'ready' ? game.settings.duration : (remaining / 1000).toFixed(1)}s`
                   : 'Untimed'}
               </span>
               <button
                 className="text-button"
-                onClick={game.status === 'ready' ? reset : finish}
+                onClick={game.status === 'ready' ? () => setSettingsOpen(true) : finish}
                 disabled={busy}
               >
                 {game.status === 'ready' ? 'Change settings' : 'Finish round'}
               </button>
             </div>
-            {game.settings.mode === 'timed' && (
+            {game.settings.mode !== 'practice' && (
               <div
                 className="time-track"
                 role="progressbar"
@@ -355,7 +401,7 @@ export default function App() {
                     <div className="asset-status" role="alert">
                       <p>
                         This flag could not load.
-                        {game.status === 'playing' && game.settings.mode === 'timed'
+                        {game.status === 'playing' && game.settings.mode !== 'practice'
                           ? ' The clock keeps running.'
                           : ''}
                       </p>
@@ -382,7 +428,7 @@ export default function App() {
                       <strong data-testid="warmup-answer">{game.warmup_answer}</strong>
                       <p>
                         Enter this country to{' '}
-                        {game.settings.mode === 'timed' ? 'start the timer' : 'start playing'}.
+                        {game.settings.mode !== 'practice' ? 'start the timer' : 'start playing'}.
                       </p>
                       {warmupError && <p className="incorrect">{warmupError}</p>}
                     </div>
@@ -398,7 +444,14 @@ export default function App() {
                 <AnswerInput
                   countries={countries}
                   questionId={game.question!.id}
-                  disabled={busy || !!error || imageStatus !== 'ready' || remaining <= 0}
+                  disabled={
+                    settingsOpen ||
+                    settingsVisible ||
+                    busy ||
+                    !!error ||
+                    imageStatus !== 'ready' ||
+                    remaining <= 0
+                  }
                   onAnswer={(text) => answer(text)}
                   onSkip={game.status === 'playing' ? () => answer('', true) : undefined}
                 />
@@ -426,6 +479,7 @@ export default function App() {
             setup={reset}
             replay={() => {
               reset()
+              setSettingsOpen(false)
               begin(game.settings)
             }}
             practice={() => {
@@ -443,6 +497,7 @@ export default function App() {
                 country_ids: missed,
               }
               reset()
+              setSettingsOpen(false)
               setSettings(next)
               begin(next)
             }}

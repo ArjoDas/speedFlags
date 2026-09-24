@@ -65,7 +65,7 @@ def test_full_game_and_shared_flags(setup):
 
 def test_deadline_is_server_controlled(setup):
     service, client, clock, _ = setup
-    game = start(client, prepare(client, duration=30, bonus=5))
+    game = start(client, prepare(client, mode="timed", duration=30, bonus=5))
     good = submit(client, game, correct_answer(service, game)).json()
     assert good["deadline"] == 1035
     clock[0] = 1035
@@ -234,3 +234,22 @@ def test_warmup_waits_for_correct_entry_and_is_unscored(setup):
     assert game["warmup_answer"] is None
     assert game["question"]["id"] != ready["question"]["id"]
     assert game["question"]["asset_url"] != ready["question"]["asset_url"]
+
+
+def test_default_challenge_and_two_second_bonus(setup):
+    service, client, _, _ = setup
+    ready = prepare(client)
+    assert ready["settings"]["mode"] == "challenge"
+    assert ready["settings"]["duration"] == 30 and ready["settings"]["bonus"] == 2
+    game = start(client, ready)
+    result = submit(client, game, correct_answer(service, game)).json()
+    assert result["deadline"] == 1032
+    for settings in ({"duration": 60}, {"bonus": 0}, {"bonus": 5}):
+        assert client.post("/api/v1/games", json={"mode": "challenge", **settings}).status_code == 422
+
+
+@pytest.mark.parametrize("bonus", [0, 2, 5])
+def test_custom_timed_options(setup, bonus):
+    service, client, _, _ = setup
+    game = start(client, prepare(client, mode="timed", duration=120, bonus=bonus))
+    assert submit(client, game, correct_answer(service, game)).json()["deadline"] == 1120 + bonus

@@ -54,3 +54,10 @@ Temporary fixes to the old Flask UI were superseded by regression-tested replace
 - Reduced padding and gaps throughout setup, play and results. Enlarged the centred timer to 72px (56px on small phones), score labels to 19.2px, and score counts to 40px (32px on mobile).
 - Added a 420ms transition that moves and shrinks the answered flag from its actual current position into the previous-flag slot. It runs only after a successful answer response, does not block typing, and cancels on resize, scroll, navigation or the next answer. Reduced-motion preferences disable it.
 - Build, lint and formatting pass. Seventeen targeted browser checks passed across Chromium, Firefox, WebKit and mobile, covering animation geometry, reduced motion, rapid input/recovery, accessibility and responsive layouts. Desktop/mobile screenshots were inspected.
+
+## Settings popup and Challenge mode
+
+- Settings now open in a native modal dialog over a blurred board, with 180ms entrance/exit transitions. Escape, the close button and backdrop dismiss it; cancelling preserves the existing warm-up. Focus is contained and restored, and answer input stays disabled until the closing animation finishes. Reduced motion removes the animation.
+- Challenge is the new default and enforces 30 seconds plus 2 seconds per correct answer on the server. Timed offers 30/45/60/120 seconds and 0/+2/+5 bonuses; Practice remains untimed. A new settings storage version introduces the new default once, then preserves explicit choices. Local bests remain separate by mode/settings.
+- PLAN.md scopes future daily competitions, public rankings, friend challenges and country comparisons to Challenge results. Those online features and player-data collection are not yet implemented.
+- Verification: 38 backend tests and 3 search tests pass. All 70 applicable browser scenarios passed across the full run and targeted rerun after correcting Firefox radio hit areas; six duplicate timer/screenshot scenarios are intentionally skipped. Build, TypeScript, ESLint, Ruff, formatting and accessibility checks pass. The settings popup screenshot was inspected.

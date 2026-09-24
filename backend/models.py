@@ -1,6 +1,6 @@
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
 class StrictModel(BaseModel):
@@ -8,11 +8,17 @@ class StrictModel(BaseModel):
 
 
 class Settings(StrictModel):
-    mode: Literal["timed", "practice"] = "timed"
+    mode: Literal["challenge", "timed", "practice"] = "challenge"
     duration: Literal[30, 45, 60, 120] = 30
-    bonus: Literal[0, 5] = 0
+    bonus: Literal[0, 2, 5] = 2
     scope: Literal["starter", "all"] = "starter"
     country_ids: list[str] = Field(default_factory=list, max_length=250)
+
+    @model_validator(mode="after")
+    def challenge_rules(self):
+        if self.mode == "challenge" and (self.duration != 30 or self.bonus != 2):
+            raise ValueError("Challenge requires 30 seconds and a 2-second bonus.")
+        return self
 
 
 class ContextRequest(StrictModel):

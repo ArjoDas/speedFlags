@@ -169,7 +169,7 @@ Build a complete mobile-first loop, rather than adding more controls to the exis
 
 | Screen | Proposed behavior |
 | --- | --- |
-| Setup | Clear game title and concise rules; Timed/Practice selection; duration, bonus and geographic scope; visible Start button; settings remembered locally. |
+| Setup | Animated settings dialog over a blurred board; Challenge/Timed/Practice selection; fixed 30s/+2s for Challenge, custom duration/bonus for Timed, flag scope, and a Play button; settings remembered locally. |
 | Play | Large undistorted flag, timer/score/attempts, labeled answer field, useful suggestions, touch-friendly Submit and Skip buttons, compact feedback. Keep the keyboard and flag usable together on mobile. |
 | Results | Score, accuracy with defined denominator, answered/skipped counts, personal best for the same settings, and a review of each flag with accepted answers. Replay same settings and Practice missed flags actions. |
 | Learn (later) | Searchable flag gallery, region filters, explanations of shared flags, and local weak-flag practice. |
@@ -252,3 +252,20 @@ Add regional challenges, multiple choice, local weak-flag practice, richer stati
 ## 7. Defaults for implementation
 
 Proceed with FastAPI on Vercel, a read-only validated country database, React/TypeScript/Vite with Tailwind CSS served through the CDN, server-validated casual scores, a revealed warm-up that starts timing on correct entry, existing time/bonus choices, a reviewed flag-question deck, and shared-flag acceptance groups. Keep browser storage for preferences/personal-best caches and defer trusted competition results until durable shared storage and replay controls are in place. Territories and disputed/name-sensitive entries need documented scope decisions during data review. These defaults keep the first modernization release focused on reliability, fairness and usability without recurring infrastructure costs.
+
+
+## 8. Challenge mode and future player features
+
+The default mode is **Challenge**, fixed at 30 seconds with a +2-second bonus per correct answer. The backend rejects attempts to change these values. **Timed** retains custom durations (30/45/60/120 seconds) and bonuses (0/+2/+5); **Practice** stays untimed. Settings appear in an accessible animated dialog with a blurred backdrop. Local saved settings now use a new version so existing users receive Challenge as their initial default; later explicit choices persist.
+
+Only Challenge results will feed future daily competitions, public rankings, streaks tied to daily completion, friend challenges, percentiles and country comparisons. Timed and Practice remain casual modes with local results and practice features. Existing local personal bests remain separate by mode, settings, flag scope and dataset version; they are not trusted public scores.
+
+Future implementation order (not implemented by the UI/mode change):
+
+1. Add durable player/game/result storage behind FastAPI, with pseudonymous identity, database-enforced submission uniqueness and server-owned competitive state. Choose a free database and verify operating limits before provisioning.
+2. Add a daily Challenge with the same curated flag sequence, scope and dataset version for everyone and one eligible attempt per player/day. Keep the 30s/+2s rule; do not substitute the earlier proposed ten-flag accuracy-first format. Keep the revealed warm-up separate from competitive scoring. Partition different flag scopes until the daily mode fixes one scope.
+3. Add spoiler-free result sharing, daily streaks and personal history for Challenge; allow casual practice afterwards without replacing the eligible result.
+4. Add asynchronous friend Challenge links with identical decks/rules. Defer live multiplayer infrastructure.
+5. Publish cached country aggregates only from eligible Challenge results, with minimum sample sizes, participant counts, duplicate/bot controls and clear limits on what location and self-selected participation imply. Use coarse location, explicit data-collection disclosure and deletion/retention controls; do not retain raw IP addresses for analysis.
+
+Daily games, analytics storage, public leaderboards and country collection are future work, not enabled by adding the Challenge mode itself. All hosting must remain free on Vercel or Cloudflare; external free database services require a deliberate provider choice and quota review.

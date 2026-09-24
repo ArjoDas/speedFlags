@@ -42,7 +42,7 @@ class GameService:
             raise GameError("invalid_context", "This game has expired or is invalid. Start a new game.", 401) from None
         if state.get("id") != game_id:
             raise GameError("wrong_game", "This answer belongs to another game.", 409)
-        if state.get("version") != self.countries.version or state.get("rules") != 2:
+        if state.get("version") != self.countries.version or state.get("rules") != 3:
             raise GameError("dataset_changed", "The game data has been updated. Start a new game.", 409)
         if self.clock() - state["created"] >= MAX_AGE:
             raise GameError("expired", "This game has expired. Start a new game.", 410)
@@ -61,7 +61,7 @@ class GameService:
         state = {
             "id": secrets.token_hex(16),
             "version": self.countries.version,
-            "rules": 2,
+            "rules": 3,
             "created": now,
             "start": None,
             "deadline": None,
@@ -85,7 +85,7 @@ class GameService:
         state.update(
             status="playing",
             start=now,
-            deadline=now + state["settings"]["duration"] if state["settings"]["mode"] == "timed" else None,
+            deadline=now + state["settings"]["duration"] if state["settings"]["mode"] != "practice" else None,
         )
         return self.response(state)
 
@@ -177,5 +177,5 @@ class GameService:
             last_attempt=self.attempt(state, index - 1) if index else None,
             history=[self.attempt(state, i) for i in range(index)] if finished else None,
             finish_reason=state["reason"],
-            eligible_best=finished and state["settings"]["mode"] == "timed" and state["reason"] in {"time", "deck"},
+            eligible_best=finished and state["settings"]["mode"] != "practice" and state["reason"] in {"time", "deck"},
         )

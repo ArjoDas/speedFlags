@@ -8,23 +8,33 @@ type Props = {
 export function Setup({ settings, onChange, onStart, disabled }: Props) {
   return (
     <section className="setup-card" aria-label="Game setup">
-      <h1>New game</h1>
       <fieldset disabled={disabled}>
         <legend>Mode</legend>
         <div className="segments">
-          {(['timed', 'practice'] as const).map((mode) => (
+          {(['challenge', 'timed', 'practice'] as const).map((mode) => (
             <label key={mode}>
               <input
                 type="radio"
                 name="mode"
                 checked={settings.mode === mode}
-                onChange={() => onChange({ ...settings, mode })}
+                onChange={() =>
+                  onChange({
+                    ...settings,
+                    mode,
+                    ...(mode === 'challenge' ? { duration: 30, bonus: 2 } : {}),
+                  })
+                }
               />
-              <span>{mode === 'timed' ? 'Timed' : 'Practice'}</span>
+              <span>
+                {mode === 'challenge' ? 'Challenge' : mode === 'timed' ? 'Timed' : 'Practice'}
+              </span>
             </label>
           ))}
         </div>
       </fieldset>
+      {settings.mode === 'challenge' && (
+        <p className="challenge-rules">30 seconds · +2s per correct answer</p>
+      )}
       {settings.mode === 'timed' && (
         <>
           <fieldset disabled={disabled}>
@@ -43,15 +53,22 @@ export function Setup({ settings, onChange, onStart, disabled }: Props) {
               ))}
             </div>
           </fieldset>
-          <label className="bonus-toggle">
-            <input
-              type="checkbox"
-              disabled={disabled}
-              checked={settings.bonus === 5}
-              onChange={(e) => onChange({ ...settings, bonus: e.target.checked ? 5 : 0 })}
-            />
-            +5 seconds per correct answer
-          </label>
+          <fieldset disabled={disabled}>
+            <legend>Bonus per correct answer</legend>
+            <div className="segments">
+              {([0, 2, 5] as const).map((bonus) => (
+                <label key={bonus}>
+                  <input
+                    type="radio"
+                    name="bonus"
+                    checked={settings.bonus === bonus}
+                    onChange={() => onChange({ ...settings, bonus })}
+                  />
+                  <span>{bonus === 0 ? 'None' : `+${bonus}s`}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
         </>
       )}
       <fieldset disabled={disabled}>
