@@ -19,32 +19,39 @@ export function Results({ game, best, saved, replay, practice, setup }: Props) {
   const history = game.history ?? []
   const missed = history.filter((a) => a.result !== 'correct')
   const accuracy = game.attempts ? Math.round((game.score / game.attempts) * 100) : 0
+  const resultHeading = (
+    <div className="result-heading">
+      <h1 ref={heading} tabIndex={-1}>
+        Results
+      </h1>
+      <p>
+        {game.finish_reason === 'time'
+          ? 'Time’s up.'
+          : game.finish_reason === 'deck'
+            ? 'All flags completed.'
+            : 'Round finished.'}
+      </p>
+    </div>
+  )
   return (
     <section className="results">
-      <div className="result-heading">
-        <h1 ref={heading} tabIndex={-1}>
-          Results
-        </h1>
-        <p>
-          {game.finish_reason === 'time'
-            ? 'Time’s up.'
-            : game.finish_reason === 'deck'
-              ? 'All flags completed.'
-              : 'Round finished.'}
-        </p>
-      </div>
       {game.challenge_date ? (
-        <div className="daily-result">
-          <strong>
-            {game.finish_reason === 'deck' ? formatTime(game.adjusted_seconds) : 'Incomplete'} ·{' '}
-            {game.score}/30
-          </strong>
-          <p>
-            {formatTime(game.elapsed_seconds)} + {game.penalty_seconds}s penalties
-          </p>
-          <p>{game.challenge_date} · Daily attempt used. Come back tomorrow.</p>
+        <div className="daily-overview">
+          <div className="daily-summary">
+            {resultHeading}
+            <div className="daily-result">
+              <strong>
+                {game.finish_reason === 'deck' ? formatTime(game.adjusted_seconds) : 'Incomplete'} ·{' '}
+                {game.score}/30
+              </strong>
+              <p>
+                {formatTime(game.elapsed_seconds)} + {game.penalty_seconds}s penalties
+              </p>
+              <p>{game.challenge_date} · Daily attempt used. Come back tomorrow.</p>
+            </div>
+          </div>
           {share && (
-            <>
+            <div className="daily-share">
               <pre aria-label="Share preview">{share}</pre>
               <button
                 className="primary"
@@ -68,30 +75,33 @@ export function Results({ game, best, saved, replay, practice, setup }: Props) {
                   onFocus={(event) => event.target.select()}
                 />
               )}
-            </>
+            </div>
           )}
         </div>
       ) : (
-        <div className="result-stats">
-          <div>
-            <span>Correct flags</span>
-            <strong>
-              {game.score}
-              <small> / {game.attempts}</small>
-            </strong>
+        <>
+          {resultHeading}
+          <div className="result-stats">
+            <div>
+              <span>Correct flags</span>
+              <strong>
+                {game.score}
+                <small> / {game.attempts}</small>
+              </strong>
+            </div>
+            <div>
+              <span>Accuracy</span>
+              <strong>
+                {accuracy}
+                <small>%</small>
+              </strong>
+            </div>
+            <div>
+              <span>Personal best</span>
+              <strong>{game.settings.mode !== 'practice' ? best : '—'}</strong>
+            </div>
           </div>
-          <div>
-            <span>Accuracy</span>
-            <strong>
-              {accuracy}
-              <small>%</small>
-            </strong>
-          </div>
-          <div>
-            <span>Personal best</span>
-            <strong>{game.settings.mode !== 'practice' ? best : '—'}</strong>
-          </div>
-        </div>
+        </>
       )}
       <div className="result-actions">
         {!game.challenge_date && (
@@ -109,15 +119,19 @@ export function Results({ game, best, saved, replay, practice, setup }: Props) {
           Change settings
         </button>
       </div>
-      <p className="result-note">
-        Accuracy includes skipped flags. Unanswered flags are not counted.{' '}
-        {game.challenge_date
-          ? 'Lowest adjusted time wins. Wrong answers and skips each add 5 seconds.'
-          : game.eligible_best
+      {!game.challenge_date && (
+        <p className="result-note">
+          Accuracy includes skipped flags. Unanswered flags are not counted.{' '}
+          {game.eligible_best
             ? 'Personal bests use these exact settings and dataset.'
-            : 'This round does not update timed personal bests.'}{' '}
-        {!saved && 'Browser storage is unavailable; this result could not be saved.'}
-      </p>
+            : 'This round does not update timed personal bests.'}
+        </p>
+      )}
+      {!saved && (
+        <p className="result-note">
+          Browser storage is unavailable; this result could not be saved.
+        </p>
+      )}
       <div className="review-heading">
         <h2>Answers</h2>
         <span>{history.length} answers</span>

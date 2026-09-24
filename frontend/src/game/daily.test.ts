@@ -12,7 +12,7 @@ describe('daily share', () => {
         result: i < 24 ? 'correct' : i < 28 ? 'incorrect' : 'skipped',
       })),
     } as Game
-    expect(dailyShare(game)).toBe(`${'🟩'.repeat(6)}\n`.repeat(4) + '🟥🟥🟥🟥🟨🟨\n\n2:12')
+    expect(dailyShare(game)).toBe(`${'🟩'.repeat(6)}\n`.repeat(4) + '🟥🟥🟥🟥🟨🟨\n2:12')
     expect(dailyShare({ ...game, finish_reason: 'ended' })).toBeNull()
     expect(formatTime(61.1)).toBe('1:02')
   })

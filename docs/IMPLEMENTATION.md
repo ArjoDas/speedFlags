@@ -77,3 +77,9 @@ Temporary fixes to the old Flask UI were superseded by regression-tested replace
 - Daily start requires writable browser storage. Web Locks serialize starts across tabs where supported, and older ready/answer responses cannot overwrite a more advanced stored attempt. Clearing storage, switching browser/device, or directly replaying stateless API contexts still requires server-side identity and durable records to police globally.
 - Settings now explain the one-attempt limit and UTC reset. Daily rules use a line break instead of the separator between “30 flags daily” and the penalty description.
 - Verification: production build, lint and formatting pass; 82 browser checks pass across Chromium, Firefox, WebKit and mobile, with six intentionally skipped duplicate timer/screenshot checks.
+
+## Results layout follow-up
+
+- Preserved and separately committed the user's shortened daily-attempt notices.
+- Daily result summary and share controls now sit side by side on wider screens and stack on small phones. Share output puts the adjusted time directly below the fifth block row, without a blank line. Removed the accuracy/scoring explanatory paragraph from Daily Challenge results.
+- Build, lint and four frontend unit tests pass. Twelve targeted browser checks pass across Chromium, Firefox, WebKit and mobile, including layout position, clipboard output and accessibility. The updated results screenshot was inspected.

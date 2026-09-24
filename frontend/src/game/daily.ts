@@ -12,5 +12,5 @@ export function dailyShare(game: Game): string | null {
     a.result === 'correct' ? '🟩' : a.result === 'incorrect' ? '🟥' : '🟨',
   )
   const rows = Array.from({ length: 5 }, (_, i) => blocks.slice(i * 6, i * 6 + 6).join(''))
-  return `${rows.join('\n')}\n\n${formatTime(game.adjusted_seconds ?? 0)}`
+  return `${rows.join('\n')}\n${formatTime(game.adjusted_seconds ?? 0)}`
 }

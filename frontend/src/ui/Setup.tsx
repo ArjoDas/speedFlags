@@ -39,9 +39,7 @@ export function Setup({ settings, onChange, onStart, disabled }: Props) {
             <br />
             +5s per wrong answer or skip
           </p>
-          <p>
-            One attempt per day
-          </p>
+          <p>One attempt per day</p>
         </div>
       )}
       {settings.mode === 'timed' && (
