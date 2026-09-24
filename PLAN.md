@@ -20,9 +20,9 @@ Retain a validated country database on the backend and serve reviewed flag asset
 
 Next.js is not selected: it builds on React, but Vite is sufficient for this frontend and FastAPI owns the API. A future need for a larger content site can prompt reassessment without changing the Python backend.
 
-Keeping FastAPI now establishes a place for competition rules. It does not by itself make scores cheat-proof: durable attempt records, authenticated participants, replay protection and an explicit fairness policy are additional competition requirements. The initial release remains casual play; section 3 defines this boundary. No framework migration has been implemented yet.
+Keeping FastAPI now establishes a place for competition rules. It does not by itself make scores cheat-proof: durable attempt records, authenticated participants, replay protection and an explicit fairness policy are additional competition requirements. The initial release remains casual play; section 3 defines this boundary. The core migration is implemented on the `modernise` branch; see [implementation status](docs/IMPLEMENTATION.md) for completed work and deferred items.
 
-This document proposes work; it does not implement fixes or alter the database. Findings below come from repository inspection and read-only SQLite/XML/hash checks. The deployed site, production logs, real-device behavior, and visual correctness of every flag have not been tested. Code-path findings are distinguished from production hypotheses; this audit cannot establish that every possible error has been found.
+This document records the original audit and implementation plan. The original database remains preserved; the generated runtime dataset and application have since been modernized. Findings below come from repository inspection and read-only SQLite/XML/hash checks. The deployed site, production logs, real-device behavior, and visual correctness of every flag have not been tested. Code-path findings are distinguished from production hypotheses; this audit cannot establish that every possible error has been found.
 
 ## 1. Findings and priorities
 
@@ -130,6 +130,7 @@ tests/           # end-to-end browser journeys
 - `POST /api/v1/games`: validate allowed settings and create a game context with a dataset version and initial question. Model preparation and activation separately so initial loading is handled deliberately.
 - `POST /api/v1/games/{id}/start`: activate a prepared casual game and return server time/deadline. A future competitive start must use a server-controlled release policy; do not let players study a question indefinitely before its clock begins.
 - `POST /api/v1/games/{id}/answers`: receive game context, question ID, sequence, submission ID and answer/skip. Validate the question and deadline, calculate the result and return updated score/context plus the next question in one response.
+- `POST /api/v1/games/{id}/sync`: resynchronize server time/state when returning to a tab, without restarting the clock or advancing a question.
 - `POST /api/v1/games/{id}/finish`: validate final context and return the server-calculated summary. Never accept a client-declared score as authoritative.
 
 Use Pydantic request/response validation, bounded input lengths, stable error codes and generated TypeScript types from OpenAPI. Keep game traffic under `/api`; route assets directly to the CDN. Use explicit per-game context rather than one cookie field for the current answer, so tabs do not overwrite each other's questions. For cookie-based credentials, address CSRF and cookie attributes; keep origins restricted and secrets exclusively on the server.

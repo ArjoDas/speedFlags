@@ -20,3 +20,7 @@ entrypoint = "backend.app:app"
 
 [tool.vercel.scripts]
 build = "npm ci && npm run build"
+
+# Middleware only handles API validation/headers; static files can bypass it.
+[tool.vercel.fastapi.static]
+cdn = true
