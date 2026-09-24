@@ -1,17 +1,25 @@
-# Ignore Flask session files
-flask_session/
-
-# Ignore Python cache files
+# Dependencies and local environments
+.venv/
+.venv-modernise/
+node_modules/
 __pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
 
-# You might also want to ignore other common Python/Flask-related files:
-*.pyc
-*.pyo
-*.pyd
-.Python
-env/
-venv/
-pip-log.txt
-pip-delete-this-directory.txt
+# Local configuration
 .env
-.vercel
+.env.*
+!.env.example
+.vercel/
+flask_session/
+.DS_Store
+
+# Build and browser-test output
+dist/
+frontend/dist/
+playwright-report/
+test-results/
+*.tsbuildinfo
