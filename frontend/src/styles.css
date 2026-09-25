@@ -771,10 +771,59 @@ legend {
   align-items: start;
 }
 .daily-share {
+  position: relative;
+  isolation: isolate;
   display: grid;
-  justify-items: end;
+  align-self: end;
+  justify-self: end;
+  width: fit-content;
+  max-width: 100%;
+  min-width: 0;
   text-align: left;
-  gap: 8px;
+  gap: 12px;
+  padding: 18px;
+  border: 1px solid color-mix(in srgb, var(--blue) 30%, var(--line));
+  border-radius: 30px 30px 0px 30px;
+  background: var(--paper);
+}
+@property --share-glow-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+.daily-share::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: conic-gradient(
+    from var(--share-glow-angle),
+    transparent 0% 55%,
+    color-mix(in srgb, var(--blue) 45%, transparent) 72%,
+    var(--blue) 84%,
+    color-mix(in srgb, var(--blue) 35%, transparent) 92%,
+    transparent 100%
+  );
+  animation: share-border-orbit 6s linear infinite;
+  padding: 1px;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+}
+@keyframes share-border-orbit {
+  to {
+    --share-glow-angle: 360deg;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .daily-share::before {
+    animation: none;
+  }
+}
+.daily-overview + .result-actions {
+  margin-top: 10px;
 }
 .daily-share pre {
   margin: 0;
@@ -793,8 +842,38 @@ legend {
 .result-actions {
   align-items: center;
 }
-.copy-result {
+.copy-control {
+  position: relative;
   margin-left: auto;
+}
+.copy-result {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border-radius: 50%;
+}
+.copy-result svg {
+  width: 21px;
+  height: 21px;
+}
+.copy-tooltip {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 8px);
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--ink);
+  color: var(--card);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+}
+.copy-control:hover .copy-tooltip,
+.copy-control:focus-within .copy-tooltip {
+  opacity: 1;
 }
 .share-status {
   display: grid;

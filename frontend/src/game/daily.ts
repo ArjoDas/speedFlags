@@ -13,5 +13,5 @@ export function dailyShare(game: Game): string | null {
   )
   const rows = Array.from({ length: 5 }, (_, i) => blocks.slice(i * 6, i * 6 + 6).join(''))
   const [year, month, day] = game.challenge_date.split('-')
-  return `My speedflags.win results\non ${day}-${month}-${year.slice(-2)}\n${rows.join('\n')}\ntime: ${formatTime(game.adjusted_seconds ?? 0)}, score ${game.score}/30`
+  return `Here’s my speedFlags.win result\non ${day}-${month}-${year.slice(-2)}\n${rows.join('\n')}\ntime: ${formatTime(game.adjusted_seconds ?? 0)}, score ${game.score}/30`
 }

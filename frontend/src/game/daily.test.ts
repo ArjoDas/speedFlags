@@ -14,7 +14,7 @@ describe('daily share', () => {
       })),
     } as Game
     expect(dailyShare(game)).toBe(
-      'My speedflags.win results\non 24-09-26\n' +
+      'Here’s my speedFlags.win result\non 24-09-26\n' +
         `${'🟩'.repeat(6)}\n`.repeat(4) +
         '🟥🟥🟥🟥🟨🟨\ntime: 2:12, score 24/30',
     )

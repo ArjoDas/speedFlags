@@ -441,7 +441,7 @@ test('daily challenge resumes, scores 30 flags and copies dated results with bri
   await page.getByRole('button', { name: 'Copy result' }).click()
   const shared = await page.evaluate(() => (window as Window & { shared?: string }).shared)
   expect(shared).toMatch(
-    /^My speedflags.win results\non \d{2}-\d{2}-\d{2}\n(🟨{6}\n){4}🟨{6}\ntime: \d+:\d{2}, score 0\/30$/u,
+    /^Here’s my speedFlags\.win result\non \d{2}-\d{2}-\d{2}\n(🟨{6}\n){4}🟨{6}\ntime: \d+:\d{2}, score 0\/30$/u,
   )
   await expect(page.getByRole('button', { name: 'Copied', exact: true })).toBeDisabled()
   await expect(page.locator('.share-status')).toHaveCount(0)

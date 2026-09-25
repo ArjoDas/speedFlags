@@ -98,22 +98,51 @@ export function Results({ game, best, saved, replay, practice }: Props) {
           </button>
         )}
         {share && (
-          <button
-            className="primary copy-result"
-            disabled={copyState === 'Copied' || copyState === 'Copying…'}
-            aria-live="polite"
-            onClick={async () => {
-              setCopyState('Copying…')
-              try {
-                await navigator.clipboard.writeText(share)
-                setCopyState('Copied')
-              } catch {
-                setCopyState('Could not copy. Select and copy the text below.')
-              }
-            }}
-          >
-            {copyState === 'Copied' || copyState === 'Copying…' ? copyState : 'Copy result'}
-          </button>
+          <>
+            <div className="copy-control">
+              <button
+                className="primary copy-result"
+                aria-label={
+                  copyState === 'Copied' || copyState === 'Copying…' ? copyState : 'Copy result'
+                }
+                disabled={copyState === 'Copied' || copyState === 'Copying…'}
+                onClick={async () => {
+                  setCopyState('Copying…')
+                  try {
+                    await navigator.clipboard.writeText(share)
+                    setCopyState('Copied')
+                  } catch {
+                    setCopyState('Could not copy. Select and copy the text below.')
+                  }
+                }}
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  {copyState === 'Copied' ? (
+                    <path d="m5 12 4 4L19 6" />
+                  ) : (
+                    <>
+                      <path d="m21 3-7 18-4-7-7-4L21 3Z" />
+                      <path d="m10 14 11-11" />
+                    </>
+                  )}
+                </svg>
+              </button>
+              <span className="copy-tooltip" aria-hidden="true">
+                {copyState === 'Copied' || copyState === 'Copying…' ? copyState : 'Copy result'}
+              </span>
+            </div>
+            <span className="sr-only" role="status">
+              {copyState === 'Copied' || copyState === 'Copying…' ? copyState : ''}
+            </span>
+          </>
         )}
       </div>
       {share && copyState.startsWith('Could') && (
