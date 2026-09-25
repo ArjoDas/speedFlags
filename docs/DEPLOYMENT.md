@@ -36,3 +36,20 @@ The current game token is compressed and authenticated/encrypted, has a fixed ma
 Before rankings, implement authenticated ownership and durable game/attempt/result storage with atomic sequence updates and unique submission IDs. Test retries against separate instances and simultaneous submissions. Choose and benchmark a free-tier data service before introducing it; Cloudflare D1 is a candidate, not an existing dependency. Asset secrecy cannot prevent image recognition, outside help or other cheating. Define latency, release, disconnection and tie policies before claiming competitive fairness.
 
 Cloudflare can host the static frontend, but moving the Python API requires a separately verified runtime and storage design. This configuration is for Vercel.
+
+
+## Search discovery
+
+Both production domains serve the game. The HTML canonical URL, Open Graph URL,
+structured data, and sitemap use `https://speedflags.win/` as the preferred URL;
+`https://speedflags.arjodas.com/` remains an alternate host. Submit
+`https://speedflags.win/sitemap.xml` in your search engine webmaster accounts after deployment.
+The static page includes readable game instructions, and `/robots.txt` allows public
+page crawling while excluding API routes. `/llms.txt` provides a concise game reference;
+it is an emerging convention, not a guarantee of indexing or AI citations.
+
+The inline JSON-LD has a SHA-256 hash in both the backend and Vercel Content Security
+Policies. If its exact text or whitespace changes, update both hashes.
+
+These changes follow Google's [JavaScript SEO guidance](https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics)
+and [AI search guidance](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide).

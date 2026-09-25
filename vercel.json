@@ -20,7 +20,7 @@
     {
       "source": "/((?!api/).*)",
       "headers": [
-        {"key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"}
+        {"key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' 'sha256-tsXcWLL2OMK4/zmGUFoQnwHza8fXOMJhy3XqGSZFam4='; style-src 'self' 'unsafe-inline'; img-src 'self'; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"}
       ]
     },
     {

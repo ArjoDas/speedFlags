@@ -62,7 +62,7 @@ def create_app(service: GameService | None = None) -> FastAPI:
         response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
         if not request.url.path.startswith("/api/"):
             response.headers["Content-Security-Policy"] = (
-                "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+                "default-src 'self'; script-src 'self' 'sha256-tsXcWLL2OMK4/zmGUFoQnwHza8fXOMJhy3XqGSZFam4='; style-src 'self' 'unsafe-inline'; img-src 'self'; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
             )
         if request.url.path.startswith(("/flags/", "/assets/")) and response.status_code == 200:
             response.headers["Cache-Control"] = "public, max-age=31536000, immutable"

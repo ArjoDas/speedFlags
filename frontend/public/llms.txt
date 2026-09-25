@@ -1,0 +1,15 @@
+# speedFlags
+
+> A free browser game for learning and identifying world flags.
+
+## Official websites
+- [Play speedFlags](https://speedflags.win/): Canonical website.
+- [Alternate domain](https://speedflags.arjodas.com/): The same game.
+
+## Game modes
+- Daily Challenge: 30 flags, one attempt per day. Wrong answers and skips add five seconds each. Completed results include an outcome grid, adjusted time, and score out of 30.
+- Timed: Identify flags before the timer expires, with configurable duration and time bonuses.
+- Practice: Untimed flag identification, including practice of missed flags after a round.
+
+## How to play
+Type a country name, choose an autocomplete suggestion or enter your answer, and press Enter. Review correct, incorrect, and skipped answers after the round. JavaScript is required to play; the home page contains a readable introduction without JavaScript.

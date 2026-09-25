@@ -814,6 +814,24 @@ legend {
 .settings-button {
   font-size: 0.8rem;
 }
+.daily-share pre {
+  font-size: 0.85rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.site-info {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 21px;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.site-info h2 {
+  font-size: 1rem;
+}
+.site-info p {
+  margin: 8px 0;
+}
 @media (max-width: 420px) {
   .site-header {
     flex-wrap: wrap;
@@ -822,9 +840,4 @@ legend {
     margin-left: auto;
     gap: 8px;
   }
-}
-.daily-share pre {
-  font-size: 0.85rem;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
 }
