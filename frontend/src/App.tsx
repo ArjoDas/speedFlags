@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useReducer, useRef, useState } from 'react'
+import { Analytics } from '@vercel/analytics/react'
 import { api, ApiError, preload, type Country, type Game, type Settings } from './api/client'
 import { loadSettings, recordBest, read, write, dailyKey, storedDaily } from './storage/preferences'
 import { AnswerInput } from './ui/AnswerInput'
@@ -627,6 +628,7 @@ export default function App() {
           />
         )}
       </main>
+      <Analytics />
     </div>
   )
 }
