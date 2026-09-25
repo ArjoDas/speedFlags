@@ -407,6 +407,8 @@ test('settings modal defaults to Challenge, preserves the warm-up on cancel and 
 test('daily challenge resumes, scores 30 flags and copies dated results with brief statistics', async ({
   page,
 }, testInfo) => {
+  // This journey submits 30 answers and reloads the game repeatedly on CI browsers.
+  test.setTimeout(60_000)
   await page.addInitScript(() =>
     Object.defineProperty(navigator, 'clipboard', {
       value: {
