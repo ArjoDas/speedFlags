@@ -293,8 +293,7 @@ test('empty Enter skips once, including whitespace, but cannot skip the warm-up'
   page,
 }) => {
   await page.goto('/')
-  if (!(await page.getByRole('dialog').isVisible()))
-    await page.getByRole('button', { name: 'Change settings' }).click()
+  await expect(page.getByRole('dialog')).toBeVisible()
   await page.getByRole('radio', { name: /^Practice$/ }).check()
   await page.getByRole('button', { name: 'Play', exact: true }).click()
   const input = page.getByRole('combobox', { name: 'Country name' })
