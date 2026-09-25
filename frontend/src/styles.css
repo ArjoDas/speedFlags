@@ -773,7 +773,7 @@ legend {
 .daily-share {
   display: grid;
   justify-items: end;
-  text-align: right;
+  text-align: left;
   gap: 8px;
 }
 .daily-share pre {
