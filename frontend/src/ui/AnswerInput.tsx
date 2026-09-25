@@ -129,8 +129,13 @@ export function AnswerInput({ countries, disabled, questionId, onAnswer, onSkip 
               id={`option-${i}`}
               role="option"
               aria-selected={i === active}
+              onPointerMove={() => {
+                if (!disabled) setActive(i)
+              }}
               onPointerDown={(event) => event.preventDefault()}
-              onClick={() => choose(country.name)}
+              onClick={() => {
+                if (!disabled) choose(country.name)
+              }}
             >
               {country.name}
               <span>{country.id}</span>

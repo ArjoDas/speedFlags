@@ -447,8 +447,7 @@ legend {
   border-radius: 0;
   cursor: pointer;
 }
-.suggestions li[aria-selected='true'],
-.suggestions li:hover {
+.suggestions li[aria-selected='true'] {
   background: var(--blue-soft);
   color: var(--blue);
 }

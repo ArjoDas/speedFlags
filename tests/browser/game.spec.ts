@@ -494,3 +494,17 @@ test('daily play requires storage so its one-play limit can persist', async ({ p
   await expect(page.getByRole('alert')).toContainText('Daily Challenge needs browser storage')
   await expect(page.getByTestId('warmup-answer')).toBeVisible()
 })
+
+test('pointer highlight and Enter submit the same second suggestion', async ({ page }) => {
+  await start(page)
+  const input = page.getByRole('combobox', { name: 'Country name' })
+  await input.fill('united')
+  const second = page.getByRole('option').nth(1)
+  await second.hover()
+  await expect(second).toHaveAttribute('aria-selected', 'true')
+  await expect(page.getByRole('option', { selected: true })).toHaveCount(1)
+  const name = (await second.innerText()).split('\n')[0]
+  const sent = page.waitForRequest((request) => request.url().endsWith('/answers'))
+  await input.press('Enter')
+  expect((await sent).postDataJSON().answer).toBe(name)
+})
