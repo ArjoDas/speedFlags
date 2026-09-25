@@ -400,7 +400,7 @@ test('settings modal defaults to Challenge, preserves the warm-up on cancel and 
   await expect(modal.getByRole('radio', { name: '+2s', exact: true })).toBeChecked()
 })
 
-test('daily challenge resumes, scores 30 flags and copies only blocks and adjusted time', async ({
+test('daily challenge resumes, scores 30 flags and copies dated results with brief statistics', async ({
   page,
 }, testInfo) => {
   await page.addInitScript(() =>
@@ -437,7 +437,12 @@ test('daily challenge resumes, scores 30 flags and copies only blocks and adjust
     await page.screenshot({ path: '/tmp/speedflags-daily-results.png', fullPage: true })
   await page.getByRole('button', { name: 'Copy result' }).click()
   const shared = await page.evaluate(() => (window as Window & { shared?: string }).shared)
-  expect(shared).toMatch(/^(🟨{6}\n){4}🟨{6}\n\d+:\d{2}$/u)
+  expect(shared).toMatch(
+    /^My results for speedflags.win on \d{2}-\d{2}-\d{2}\n(🟨{6}\n){4}🟨{6}\ntime: \d+:\d{2}, score 0\/30$/u,
+  )
+  await expect(page.getByRole('button', { name: 'Copied', exact: true })).toBeDisabled()
+  await expect(page.locator('.share-status')).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'Copy result', exact: true })).toBeEnabled()
   expect(shared).toBe(await page.getByLabel('Share preview').innerText())
   await expect(page.locator('.results')).not.toContainText('Accuracy includes')
   await expect(page.locator('.results')).not.toContainText('Lowest adjusted time wins')

@@ -10,6 +10,11 @@ type Props = {
 }
 export function Results({ game, best, saved, replay, practice }: Props) {
   const [copyState, setCopyState] = useState('')
+  useEffect(() => {
+    if (copyState !== 'Copied') return
+    const timer = setTimeout(() => setCopyState(''), 2000)
+    return () => clearTimeout(timer)
+  }, [copyState])
   const share = dailyShare(game)
   const heading = useRef<HTMLHeadingElement>(null)
   useEffect(() => {
@@ -95,7 +100,10 @@ export function Results({ game, best, saved, replay, practice }: Props) {
         {share && (
           <button
             className="primary copy-result"
+            disabled={copyState === 'Copied' || copyState === 'Copying…'}
+            aria-live="polite"
             onClick={async () => {
+              setCopyState('Copying…')
               try {
                 await navigator.clipboard.writeText(share)
                 setCopyState('Copied')
@@ -104,11 +112,11 @@ export function Results({ game, best, saved, replay, practice }: Props) {
               }
             }}
           >
-            Copy result
+            {copyState === 'Copied' || copyState === 'Copying…' ? copyState : 'Copy result'}
           </button>
         )}
       </div>
-      {share && copyState && (
+      {share && copyState.startsWith('Could') && (
         <div className="share-status">
           {' '}
           <p role="status">{copyState}</p>

@@ -824,3 +824,8 @@ legend {
     gap: 8px;
   }
 }
+.daily-share pre {
+  font-size: 0.85rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
