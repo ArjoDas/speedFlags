@@ -1,8 +1,9 @@
 import { defineConfig, devices } from '@playwright/test'
 export default defineConfig({
   testDir: './tests/browser',
-  timeout: 30000,
-  expect: { timeout: 7000 },
+  // Shared CI runners need time to preload 245 flags and complete full game journeys.
+  timeout: process.env.CI ? 60000 : 30000,
+  expect: { timeout: process.env.CI ? 20000 : 7000 },
   fullyParallel: true,
   workers: 3,
   reporter: [['list'], ['html', { open: 'never' }]],

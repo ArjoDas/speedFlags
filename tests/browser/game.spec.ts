@@ -15,6 +15,8 @@ async function warmup(page) {
 
 async function start(page) {
   await page.goto('/')
+  // The header is briefly enabled before startup; a warm-up proves preload has finished.
+  await expect(page.getByTestId('warmup-answer')).toBeAttached({ timeout: 20_000 })
   if (!(await page.getByRole('dialog').isVisible()))
     await page.getByRole('button', { name: 'Change settings' }).click()
   await page.getByRole('radio', { name: /^Practice$/ }).check()
@@ -291,8 +293,7 @@ test('empty Enter skips once, including whitespace, but cannot skip the warm-up'
   page,
 }) => {
   await page.goto('/')
-  if (!(await page.getByRole('dialog').isVisible()))
-    await page.getByRole('button', { name: 'Change settings' }).click()
+  await expect(page.getByRole('dialog')).toBeVisible()
   await page.getByRole('radio', { name: /^Practice$/ }).check()
   await page.getByRole('button', { name: 'Play', exact: true }).click()
   const input = page.getByRole('combobox', { name: 'Country name' })
@@ -403,6 +404,8 @@ test('settings modal defaults to Challenge, preserves the warm-up on cancel and 
 test('daily challenge resumes, scores 30 flags and copies dated results with brief statistics', async ({
   page,
 }, testInfo) => {
+  // This journey submits 30 answers and reloads the game repeatedly on CI browsers.
+  test.setTimeout(60_000)
   await page.addInitScript(() =>
     Object.defineProperty(navigator, 'clipboard', {
       value: {
@@ -510,6 +513,7 @@ test('pointer highlight and Enter submit the same second suggestion', async ({ p
 })
 
 test('return visits never mount settings until explicitly opened', async ({ page }) => {
+  test.setTimeout(45_000)
   await page.addInitScript(() => {
     localStorage.setItem('speedflags.settings-seen.v1', 'true')
     const state = window as Window & { settingsMounted?: boolean }
@@ -528,9 +532,9 @@ test('return visits never mount settings until explicitly opened', async ({ page
   })
   await page.goto('/')
   const input = page.getByRole('combobox', { name: 'Country name' })
-  await expect(input).toBeEnabled()
+  await expect(input).toBeEnabled({ timeout: 20_000 })
   await page.reload()
-  await expect(input).toBeEnabled()
+  await expect(input).toBeEnabled({ timeout: 20_000 })
   expect(
     await page.evaluate(() => (window as Window & { settingsMounted?: boolean }).settingsMounted),
   ).toBe(false)

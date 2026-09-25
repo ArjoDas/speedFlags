@@ -8,6 +8,20 @@ The native FastAPI integration promotes `app.frontend()` and static mounts to th
 
 The country database, source flags and built frontend are explicitly included in the function bundle through `functions["backend/app.py"].includeFiles` in `vercel.json`. Keep the static directories at their original paths: FastAPI mounts them during import and may serve them as a fallback even when the CDN handles normal asset requests. Omitting `frontend/public/flags` caused the first preview's `FUNCTION_INVOCATION_FAILED` error before any API route could run. Original snapshots, test artifacts and environments are excluded from deployment. `requirements.txt` is generated from the locked runtime dependencies; `uv.lock` also locks development tools.
 
+## Web Analytics
+
+The root React app mounts `@vercel/analytics/react` once to collect page views.
+Enable Web Analytics for this project in the Vercel dashboard, then deploy the
+integration. Installing the package alone does not enable the hosted service.
+See [Vercel's setup guide](https://vercel.com/docs/analytics/quickstart).
+
+In production, the SDK loads `/_vercel/insights/script.js` from the site's own
+origin, which the existing Content Security Policy permits. Vercel serves the
+analytics endpoints; the local FastAPI server does not. After deployment, check
+that the script loads and a page-view request succeeds in the browser's Network
+panel, then confirm visits appear in the project's Analytics dashboard. Game
+actions are not tracked as custom events by this integration.
+
 ## Secrets
 
 Set `SPEEDFLAGS_KEYS` on Vercel before preview/production startup. Generate a fresh Fernet key using the installed `cryptography` package. Do not reuse the development key, commit `.env`, or use a `VITE_` prefix (which would expose it in frontend code).
