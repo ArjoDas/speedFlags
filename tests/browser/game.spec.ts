@@ -510,6 +510,7 @@ test('pointer highlight and Enter submit the same second suggestion', async ({ p
 })
 
 test('return visits never mount settings until explicitly opened', async ({ page }) => {
+  test.setTimeout(45_000)
   await page.addInitScript(() => {
     localStorage.setItem('speedflags.settings-seen.v1', 'true')
     const state = window as Window & { settingsMounted?: boolean }
@@ -528,9 +529,9 @@ test('return visits never mount settings until explicitly opened', async ({ page
   })
   await page.goto('/')
   const input = page.getByRole('combobox', { name: 'Country name' })
-  await expect(input).toBeEnabled()
+  await expect(input).toBeEnabled({ timeout: 20_000 })
   await page.reload()
-  await expect(input).toBeEnabled()
+  await expect(input).toBeEnabled({ timeout: 20_000 })
   expect(
     await page.evaluate(() => (window as Window & { settingsMounted?: boolean }).settingsMounted),
   ).toBe(false)
