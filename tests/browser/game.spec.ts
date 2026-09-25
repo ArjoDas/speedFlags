@@ -15,10 +15,8 @@ async function warmup(page) {
 
 async function start(page) {
   await page.goto('/')
-  // Wait for preload and the initial dialog effect before deciding whether to open settings.
-  await expect(page.getByRole('button', { name: 'Change settings' })).toBeEnabled({
-    timeout: 20_000,
-  })
+  // The header is briefly enabled before startup; a warm-up proves preload has finished.
+  await expect(page.getByTestId('warmup-answer')).toBeAttached({ timeout: 20_000 })
   if (!(await page.getByRole('dialog').isVisible()))
     await page.getByRole('button', { name: 'Change settings' }).click()
   await page.getByRole('radio', { name: /^Practice$/ }).check()
