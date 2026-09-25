@@ -15,6 +15,8 @@ async function warmup(page) {
 
 async function start(page) {
   await page.goto('/')
+  if (!(await page.getByRole('dialog').isVisible()))
+    await page.getByRole('button', { name: 'Change settings' }).click()
   await page.getByRole('radio', { name: /^Practice$/ }).check()
   await page.getByRole('button', { name: 'Play', exact: true }).click()
   await expect(page.getByRole('combobox', { name: 'Country name' })).toBeEnabled()
@@ -289,6 +291,8 @@ test('empty Enter skips once, including whitespace, but cannot skip the warm-up'
   page,
 }) => {
   await page.goto('/')
+  if (!(await page.getByRole('dialog').isVisible()))
+    await page.getByRole('button', { name: 'Change settings' }).click()
   await page.getByRole('radio', { name: /^Practice$/ }).check()
   await page.getByRole('button', { name: 'Play', exact: true }).click()
   const input = page.getByRole('combobox', { name: 'Country name' })
@@ -389,6 +393,8 @@ test('settings modal defaults to Challenge, preserves the warm-up on cancel and 
   await expect(modal).not.toBeVisible()
   await expect(page.locator('.timer')).toHaveText('60s')
   await page.reload()
+  await expect(modal).not.toBeVisible()
+  await page.getByRole('button', { name: 'Change settings' }).click()
   await expect(modal.getByRole('radio', { name: 'Timed', exact: true })).toBeChecked()
   await expect(modal.getByRole('radio', { name: '60s' })).toBeChecked()
   await expect(modal.getByRole('radio', { name: '+2s', exact: true })).toBeChecked()
@@ -415,7 +421,7 @@ test('daily challenge resumes, scores 30 flags and copies only blocks and adjust
   await expect(page.locator('.score-panel dd').nth(1)).toHaveText('1')
   const src = await page.getByAltText('Flag to identify').getAttribute('src')
   await page.reload()
-  await page.getByRole('button', { name: 'Play', exact: true }).click()
+  await expect(page.getByRole('dialog')).not.toBeVisible()
   await expect(input).toBeEnabled()
   await expect(page.getByAltText('Flag to identify')).toHaveAttribute('src', src!)
   for (let i = 1; i < 30; i++) {
@@ -442,7 +448,7 @@ test('daily challenge resumes, scores 30 flags and copies only blocks and adjust
     expect(Math.abs(sharePanel!.y - summary!.y)).toBeLessThan(2)
   }
   await page.reload()
-  await page.getByRole('button', { name: 'Play', exact: true }).click()
+  await expect(page.getByRole('dialog')).not.toBeVisible()
   await expect(page.getByRole('heading', { name: 'Results', exact: true })).toBeVisible()
   await expect(page.getByLabel('Share preview')).toHaveText(shared!)
   await expect(page.getByRole('button', { name: 'Practice today’s flags' })).toHaveCount(0)

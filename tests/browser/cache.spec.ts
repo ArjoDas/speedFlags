@@ -64,7 +64,7 @@ test('playing reuses the preloaded collection', async ({ page }) => {
   // Destroy the in-memory images; the next visit should reuse the HTTP cache.
   await page.goto('about:blank')
   await page.goto('/')
-  await page.getByRole('button', { name: 'Close settings' }).click()
+  await expect(page.getByRole('dialog')).not.toBeVisible()
   await expect(input).toBeEnabled()
   const revisit = await page.evaluate(() => {
     const flags = performance

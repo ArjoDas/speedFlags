@@ -7,9 +7,8 @@ type Props = {
   saved: boolean
   replay: () => void
   practice: () => void
-  setup: () => void
 }
-export function Results({ game, best, saved, replay, practice, setup }: Props) {
+export function Results({ game, best, saved, replay, practice }: Props) {
   const [copyState, setCopyState] = useState('')
   const share = dailyShare(game)
   const heading = useRef<HTMLHeadingElement>(null)
@@ -93,9 +92,6 @@ export function Results({ game, best, saved, replay, practice, setup }: Props) {
             Practice missed flags
           </button>
         )}
-        <button className="text-button" onClick={setup}>
-          Change settings
-        </button>
         {share && (
           <button
             className="primary copy-result"

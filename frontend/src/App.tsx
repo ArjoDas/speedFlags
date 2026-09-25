@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useReducer, useRef, useState } from 'react'
 import { api, ApiError, preload, type Country, type Game, type Settings } from './api/client'
-import { loadSettings, recordBest, write, dailyKey, storedDaily } from './storage/preferences'
+import { loadSettings, recordBest, read, write, dailyKey, storedDaily } from './storage/preferences'
 import { AnswerInput } from './ui/AnswerInput'
 import { Results } from './ui/Results'
 import { Setup } from './ui/Setup'
@@ -60,8 +60,8 @@ function reducer(state: State, action: Action): State {
 export default function App() {
   const [state, dispatch] = useReducer(reducer, initial)
   const [settings, setSettings] = useState<Settings>(loadSettings)
-  const [settingsOpen, setSettingsOpen] = useState(true)
-  const [settingsVisible, setSettingsVisible] = useState(true)
+  const [settingsOpen, setSettingsOpen] = useState(() => read('settings-seen.v1') !== true)
+  const [settingsVisible, setSettingsVisible] = useState(settingsOpen)
   const [countries, setCountries] = useState<Country[]>([])
   const [flagProgress, setFlagProgress] = useState<FlagProgress | null>(null)
   const [remaining, setRemaining] = useState(0)
@@ -168,6 +168,10 @@ export default function App() {
     },
     [],
   )
+
+  useEffect(() => {
+    write('settings-seen.v1', true)
+  }, [])
 
   const initialSettings = useRef(settings)
   useEffect(() => {
@@ -329,6 +333,13 @@ export default function App() {
           </span>
         </a>
         <div className="header-right">
+          <button
+            className="secondary settings-button"
+            onClick={() => setSettingsOpen(true)}
+            disabled={busy}
+          >
+            Change settings
+          </button>
           <Theme />
         </div>
       </header>
@@ -366,9 +377,6 @@ export default function App() {
                     ? '0:00'
                     : `${settings.duration}s`}
               </span>
-              <button className="text-button" onClick={() => setSettingsOpen(true)}>
-                Settings
-              </button>
             </div>
             <div className="time-track" aria-hidden="true">
               <div style={{ width: '100%' }} />
@@ -436,13 +444,11 @@ export default function App() {
                     ? `${game.status === 'ready' ? game.settings.duration : (remaining / 1000).toFixed(1)}s`
                     : 'Untimed'}
               </span>
-              <button
-                className="text-button"
-                onClick={game.status === 'ready' ? () => setSettingsOpen(true) : finish}
-                disabled={busy}
-              >
-                {game.status === 'ready' ? 'Change settings' : 'Finish round'}
-              </button>
+              {game.status === 'playing' && (
+                <button className="text-button" onClick={finish} disabled={busy}>
+                  Finish round
+                </button>
+              )}
             </div>
             {game.settings.mode !== 'practice' && (
               <div
@@ -592,7 +598,6 @@ export default function App() {
             game={game}
             best={state.best}
             saved={state.saved}
-            setup={reset}
             replay={() => {
               reset()
               setSettingsOpen(false)

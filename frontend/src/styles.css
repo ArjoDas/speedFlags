@@ -806,3 +806,21 @@ legend {
 .share-status textarea {
   max-width: 430px;
 }
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.settings-button {
+  font-size: 0.8rem;
+}
+@media (max-width: 420px) {
+  .site-header {
+    flex-wrap: wrap;
+  }
+  .header-right {
+    margin-left: auto;
+    gap: 8px;
+  }
+}
