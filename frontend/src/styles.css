@@ -820,17 +820,39 @@ legend {
   overflow-wrap: anywhere;
 }
 .site-info {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 24px 21px;
+  width: 100%;
+  border-top: 1px solid var(--line);
+  background: var(--card);
   color: var(--muted);
-  font-size: 0.85rem;
+  font-size: 0.75rem;
+  line-height: 1.5;
 }
-.site-info h2 {
-  font-size: 1rem;
+.footer-bottom {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 14px 21px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 20px;
 }
-.site-info p {
-  margin: 8px 0;
+.footer-bottom nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+.site-info a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.site-info a:hover {
+  color: var(--blue);
+}
+@media (max-width: 760px) {
+  .footer-bottom {
+    padding: 12px 13px;
+  }
 }
 @media (max-width: 420px) {
   .site-header {

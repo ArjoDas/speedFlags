@@ -386,44 +386,46 @@ export default function App() {
             </div>
           </section>
         )}
-        <SettingsDialog
-          onVisibilityChange={setSettingsVisible}
-          open={settingsOpen}
-          busy={busy}
-          onDismiss={() => {
-            setSettingsOpen(false)
-            if (!game || JSON.stringify(game.settings) !== JSON.stringify(settings)) begin()
-          }}
-        >
-          {error && (
-            <div className="error-banner" role="alert">
-              <div>
-                <p>{error}</p>
-              </div>
-              <div>
-                {retry.current && (
-                  <button className="secondary" onClick={() => retry.current?.()}>
-                    Retry
+        {(settingsOpen || settingsVisible) && (
+          <SettingsDialog
+            onVisibilityChange={setSettingsVisible}
+            open={settingsOpen}
+            busy={busy}
+            onDismiss={() => {
+              setSettingsOpen(false)
+              if (!game || JSON.stringify(game.settings) !== JSON.stringify(settings)) begin()
+            }}
+          >
+            {error && (
+              <div className="error-banner" role="alert">
+                <div>
+                  <p>{error}</p>
+                </div>
+                <div>
+                  {retry.current && (
+                    <button className="secondary" onClick={() => retry.current?.()}>
+                      Retry
+                    </button>
+                  )}
+                  <button className="text-button" onClick={reset}>
+                    Back to setup
                   </button>
-                )}
-                <button className="text-button" onClick={reset}>
-                  Back to setup
-                </button>
+                </div>
               </div>
-            </div>
-          )}
-          <Setup
-            settings={settings}
-            disabled={busy}
-            onChange={setSettings}
-            onStart={() => begin()}
-          />
-          {busy && flagProgress && (
-            <p role="status">
-              Loading flags… {flagProgress.loaded}/{flagProgress.total}
-            </p>
-          )}
-        </SettingsDialog>
+            )}
+            <Setup
+              settings={settings}
+              disabled={busy}
+              onChange={setSettings}
+              onStart={() => begin()}
+            />
+            {busy && flagProgress && (
+              <p role="status">
+                Loading flags… {flagProgress.loaded}/{flagProgress.total}
+              </p>
+            )}
+          </SettingsDialog>
+        )}
         {game && game.status !== 'finished' && (
           <section className="play-layout" aria-label="Flag game">
             <h1 className="sr-only">Flag game</h1>
